@@ -1,21 +1,27 @@
-package de.goldendeveloper.githubapi;
+package de.goldendeveloper.githubapi.repositories;
 
-import de.goldendeveloper.githubapi.interfaces.HttpRequestInterface;
-import de.goldendeveloper.githubapi.interfaces.JSONHelper;
+import de.goldendeveloper.githubapi.GHPermissions;
+import de.goldendeveloper.githubapi.Github;
+import de.goldendeveloper.githubapi.bases.ClassBase;
+import de.goldendeveloper.githubapi.builders.GHFileBuilder;
+import de.goldendeveloper.githubapi.builders.GHIssueBuilder;
+import de.goldendeveloper.githubapi.entities.GHUser;
+import de.goldendeveloper.githubapi.enums.GHState;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class GHRepository implements JSONHelper, HttpRequestInterface {
+public class GHRepository extends ClassBase {
 
-    private final int id;
     private final int size;
     private final int forks;
-    private final String url;
+
     private GHLicense license;
     private final String name;
     private final boolean fork;
@@ -25,10 +31,11 @@ public class GHRepository implements JSONHelper, HttpRequestInterface {
     private final String svnUrl;
     private final Github github;
     private final String keysUrl;
-    private final String htmlUrl;
     private final String tagsUrl;
     private final String cloneUrl;
-    private final Object pushedAt; //Date
+    private final LocalDateTime pushedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
     private final String language;
     private final String fullname;
     private final String forksUrl;
@@ -37,7 +44,6 @@ public class GHRepository implements JSONHelper, HttpRequestInterface {
     private final String hooksUrl;
     private final String labelsUrl;
     private final boolean archived;
-    private final Object createdAt; //Date
     private final boolean isPrivate;
     private final String gitRefsUrl;
     private final String visibility;
@@ -47,7 +53,7 @@ public class GHRepository implements JSONHelper, HttpRequestInterface {
     private final String description;
     private final String branchesUrl;
     private final String releasesUrl;
-    private final List<String> topics;
+    private List<String> topics;
     private final String languagesUrl;
     private final int stargazersCount;
     private final int openIssuesCount;
@@ -63,7 +69,6 @@ public class GHRepository implements JSONHelper, HttpRequestInterface {
     private final boolean hasProjects;
     private final String deploymentsUrl;
     private final boolean hasWiki;
-    private final Object updatedAt; //Date
     private final String commentsUrl;
     private final String stargazersUrl;
     private final boolean disabled;
@@ -83,12 +88,11 @@ public class GHRepository implements JSONHelper, HttpRequestInterface {
     private final String milestonesUrl;
     private final String teamsUrl;
     private final String issuesUrl;
-    private final String eventsUrl;
+
     private final String issueEventsUrl;
     private final String assigneesUrl;
     private final int openIssues;
     private final int watchersCount;
-    private final String nodeId;
     private final String homepage;
     private final int forksCount;
     private final GHPermissions permissions;
@@ -145,16 +149,15 @@ getDependabotSecurityFixesPullRequestsLockedAlerts
 getStars
 getSubscribers
 
-
-
     },*/
 
     public GHRepository(JSONObject jsonObject, Github github) {
+        super(jsonObject);
         this.github = github;
         this.allowForking = getBooleanOrNull(jsonObject, "allow_forking");
         this.stargazersCount = getIntOrNull(jsonObject, "stargazers_count");
         this.isTemplate = getBooleanOrNull(jsonObject, "is_template");
-        this.pushedAt = getStringOrNull(jsonObject, "pushed_at");
+        this.pushedAt = getLocalDateOrNull(jsonObject, "pushed_at");
         this.subscriptionUrl = getStringOrNull(jsonObject, "subscription_url");
         this.language = getStringOrNull(jsonObject, "language");
         this.branchesUrl = getStringOrNull(jsonObject, "branches_url");
@@ -163,7 +166,6 @@ getSubscribers
         this.subscribersUrl = getStringOrNull(jsonObject, "subscribers_url");
         this.releasesUrl = getStringOrNull(jsonObject, "releases_url");
         this.svnUrl = getStringOrNull(jsonObject, "svn_url");
-        this.id = getIntOrNull(jsonObject, "id");
         this.hasDiscussions = getBooleanOrNull(jsonObject, "has_discussions");
         this.forks = getIntOrNull(jsonObject, "forks");
         this.archiveUrl = getStringOrNull(jsonObject, "archive_url");
@@ -175,7 +177,6 @@ getSubscribers
         this.fullname = getStringOrNull(jsonObject, "full_name");
         this.size = getIntOrNull(jsonObject, "size");
         this.languagesUrl = getStringOrNull(jsonObject, "languages_url");
-        this.htmlUrl = getStringOrNull(jsonObject, "html_url");
         this.collaboratorsUrl = getStringOrNull(jsonObject, "collaborators_url");
         this.cloneUrl = getStringOrNull(jsonObject, "clone_url");
         this.name = getStringOrNull(jsonObject, "name");
@@ -191,14 +192,14 @@ getSubscribers
         this.notificationsUrl = getStringOrNull(jsonObject, "notifications_url");
         this.openIssuesCount = getIntOrNull(jsonObject, "open_issues_count");
         this.description = getStringOrNull(jsonObject, "description");
-        this.createdAt = getStringOrNull(jsonObject, "created_at");
+        this.createdAt = getLocalDateOrNull(jsonObject, "created_at");
         this.watchers = getIntOrNull(jsonObject, "watchers");
         this.keysUrl = getStringOrNull(jsonObject, "keys_url");
         this.deploymentsUrl = getStringOrNull(jsonObject, "deployments_url");
         this.hasProjects = getBooleanOrNull(jsonObject, "has_projects");
         this.archived = getBooleanOrNull(jsonObject, "archived");
         this.hasWiki = getBooleanOrNull(jsonObject, "has_wiki");
-        this.updatedAt = getStringOrNull(jsonObject, "updated_at");
+        this.updatedAt = getLocalDateOrNull(jsonObject, "updated_at");
         this.commentsUrl = getStringOrNull(jsonObject, "comments_url");
         this.disabled = getBooleanOrNull(jsonObject, "disabled");
         this.hasPages = getBooleanOrNull(jsonObject, "has_pages");
@@ -212,19 +213,16 @@ getSubscribers
         this.downloadsUrl = getStringOrNull(jsonObject, "downloads_url");
         this.hasIssues = getBooleanOrNull(jsonObject, "has_issues");
         this.webCommitSignoffRequired = getBooleanOrNull(jsonObject, "web_commit_signoff_required");
-        this.url = getStringOrNull(jsonObject, "url");
         this.contentsUrl = getStringOrNull(jsonObject, "contents_url");
         this.mirrorUrl = getStringOrNull(jsonObject, "mirror_url");
         this.milestonesUrl = getStringOrNull(jsonObject, "milestones_url");
         this.teamsUrl = getStringOrNull(jsonObject, "teams_url");
         this.fork = getBooleanOrNull(jsonObject, "fork");
         this.issuesUrl = getStringOrNull(jsonObject, "issues_url");
-        this.eventsUrl = getStringOrNull(jsonObject, "events_url");
         this.issueEventsUrl = getStringOrNull(jsonObject, "issue_events_url");
         this.assigneesUrl = getStringOrNull(jsonObject, "assignees_url");
         this.openIssues = getIntOrNull(jsonObject, "open_issues");
         this.watchersCount = getIntOrNull(jsonObject, "watchers_count");
-        this.nodeId = getStringOrNull(jsonObject, "node_id");
         this.homepage = getStringOrNull(jsonObject, "homepage");
         this.forksCount = getIntOrNull(jsonObject, "forks_count");
         this.owner = new GHUser(getJSONObjectOrNull(jsonObject, "owner"));
@@ -235,16 +233,24 @@ getSubscribers
         this.topics = jsonObject.getJSONArray("topics").toList().stream().map(Object::toString).collect(Collectors.toList());
     }
 
-    public GHIssue createIssue(String title) {
-        return new GHIssue(title);
+    public GHIssueBuilder createIssue(String title) {
+        return new GHIssueBuilder(title);
     }
 
-    public List<GHBranch> getBranches() {
-        return null;
+    public HashMap<String, GHBranch> getBranches() {
+        HashMap<String, GHBranch> branches = new HashMap<>();
+        String response = sendGetRequest(getUrl() + "/branches", github.getToken());
+        JSONArray jsonArray = new JSONArray(response);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String name = getStringOrNull(jsonObject, "name");
+            branches.put(name, new GHBranch(jsonObject));
+        }
+        return branches;
     }
 
     public List<GHUser> getContributors() {
-        String response = sendGetRequest(this.url + "/contributors", github.getToken());
+        String response = sendGetRequest(getUrl() + "/contributors", github.getToken());
         List<GHUser> contributors = new ArrayList<>();
         if (response != null) {
             JSONArray jsonArray = new JSONArray(response);
@@ -255,12 +261,71 @@ getSubscribers
         return contributors;
     }
 
-    public int getForks() {
-        return forks;
+    public List<GHIssue> getIssues(GHState state) {
+        String response = sendGetRequest(getUrl() + "/issues", github.getToken());
+        List<GHIssue> issues = new ArrayList<>();
+        if (response != null) {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                issues.add(new GHIssue(jsonArray.getJSONObject(i)));
+            }
+        }
+        return issues;
     }
 
-    public int getId() {
-        return id;
+    public List<GHIssue> getIssues() {
+        return getIssues(GHState.ALL);
+    }
+
+    public GHFileBuilder addFile() {
+        return new GHFileBuilder(this);
+    }
+
+    public GHFileBuilder addFile(GHBranch branch) {
+        return new GHFileBuilder(this, branch);
+    }
+
+    public GHFileBuilder addFile(GHBranch branch, String path, String content, String message) {
+        return new GHFileBuilder(this, branch, path, content, message);
+    }
+
+    public List<String> getAllFilenames() {
+        List<String> filenames = new ArrayList<>();
+        String url = getBaseUrl() + "/repos/" + this.owner.getLogin() + "/" + this.name + "/contents/?per_page=100";
+        while (url != null) {
+            String[] responseAndLink = sendGetRequestWithLinkHeader(url, github.getToken());
+            String response = responseAndLink[0];
+            JSONArray json = new JSONArray(response);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject fileJson = json.getJSONObject(i);
+                if ("file".equals(fileJson.getString("type"))) {
+                    filenames.add(fileJson.getString("name"));
+                }
+            }
+            url = extractNextPageUrl(responseAndLink[1]);
+        }
+        return filenames;
+    }
+
+
+    public List<GHFile> getDirectoryContent(String path) {
+        List<GHFile> files = new ArrayList<>();
+        try {
+            String response = sendGetRequest(getUrl() + "/contents/" + path, github.getToken());
+            if (response != null) {
+                JSONArray jsonArray = new JSONArray(response);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    files.add(new GHFile(jsonArray.getJSONObject(i)));
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return files;
+    }
+
+    public int getForks() {
+        return forks;
     }
 
     public int getOpenIssuesCount() {
@@ -279,7 +344,7 @@ getSubscribers
         return permissions;
     }
 
-    public Object getPushedAt() {
+    public LocalDateTime getPushedAt() {
         return pushedAt;
     }
 
@@ -287,7 +352,7 @@ getSubscribers
         return branchesUrl;
     }
 
-    public String getIssueComment_url() {
+    public String getIssueCommentUrl() {
         return issueCommentUrl;
     }
 
@@ -331,11 +396,11 @@ getSubscribers
         return svnUrl;
     }
 
-    public Object getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Object getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
@@ -403,10 +468,6 @@ getSubscribers
         return gitCommitsUrl;
     }
 
-    public String getEventsUrl() {
-        return eventsUrl;
-    }
-
     public String getLanguagesUrl() {
         return languagesUrl;
     }
@@ -437,10 +498,6 @@ getSubscribers
 
     public String getHooksUrl() {
         return hooksUrl;
-    }
-
-    public String getHtmlUrl() {
-        return htmlUrl;
     }
 
     public String getIssueEventsUrl() {
@@ -479,10 +536,6 @@ getSubscribers
         return name;
     }
 
-    public String getNodeId() {
-        return nodeId;
-    }
-
     public String getNotificationsUrl() {
         return notificationsUrl;
     }
@@ -505,10 +558,6 @@ getSubscribers
 
     public String getTreesUrl() {
         return treesUrl;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public boolean isWebCommitSignoffRequired() {
@@ -563,10 +612,6 @@ getSubscribers
         return hasIssues;
     }
 
-    public String getIssueCommentUrl() {
-        return issueCommentUrl;
-    }
-
     public List<String> getTopics() {
         return topics;
     }
@@ -577,5 +622,17 @@ getSubscribers
 
     public GHUser getOwner() {
         return owner;
+    }
+
+    public void updateTopics(List<String> topics) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("names", topics);
+        //TODO: Implement
+//        sendPatchRequest(this.url + "/topics", jsonObject.toString(), github.getToken());
+        this.topics = topics;
+    }
+
+    public void updateHomePage(String url) {
+        //TODO: Implement
     }
 }

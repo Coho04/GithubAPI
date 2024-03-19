@@ -1,13 +1,16 @@
 package de.goldendeveloper.githubapi;
 
 
-import de.goldendeveloper.githubapi.interfaces.HttpRequestInterface;
+import de.goldendeveloper.githubapi.bases.GHBase;
+import de.goldendeveloper.githubapi.entities.GHOrganisation;
+import de.goldendeveloper.githubapi.entities.GHUser;
+import org.json.JSONObject;
 
 @SuppressWarnings("unused")
-public class Github implements HttpRequestInterface {
+public class Github extends GHBase {
 
-    private String username;
-    private String token;
+    private final String username;
+    private final String token;
 
     public Github(String username, String token) {
         this.username = username;
@@ -15,7 +18,11 @@ public class Github implements HttpRequestInterface {
     }
 
     public GHOrganisation findOrganisationByName(String name) {
-        return new GHOrganisation(this, name);
+        return GHOrganisation.getOrganisation(this, name);
+    }
+
+    public GHUser findUserByName(String name) {
+        return GHUser.getUser(this, name);
     }
 
     public String getUsername() {
@@ -24,5 +31,10 @@ public class Github implements HttpRequestInterface {
 
     public String getToken() {
         return token;
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject();
     }
 }

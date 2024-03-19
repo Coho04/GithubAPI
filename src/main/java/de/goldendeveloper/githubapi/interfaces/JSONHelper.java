@@ -1,6 +1,11 @@
 package de.goldendeveloper.githubapi.interfaces;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface JSONHelper {
 
@@ -12,11 +17,36 @@ public interface JSONHelper {
         return jsonObject.isNull(key) ? 0 : jsonObject.getInt(key);
     }
 
+    default Long getLongOrNull(JSONObject jsonObject, String key) {
+        return jsonObject.isNull(key) ? 0L : jsonObject.getLong(key);
+    }
+
     default boolean getBooleanOrNull(JSONObject jsonObject, String key) {
         return !jsonObject.isNull(key) && jsonObject.getBoolean(key);
     }
 
     default JSONObject getJSONObjectOrNull(JSONObject jsonObject, String key) {
         return jsonObject.isNull(key) ? null : jsonObject.getJSONObject(key);
+    }
+
+    default LocalDateTime getLocalDateOrNull(JSONObject jsonObject, String key) {
+        return jsonObject.isNull(key) ? null : LocalDateTime.parse(jsonObject.getString(key));
+    }
+
+    default <T> List<T> getArrayOrNull(JSONObject jsonObject, String key, JSONToObject<T> factory) {
+        if (jsonObject.isNull(key)) {
+            return null;
+        }
+        JSONArray jsonArray = jsonObject.getJSONArray(key);
+        List<T> list = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            list.add(factory.apply(jsonArray.getJSONObject(i)));
+        }
+        return list;
+    }
+
+    @FunctionalInterface
+    interface JSONToObject<T> {
+        T apply(JSONObject jsonObject);
     }
 }

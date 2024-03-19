@@ -1,8 +1,10 @@
 package de.goldendeveloper.githubapi;
 
+import de.goldendeveloper.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
-public class GHPlan {
+@SuppressWarnings("unused")
+public class GHPlan extends GHBase {
 
     private final String name;
     private final long space;
@@ -10,12 +12,12 @@ public class GHPlan {
     private final int filledSeats;
     private final int seats;
 
-    public GHPlan(JSONObject json) {
-        this.name = json.getString("name");
-        this.space = json.getLong("space");
-        this.privateRepos = json.getInt("private_repos");
-        this.filledSeats = json.getInt("filled_seats");
-        this.seats = json.getInt("seats");
+    public GHPlan(JSONObject jsonObject) {
+        this.seats = getIntOrNull(jsonObject, "seats");
+        this.space = getLongOrNull(jsonObject, "space");
+        this.name = getStringOrNull(jsonObject, "name");
+        this.filledSeats = getIntOrNull(jsonObject, "filled_seats");
+        this.privateRepos = getIntOrNull(jsonObject, "private_repos");
     }
 
     public String getName() {
@@ -36,5 +38,15 @@ public class GHPlan {
 
     public long getSpace() {
         return space;
+    }
+
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject()
+                .put("name", name)
+                .put("space", space)
+                .put("seats", seats)
+                .put("filled_seats", filledSeats)
+                .put("private_repos", privateRepos);
     }
 }

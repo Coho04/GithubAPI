@@ -1,9 +1,10 @@
-package de.goldendeveloper.githubapi;
+package de.goldendeveloper.githubapi.repositories;
 
+import de.goldendeveloper.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
 @SuppressWarnings("unused")
-public class GHLicense {
+public class GHLicense extends GHBase {
 
     private final String name;
     private final String spdxId;
@@ -12,11 +13,11 @@ public class GHLicense {
     private final String nodeId;
 
     public GHLicense(JSONObject jsonObject) {
-        this.name = jsonObject.getString("name");
-        this.spdxId = jsonObject.getString("spdx_id");
-        this.key = jsonObject.getString("key");
-        this.url = jsonObject.getString("url");
-        this.nodeId = jsonObject.getString("node_id");
+        this.name = getStringOrNull(jsonObject, "name");
+        this.spdxId = getStringOrNull(jsonObject, "spdx_id");
+        this.key = getStringOrNull(jsonObject, "key");
+        this.url = getStringOrNull(jsonObject, "url");
+        this.nodeId = getStringOrNull(jsonObject, "node_id");
     }
 
     public String getUrl() {

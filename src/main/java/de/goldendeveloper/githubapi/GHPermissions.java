@@ -1,21 +1,23 @@
 package de.goldendeveloper.githubapi;
 
+import de.goldendeveloper.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
-public class GHPermissions {
+@SuppressWarnings("unused")
+public class GHPermissions extends GHBase {
 
     private final boolean pull;
-    private final boolean maintain;
+    private final boolean push;
     private final boolean admin;
     private final boolean triage;
-    private final boolean push;
+    private final boolean maintain;
 
     public GHPermissions(JSONObject jsonObject) {
-        this.pull = jsonObject.getBoolean("pull");
-        this.maintain = jsonObject.getBoolean("maintain");
-        this.admin = jsonObject.getBoolean("admin");
-        this.triage = jsonObject.getBoolean("triage");
-        this.push = jsonObject.getBoolean("push");
+        this.pull = getBooleanOrNull(jsonObject, "pull");
+        this.maintain = getBooleanOrNull(jsonObject, "maintain");
+        this.admin = getBooleanOrNull(jsonObject, "admin");
+        this.triage = getBooleanOrNull(jsonObject, "triage");
+        this.push = getBooleanOrNull(jsonObject, "push");
     }
 
     public boolean isPull() {
