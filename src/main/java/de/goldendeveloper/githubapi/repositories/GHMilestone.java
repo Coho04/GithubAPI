@@ -6,6 +6,7 @@ import de.goldendeveloper.githubapi.enums.GHState;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @SuppressWarnings("unused")
 public class GHMilestone extends ClassBase {
@@ -13,19 +14,21 @@ public class GHMilestone extends ClassBase {
     private final int number;
     private final String title;
     private final String dueOn; //Date?
-    private final GHState state;
-    private final GHUser creator;
+    private GHState state;
+    private GHUser creator;
     private final int openIssues;
-    private final LocalDateTime closedAt;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime closedAt;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
     private final int closedIssues;
     private final String labelsUrl;
     private final String description;
 
     public GHMilestone(JSONObject jsonObject) {
         super(jsonObject);
-        this.creator = new GHUser(getJSONObjectOrNull(jsonObject, "creator"));
+        if (jsonObject.has("creator")) {
+            this.creator = new GHUser(jsonObject.getJSONObject("creator"));
+        }
         this.closedAt = getLocalDateOrNull(jsonObject, "closed_at");
         this.description = getStringOrNull(jsonObject, "description");
         this.createdAt = getLocalDateOrNull(jsonObject, "created_at");
@@ -35,7 +38,9 @@ public class GHMilestone extends ClassBase {
         this.labelsUrl = getStringOrNull(jsonObject, "labels_url");
         this.number = getIntOrNull(jsonObject, "number");
         this.updatedAt = getLocalDateOrNull(jsonObject, "updated_at");
-        this.state = GHState.fromString(getStringOrNull(jsonObject, "state"));
+        if (jsonObject.has("state")) {
+            this.state = GHState.fromString(getStringOrNull(jsonObject, "state"));
+        }
         this.openIssues = getIntOrNull(jsonObject, "open_issues");
     }
 
@@ -43,7 +48,7 @@ public class GHMilestone extends ClassBase {
         return description;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
@@ -55,11 +60,11 @@ public class GHMilestone extends ClassBase {
         return title;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getClosedAt() {
+    public OffsetDateTime getClosedAt() {
         return closedAt;
     }
 

@@ -5,7 +5,7 @@ import de.goldendeveloper.githubapi.entities.GHUser;
 import de.goldendeveloper.githubapi.enums.GHState;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -19,9 +19,9 @@ public class GHIssue extends ClassBase {
     private final boolean draft;
     private final boolean locked;
     private final String labelsUrl;
-    private final LocalDateTime createdAt; //Date
-    private final LocalDateTime updatedAt; //Date
-    private final LocalDateTime closedAt;
+    private final OffsetDateTime createdAt; //Date
+    private final OffsetDateTime updatedAt; //Date
+    private final OffsetDateTime closedAt;
     private final String commentsUrl;
     private final String timelineUrl;
     private final String repositoryUrl;
@@ -32,7 +32,7 @@ public class GHIssue extends ClassBase {
     private GHMilestone milestone;
     private final List<GHLabels> labels;
     private final List<GHUser> assignees;
-    private final GHUser user;
+    private GHUser user;
     private GHUser assignee;
 
         /*
@@ -83,7 +83,9 @@ public class GHIssue extends ClassBase {
         }
         this.labels = getArrayOrNull(jsonObject, "labels", GHLabels::new);
         this.assignees = getArrayOrNull(jsonObject, "assignees", GHUser::new);
-        this.user = new GHUser(getJSONObjectOrNull(jsonObject, "user"));
+        if (jsonObject.has("user")) {
+            this.user = new GHUser(getJSONObjectOrNull(jsonObject, "user"));
+        }
         JSONObject assigneeJSONObject = getJSONObjectOrNull(jsonObject, "assignee");
         if (assigneeJSONObject != null) {
             this.assignee = new GHUser(assigneeJSONObject);
@@ -114,7 +116,7 @@ public class GHIssue extends ClassBase {
         return body;
     }
 
-    public LocalDateTime getClosedAt() {
+    public OffsetDateTime getClosedAt() {
         return closedAt;
     }
 
@@ -122,7 +124,7 @@ public class GHIssue extends ClassBase {
         return commentsUrl;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -159,7 +161,7 @@ public class GHIssue extends ClassBase {
         return title;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 

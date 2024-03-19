@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class GHOrganisation extends EntityBase {
     private final int publicGists;
     private final int followers;
     private final int following;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
-    private final LocalDateTime archivedAt;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime archivedAt;
     private final int totalPrivateRepos;
     private final int ownedPrivateRepos;
     private final int privateGists;
@@ -207,7 +208,7 @@ public class GHOrganisation extends EntityBase {
         return email;
     }
 
-    public LocalDateTime getArchivedAt() {
+    public OffsetDateTime getArchivedAt() {
         return archivedAt;
     }
 
@@ -215,7 +216,7 @@ public class GHOrganisation extends EntityBase {
         return location;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -223,7 +224,7 @@ public class GHOrganisation extends EntityBase {
         return twitterUsername;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 

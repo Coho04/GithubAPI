@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,16 +27,16 @@ public class GHRepository extends ClassBase {
     private final String name;
     private final boolean fork;
     private final int watchers;
-    private final GHUser owner;
+    private GHUser owner;
     private final String sshUrl;
     private final String svnUrl;
     private final Github github;
     private final String keysUrl;
     private final String tagsUrl;
     private final String cloneUrl;
-    private final LocalDateTime pushedAt;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private final OffsetDateTime pushedAt;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
     private final String language;
     private final String fullname;
     private final String forksUrl;
@@ -225,7 +226,9 @@ getSubscribers
         this.watchersCount = getIntOrNull(jsonObject, "watchers_count");
         this.homepage = getStringOrNull(jsonObject, "homepage");
         this.forksCount = getIntOrNull(jsonObject, "forks_count");
-        this.owner = new GHUser(getJSONObjectOrNull(jsonObject, "owner"));
+        if (jsonObject.has("owner") && !jsonObject.isNull("owner")) {
+            this.owner = new GHUser(getJSONObjectOrNull(jsonObject, "owner"));
+        }
         if (jsonObject.has("license") && !jsonObject.isNull("license")) {
             this.license = new GHLicense(getJSONObjectOrNull(jsonObject, "license"));
         }
@@ -234,7 +237,7 @@ getSubscribers
     }
 
     public GHIssueBuilder createIssue(String title) {
-        return new GHIssueBuilder(title);
+        return new GHIssueBuilder(github, title);
     }
 
     public HashMap<String, GHBranch> getBranches() {
@@ -344,7 +347,7 @@ getSubscribers
         return permissions;
     }
 
-    public LocalDateTime getPushedAt() {
+    public OffsetDateTime getPushedAt() {
         return pushedAt;
     }
 
@@ -396,11 +399,11 @@ getSubscribers
         return svnUrl;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 

@@ -3,7 +3,7 @@ package de.goldendeveloper.githubapi.interfaces;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +29,8 @@ public interface JSONHelper {
         return jsonObject.isNull(key) ? null : jsonObject.getJSONObject(key);
     }
 
-    default LocalDateTime getLocalDateOrNull(JSONObject jsonObject, String key) {
-        return jsonObject.isNull(key) ? null : LocalDateTime.parse(jsonObject.getString(key));
+    default OffsetDateTime getLocalDateOrNull(JSONObject jsonObject, String key) {
+        return jsonObject.isNull(key) ? null : OffsetDateTime.parse(jsonObject.getString(key));
     }
 
     default <T> List<T> getArrayOrNull(JSONObject jsonObject, String key, JSONToObject<T> factory) {
