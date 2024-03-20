@@ -24,7 +24,7 @@ jobs:
           username: github
           password: ${{ secrets.NEXUS_PASSWORD }}
           format: maven2
-          repository: maven-releases
+          repository: maven-central
           coordinates: groupId=de.goldendeveloper artifactId=GithubAPI version=${{ env.RELEASE_VERSION }}
           assets: extension=jar
           filename: ./target/GithubAPI-${{ env.RELEASE_VERSION }}.jar
