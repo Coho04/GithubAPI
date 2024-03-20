@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GHPermissionsTest {
+class GHPermissionsTest {
 
     @Test
-    public void shouldReturnCorrectPullPermission() {
+    void shouldReturnCorrectPullPermission() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("pull", true);
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
@@ -17,7 +17,7 @@ public class GHPermissionsTest {
     }
 
     @Test
-    public void shouldReturnCorrectMaintainPermission() {
+    void shouldReturnCorrectMaintainPermission() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("maintain", true);
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
@@ -25,7 +25,7 @@ public class GHPermissionsTest {
     }
 
     @Test
-    public void shouldReturnCorrectAdminPermission() {
+    void shouldReturnCorrectAdminPermission() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("admin", true);
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
@@ -33,7 +33,7 @@ public class GHPermissionsTest {
     }
 
     @Test
-    public void shouldReturnCorrectTriagePermission() {
+    void shouldReturnCorrectTriagePermission() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("triage", true);
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
@@ -41,7 +41,7 @@ public class GHPermissionsTest {
     }
 
     @Test
-    public void shouldReturnCorrectPushPermission() {
+    void shouldReturnCorrectPushPermission() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("push", true);
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
@@ -49,35 +49,35 @@ public class GHPermissionsTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenPullPermissionIsNotPresent() {
+    void shouldReturnFalseWhenPullPermissionIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
         assertFalse(ghPermissions.isPull());
     }
 
     @Test
-    public void shouldReturnFalseWhenMaintainPermissionIsNotPresent() {
+    void shouldReturnFalseWhenMaintainPermissionIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
         assertFalse(ghPermissions.isMaintain());
     }
 
     @Test
-    public void shouldReturnFalseWhenAdminPermissionIsNotPresent() {
+    void shouldReturnFalseWhenAdminPermissionIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
         assertFalse(ghPermissions.isAdmin());
     }
 
     @Test
-    public void shouldReturnFalseWhenTriagePermissionIsNotPresent() {
+    void shouldReturnFalseWhenTriagePermissionIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
         assertFalse(ghPermissions.isTriage());
     }
 
     @Test
-    public void shouldReturnFalseWhenPushPermissionIsNotPresent() {
+    void shouldReturnFalseWhenPushPermissionIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
         GHPermissions ghPermissions = new GHPermissions(jsonObject);
         assertFalse(ghPermissions.isPush());

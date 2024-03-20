@@ -8,10 +8,10 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class GithubTest {
+class GithubTest {
 
     @Test
-    public void shouldFindOrganisationByName() {
+    void shouldFindOrganisationByName() {
         Github github = Mockito.mock(Github.class);
         GHOrganisation mockOrganisation = Mockito.mock(GHOrganisation.class);
         when(github.findOrganisationByName("orgName")).thenReturn(mockOrganisation);
@@ -20,7 +20,7 @@ public class GithubTest {
     }
 
     @Test
-    public void shouldFindUserByName() {
+    void shouldFindUserByName() {
         Github github = Mockito.mock(Github.class);
         GHUser mockUser = Mockito.mock(GHUser.class);
         when(github.findUserByName("userName")).thenReturn(mockUser);
@@ -29,14 +29,14 @@ public class GithubTest {
     }
 
     @Test
-    public void shouldReturnUsername() {
+    void shouldReturnUsername() {
         Github github = new Github("username", "token");
         String result = github.getUsername();
         assertEquals("username", result);
     }
 
     @Test
-    public void shouldReturnToken() {
+    void shouldReturnToken() {
         Github github = new Github("username", "token");
         String result = github.getToken();
         assertEquals("token", result);

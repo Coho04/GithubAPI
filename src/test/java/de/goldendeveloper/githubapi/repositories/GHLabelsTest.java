@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GHLabelsTest {
+class GHLabelsTest {
 
     @Test
-    public void shouldReturnCorrectId() {
+    void shouldReturnCorrectId() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 123);
 
@@ -19,7 +19,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectUrl() {
+    void shouldReturnCorrectUrl() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("url", "http://test.com");
 
@@ -29,7 +29,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectName() {
+    void shouldReturnCorrectName() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "Test Name");
 
@@ -39,7 +39,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectColor() {
+    void shouldReturnCorrectColor() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("color", "ffffff");
 
@@ -49,7 +49,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectNodeId() {
+    void shouldReturnCorrectNodeId() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("node_id", "abc123");
 
@@ -59,7 +59,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectDefaultStatus() {
+    void shouldReturnCorrectDefaultStatus() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("default", true);
 
@@ -69,7 +69,7 @@ public class GHLabelsTest {
     }
 
     @Test
-    public void shouldReturnCorrectDescription() {
+    void shouldReturnCorrectDescription() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("description", "Test Description");
 

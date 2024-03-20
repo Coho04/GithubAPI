@@ -9,7 +9,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GHIssueTest {
+class GHIssueTest {
 
     private JSONObject jsonObject;
 
@@ -26,37 +26,37 @@ public class GHIssueTest {
     }
 
     @Test
-    public void shouldReturnCorrectNumber() {
+    void shouldReturnCorrectNumber() {
         assertEquals(123, new GHIssue(jsonObject).getNumber());
     }
 
     @Test
-    public void shouldReturnCorrectComments() {
+    void shouldReturnCorrectComments() {
         assertEquals(10, new GHIssue(jsonObject).getComments());
     }
 
     @Test
-    public void shouldReturnCorrectBody() {
+    void shouldReturnCorrectBody() {
         assertEquals("Test Body", new GHIssue(jsonObject).getBody());
     }
 
     @Test
-    public void shouldReturnCorrectState() {
+    void shouldReturnCorrectState() {
         assertEquals(GHState.OPEN, new GHIssue(jsonObject).getState());
     }
 
     @Test
-    public void shouldReturnCorrectUser() {
+    void shouldReturnCorrectUser() {
         assertEquals("TestUser", new GHIssue(jsonObject).getUser().getLogin());
     }
 
     @Test
-    public void shouldReturnCorrectLabels() {
+    void shouldReturnCorrectLabels() {
         assertEquals("TestLabel", new GHIssue(jsonObject).getLabels().get(0).getName());
     }
 
     @Test
-    public void shouldReturnCorrectAssignees() {
+    void shouldReturnCorrectAssignees() {
         assertEquals("TestAssignee", new GHIssue(jsonObject).getAssignees().get(0).getLogin());
     }
 
@@ -65,7 +65,7 @@ public class GHIssueTest {
      * Test case is straightforward and simple, the input matches one of the GHState enums.
      */
     @Test
-    public void shouldReturnOpenWhenFromStringCalledWithOpen() {
+    void shouldReturnOpenWhenFromStringCalledWithOpen() {
         assertEquals(GHState.OPEN, GHState.fromString("open"));
     }
 
@@ -74,7 +74,7 @@ public class GHIssueTest {
      * Test case is straightforward and simple, the input matches one of the GHState enums.
      */
     @Test
-    public void shouldReturnClosedWhenFromStringCalledWithClosed() {
+    void shouldReturnClosedWhenFromStringCalledWithClosed() {
         assertEquals(GHState.CLOSED, GHState.fromString("closed"));
     }
 
@@ -83,7 +83,7 @@ public class GHIssueTest {
      * Test case is straightforward and simple, the input matches one of the GHState enums.
      */
     @Test
-    public void shouldReturnAllWhenFromStringCalledWithAll() {
+    void shouldReturnAllWhenFromStringCalledWithAll() {
         assertEquals(GHState.ALL, GHState.fromString("all"));
     }
 
@@ -92,7 +92,7 @@ public class GHIssueTest {
      * In this case we are testing the error handling of the method, and the expected outcome is that an IllegalArgumentException is thrown.
      */
     @Test
-    public void shouldThrowIllegalArgumentExceptionWhenFromStringCalledWithInvalidString() {
+    void shouldThrowIllegalArgumentExceptionWhenFromStringCalledWithInvalidString() {
         assertThrows(IllegalArgumentException.class, () -> GHState.fromString("invalid"));
     }
 }
