@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GHBranchTest {
+class GHBranchTest {
 
     private JSONObject jsonObject;
 
@@ -23,27 +23,27 @@ public class GHBranchTest {
     }
 
     @Test
-    public void shouldReturnCorrectName() {
+    void shouldReturnCorrectName() {
         assertEquals("Test Branch", new GHBranch(jsonObject).getName());
     }
 
     @Test
-    public void shouldReturnCorrectCommitSha() {
+    void shouldReturnCorrectCommitSha() {
         assertEquals("abc123",new GHBranch(jsonObject).getCommitSha() );
     }
 
     @Test
-    public void shouldReturnCorrectCommitUrl() {
+    void shouldReturnCorrectCommitUrl() {
         assertEquals("https://test.com", new GHBranch(jsonObject).getCommitUrl());
     }
 
     @Test
-    public void shouldReturnCorrectProtectionStatus() {
+    void shouldReturnCorrectProtectionStatus() {
         assertTrue(new GHBranch(jsonObject).isProtected());
     }
 
     @Test
-    public void shouldReturnFalseWhenProtectionStatusIsNotPresent() {
+    void shouldReturnFalseWhenProtectionStatusIsNotPresent() {
         jsonObject.remove("protected");
         assertFalse(new GHBranch(jsonObject).isProtected());
     }

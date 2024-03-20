@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class GHFileTest {
+class GHFileTest {
 
     @Test
-    public void shouldReturnCorrectName() {
+    void shouldReturnCorrectName() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "Test File");
 
@@ -19,7 +19,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnCorrectPath() {
+    void shouldReturnCorrectPath() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("path", "/path/to/file");
 
@@ -29,7 +29,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnCorrectSha() {
+    void shouldReturnCorrectSha() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sha", "abc123");
 
@@ -39,7 +39,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnCorrectSize() {
+    void shouldReturnCorrectSize() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("size", 100);
 
@@ -49,7 +49,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnCorrectUrl() {
+    void shouldReturnCorrectUrl() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("url", "http://test.com");
 
@@ -59,7 +59,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnNullWhenNameIsNotPresent() {
+    void shouldReturnNullWhenNameIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
 
         GHFile ghFile = new GHFile(jsonObject);
@@ -68,7 +68,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnNullWhenPathIsNotPresent() {
+    void shouldReturnNullWhenPathIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
 
         GHFile ghFile = new GHFile(jsonObject);
@@ -77,7 +77,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnNullWhenShaIsNotPresent() {
+    void shouldReturnNullWhenShaIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
 
         GHFile ghFile = new GHFile(jsonObject);
@@ -86,7 +86,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnZeroWhenSizeIsNotPresent() {
+    void shouldReturnZeroWhenSizeIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
 
         GHFile ghFile = new GHFile(jsonObject);
@@ -95,7 +95,7 @@ public class GHFileTest {
     }
 
     @Test
-    public void shouldReturnNullWhenUrlIsNotPresent() {
+    void shouldReturnNullWhenUrlIsNotPresent() {
         JSONObject jsonObject = new JSONObject();
 
         GHFile ghFile = new GHFile(jsonObject);
