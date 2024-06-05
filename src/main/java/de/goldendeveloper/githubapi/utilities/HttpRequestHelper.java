@@ -101,4 +101,44 @@ public class HttpRequestHelper {
         }
         return null;
     }
+
+    public static void sendDeleteRequest(String url, String githubToken) {
+        try {
+            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer " + githubToken);
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                System.out.println("Successfully sent DELETE request to: " + url);
+            } else if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
+                System.out.println("Token: " + githubToken);
+                System.out.println("Failed to send GET request to: " + url);
+                System.out.println("Response Message: " + con.getResponseMessage());
+                System.out.println("Response Code: " + responseCode);
+            } else {
+                System.out.println("Failed to send DELETE request to: " + url);
+                System.out.println("Response Code: " + responseCode);
+            }
+        } catch (IOException exception) {
+            if (!exception.getMessage().contains("404")) {
+                System.out.println("Failed to send GET request to: " + url);
+                System.out.println("ErrorMessage: " + exception.getMessage());
+            }
+        }
+    }
+
+    public static Boolean sendGetRequestWithResponseCode(String url , String githubToken, int responseCode) {
+        try {
+            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Authorization", "Bearer " + githubToken);
+            return con.getResponseCode() == responseCode;
+        } catch (IOException exception) {
+            if (!exception.getMessage().contains("404")) {
+                System.out.println("Failed to send GET request to: " + url);
+                System.out.println("ErrorMessage: " + exception.getMessage());
+            }
+        }
+        return false;
+    }
 }

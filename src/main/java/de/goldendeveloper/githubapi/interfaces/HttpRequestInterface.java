@@ -13,8 +13,17 @@ public interface HttpRequestInterface {
         return HttpRequestHelper.sendGetRequest(url, githubToken);
     }
 
+    default void sendDeleteRequest(String url, String githubToken) {
+        HttpRequestHelper.sendDeleteRequest(url, githubToken);
+    }
+
+
     default String[] sendGetRequestWithLinkHeader(String url, String githubToken) {
         return HttpRequestHelper.sendGetRequestWithLinkHeader(url, githubToken);
+    }
+
+    default Boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
+        return HttpRequestHelper.sendGetRequestWithResponseCode(url, githubToken, responseCode);
     }
 
     default String extractNextPageUrl(String linkHeader) {
