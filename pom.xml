@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.goldendeveloper</groupId>
+    <groupId>de.coho04</groupId>
     <artifactId>githubapi</artifactId>
     <version>1.0.1</version>
 
@@ -77,13 +77,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/Golden-Developer/githubapi</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
