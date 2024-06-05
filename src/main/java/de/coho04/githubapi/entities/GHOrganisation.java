@@ -2,6 +2,7 @@ package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.bases.EntityBase;
 import de.coho04.githubapi.enums.GHPackageType;
+import de.coho04.githubapi.enums.GHState;
 import de.coho04.githubapi.repositories.GHRepository;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
@@ -425,8 +426,8 @@ public class GHOrganisation extends EntityBase {
         //TODO: Implement Function
     }
 
-    public void getRepositorysWithOpenPullRequests() {
-        //TODO: Implement Function
+    public List<GHRepository> getRepositorysWithOpenPullRequests() {
+        return getRepositories().stream().filter(repo -> repo.hasPullRequestsWithState(GHState.OPEN)).toList();
     }
 
     public void getPullRequests() {
@@ -473,5 +474,9 @@ public class GHOrganisation extends EntityBase {
         String response = sendGetRequest(url, github.getToken());
         assert response != null;
         return new GHPackage(new JSONObject(response));
+    }
+
+    public List<GHAlert> listSecretScanningAlerts() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/secret-scanning/alerts",  json -> new GHAlert(json, github), github.getToken());
     }
 }

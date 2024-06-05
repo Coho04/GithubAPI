@@ -4,7 +4,7 @@ import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
 @SuppressWarnings("unused")
-public class GHLabels extends GHBase {
+public class GHLabel extends GHBase {
 
     private final int id;
     private final String url;
@@ -14,7 +14,7 @@ public class GHLabels extends GHBase {
     private final boolean isDefault;
     private final String description;
 
-    public GHLabels(JSONObject jsonObject) {
+    public GHLabel(JSONObject jsonObject) {
         this.id = getIntOrNull(jsonObject, "id");
         this.url = getStringOrNull(jsonObject, "url");
         this.name = getStringOrNull(jsonObject, "name");

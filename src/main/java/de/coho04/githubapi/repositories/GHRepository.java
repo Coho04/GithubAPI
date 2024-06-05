@@ -6,6 +6,7 @@ import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.builders.GHFileBuilder;
 import de.coho04.githubapi.builders.GHIssueBuilder;
+import de.coho04.githubapi.entities.GHPullRequest;
 import de.coho04.githubapi.entities.GHUser;
 import de.coho04.githubapi.enums.GHState;
 import org.json.JSONArray;
@@ -573,6 +574,16 @@ public class GHRepository extends ClassBase {
 
     public GHUser getOwner() {
         return owner;
+    }
+
+
+    public List<GHPullRequest> listPullRequests() {
+        String url = "/repos/" + this.getOwner().getLogin() + "/" + this.getName() + "/pulls";
+        return fetchPaginatedData(url, GHPullRequest::new, github.getToken(), "&state=all");
+    }
+
+    public Boolean hasPullRequestsWithState(GHState state) {
+        return listPullRequests().stream().anyMatch(pr -> pr.getState().equals(state));
     }
 
     public void updateTopics(List<String> topics) {

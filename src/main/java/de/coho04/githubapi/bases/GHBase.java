@@ -46,6 +46,32 @@ public class GHBase implements JSONHelper, HttpRequestInterface {
      * @param token the authentication token to use for the request
      * @return a list of objects of type T representing the fetched data
      */
+    protected <T> List<T> fetchPaginatedData(String endpoint, Function<JSONObject, T> mapper, String token, String params) {
+        List<T> result = new ArrayList<>();
+        String url = getBaseUrl() + endpoint + "?per_page=100" + params;
+        while (url != null) {
+            String[] responseAndLink = sendGetRequestWithLinkHeader(url, token);
+            String response = responseAndLink[0];
+            JSONArray json = new JSONArray(response);
+            for (int i = 0; i < json.length(); i++) {
+                JSONObject jsonObject = json.getJSONObject(i);
+                result.add(mapper.apply(jsonObject));
+            }
+            String linkHeader = responseAndLink[1];
+            url = extractNextPageUrl(linkHeader);
+        }
+        return result;
+    }
+
+    /**
+     * Fetches paginated data from a given endpoint and maps the data to a list of objects of type T.
+     *
+     * @param <T> the type of objects in the returned list
+     * @param endpoint the endpoint to fetch data from
+     * @param mapper a function that maps a JSONObject to an object of type T
+     * @param token the authentication token to use for the request
+     * @return a list of objects of type T representing the fetched data
+     */
     protected <T> List<T> fetchPaginatedData(String endpoint, Function<JSONObject, T> mapper, String token) {
         List<T> result = new ArrayList<>();
         String url = getBaseUrl() + endpoint + "?per_page=100";

@@ -30,7 +30,7 @@ public class GHIssue extends ClassBase {
     private final String performedViaGithubApp;
     private final String stateReason;
     private GHMilestone milestone;
-    private final List<GHLabels> labels;
+    private final List<GHLabel> labels;
     private final List<GHUser> assignees;
     private GHUser user;
     private GHUser assignee;
@@ -81,7 +81,7 @@ public class GHIssue extends ClassBase {
         if (milestoneJSONObject != null) {
             this.milestone = new GHMilestone(milestoneJSONObject);
         }
-        this.labels = getArrayOrNull(jsonObject, "labels", GHLabels::new);
+        this.labels = getArrayOrNull(jsonObject, "labels", GHLabel::new);
         this.assignees = getArrayOrNull(jsonObject, "assignees", GHUser::new);
         if (jsonObject.has("user")) {
             this.user = new GHUser(getJSONObjectOrNull(jsonObject, "user"));
@@ -181,7 +181,7 @@ public class GHIssue extends ClassBase {
         return assignee;
     }
 
-    public List<GHLabels> getLabels() {
+    public List<GHLabel> getLabels() {
         return labels;
     }
 

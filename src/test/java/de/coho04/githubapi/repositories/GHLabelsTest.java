@@ -13,9 +13,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 123);
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals(123, ghLabels.getId());
+        assertEquals(123, ghLabel.getId());
     }
 
     @Test
@@ -23,9 +23,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("url", "http://test.com");
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("http://test.com", ghLabels.getUrl());
+        assertEquals("http://test.com", ghLabel.getUrl());
     }
 
     @Test
@@ -33,9 +33,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "Test Name");
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("Test Name", ghLabels.getName());
+        assertEquals("Test Name", ghLabel.getName());
     }
 
     @Test
@@ -43,9 +43,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("color", "ffffff");
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("ffffff", ghLabels.getColor());
+        assertEquals("ffffff", ghLabel.getColor());
     }
 
     @Test
@@ -53,9 +53,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("node_id", "abc123");
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("abc123", ghLabels.getNodeId());
+        assertEquals("abc123", ghLabel.getNodeId());
     }
 
     @Test
@@ -63,9 +63,9 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("default", true);
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertTrue(ghLabels.isDefault());
+        assertTrue(ghLabel.isDefault());
     }
 
     @Test
@@ -73,8 +73,8 @@ class GHLabelsTest {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("description", "Test Description");
 
-        GHLabels ghLabels = new GHLabels(jsonObject);
+        GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("Test Description", ghLabels.getDescription());
+        assertEquals("Test Description", ghLabel.getDescription());
     }
 }

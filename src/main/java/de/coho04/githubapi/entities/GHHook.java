@@ -1,13 +1,13 @@
 package de.coho04.githubapi.entities;
 
-import de.coho04.githubapi.interfaces.JSONHelper;
+import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class GHHook implements JSONHelper {
+public class GHHook extends GHBase {
 
     public final int id;
     public final String url;
