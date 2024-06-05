@@ -38,7 +38,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           mv target/site/apidocs $HOME/javadocs
           cd $HOME
-          git clone --depth 1 --branch gh-pages git@github.com:<USERNAME>/<REPO>.git gh-pages
+          git clone --depth 1 --branch gh-pages git@github.com:Coho04/GithubAPI.git gh-pages
           cd gh-pages
           rm -rf *
           mv $HOME/javadocs/* .
