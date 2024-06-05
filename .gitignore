@@ -13,7 +13,7 @@ target/
 *.ipr
 .idea
 
-src/main/java/de/goldendeveloper/TestMain.java
+**/TestMain.java
 
 ### Eclipse ###
 .apt_generated
