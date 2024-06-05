@@ -1,6 +1,7 @@
 package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.bases.EntityBase;
+import de.coho04.githubapi.enums.GHPackageType;
 import de.coho04.githubapi.repositories.GHRepository;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
@@ -457,5 +458,20 @@ public class GHOrganisation extends EntityBase {
 
     public void deleteHook(Long id) {
         //TODO: Implement Function
+    }
+
+    public List<GHPackage> listDockerConflictsPackages() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/docker/conflicts", GHPackage::new, github.getToken());
+    }
+
+    public List<GHPackage> listPackages(GHPackageType packageType) {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/packages?package_type=" + packageType.toURL(), GHPackage::new, github.getToken());
+    }
+
+    public GHPackage getPackage(String name, GHPackageType packageType) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/packages/" + packageType.toURL() + name;
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new GHPackage(new JSONObject(response));
     }
 }
