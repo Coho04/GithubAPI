@@ -5,12 +5,10 @@ import de.goldendeveloper.githubapi.bases.EntityBase;
 import de.goldendeveloper.githubapi.repositories.GHRepository;
 import de.goldendeveloper.githubapi.Github;
 import de.goldendeveloper.githubapi.utilities.HttpRequestHelper;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
+import java.net.HttpURLConnection;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -121,7 +119,6 @@ public class GHOrganisation extends EntityBase {
         this.secretScanningPushProtectionCustomLinkEnabled = getBooleanOrNull(jsonObject, "secret_scanning_push_protection_custom_link_enabled");
         this.secretScanningPushProtectionCustomLink = getStringOrNull(jsonObject, "secret_scanning_push_protection_custom_link");
         this.secretScanningValidityChecksEnabled = getBooleanOrNull(jsonObject, "secret_scanning_validity_checks_enabled");
-
     }
 
     public static GHOrganisation getOrganisation(Github github, String name) {
@@ -136,20 +133,7 @@ public class GHOrganisation extends EntityBase {
     }
 
     public List<GHRepository> getRepositories() {
-        List<GHRepository> repositories = new ArrayList<>();
-        String url = getBaseUrl() + "/orgs/" + this.givenName + "/repos?per_page=100";
-        while (url != null) {
-            String[] responseAndLink = sendGetRequestWithLinkHeader(url, github.getToken());
-            String response = responseAndLink[0];
-            JSONArray json = new JSONArray(response);
-            for (int i = 0; i < json.length(); i++) {
-                JSONObject repoJson = json.getJSONObject(i);
-                repositories.add(new GHRepository(repoJson, github));
-            }
-            String linkHeader = responseAndLink[1];
-            url = extractNextPageUrl(linkHeader);
-        }
-        return repositories;
+        return fetchPaginatedData("/orgs/" + this.givenName + "/repos", json -> new GHRepository(json, github), github.getToken());
     }
 
     public String getName() {
@@ -353,52 +337,123 @@ public class GHOrganisation extends EntityBase {
     }
 
 
+    public String getGivenName() {
+        return givenName.replace(" ", "-");
+    }
+
     @Override
     public JSONObject toJSONObject() {
-        return super.toJSONObject()
-                .put("name", name)
-                .put("description", description)
-                .put("company", company)
-                .put("blog", blog)
-                .put("location", location)
-                .put("email", email)
-                .put("twitter_username", twitterUsername)
-                .put("is_verified", isVerified)
-                .put("has_organization_projects", hasOrganizationProjects)
-                .put("has_repository_projects", hasRepositoryProjects)
-                .put("public_repos", publicRepos)
-                .put("public_gists", publicGists)
-                .put("followers", followers)
-                .put("following", following)
-                .put("created_at", createdAt)
-                .put("updated_at", updatedAt)
-                .put("archived_at", archivedAt)
-                .put("total_private_repos", totalPrivateRepos)
-                .put("owned_private_repos", ownedPrivateRepos)
-                .put("private_gists", privateGists)
-                .put("disk_usage", diskUsage)
-                .put("collaborators", collaborators)
-                .put("billing_email", billingEmail)
-                .put("default_repository_permission", defaultRepositoryPermission)
-                .put("members_can_create_repositories", membersCanCreateRepositories)
-                .put("two_factor_requirement_enabled", twoFactorRequirementEnabled)
-                .put("members_allowed_repository_creation_type", membersAllowedRepositoryCreationType)
-                .put("members_can_create_public_repositories", membersCanCreatePublicRepositories)
-                .put("members_can_create_private_repositories", membersCanCreatePrivateRepositories)
-                .put("members_can_create_internal_repositories", membersCanCreateInternalRepositories)
-                .put("members_can_create_pages", membersCanCreatePages)
-                .put("members_can_fork_private_repositories", membersCanForkPrivateRepositories)
-                .put("web_commit_signoff_required", webCommitSignoffRequired)
-                .put("members_can_create_public_pages", membersCanCreatePublicPages)
-                .put("members_can_create_private_pages", membersCanCreatePrivatePages)
-                .put("advanced_security_enabled_for_new_repositories", advancedSecurityEnabledForNewRepositories)
-                .put("dependabot_alerts_enabled_for_new_repositories", dependabotAlertsEnabledForNewRepositories)
-                .put("dependabot_security_updates_enabled_for_new_repositories", dependabotSecurityUpdatesEnabledForNewRepositories)
-                .put("dependency_graph_enabled_for_new_repositories", dependencyGraphEnabledForNewRepositories)
-                .put("secret_scanning_enabled_for_new_repositories",secretScanningEnabledForNewRepositories)
-                .put("secret_scanning_push_protection_enabled_for_new_repositories",secretScanningPushProtectionEnabledForNewRepositories)
-                .put("secret_scanning_push_protection_custom_link_enabled",secretScanningPushProtectionCustomLinkEnabled)
-                .put("secret_scanning_push_protection_custom_link",secretScanningPushProtectionCustomLink)
-                .put("secret_scanning_validity_checks_enabled", secretScanningValidityChecksEnabled);
+        return super.toJSONObject().put("name", name).put("description", description).put("company", company).put("blog", blog).put("location", location).put("email", email).put("twitter_username", twitterUsername).put("is_verified", isVerified).put("has_organization_projects", hasOrganizationProjects).put("has_repository_projects", hasRepositoryProjects).put("public_repos", publicRepos).put("public_gists", publicGists).put("followers", followers).put("following", following).put("created_at", createdAt).put("updated_at", updatedAt).put("archived_at", archivedAt).put("total_private_repos", totalPrivateRepos).put("owned_private_repos", ownedPrivateRepos).put("private_gists", privateGists).put("disk_usage", diskUsage).put("collaborators", collaborators).put("billing_email", billingEmail).put("default_repository_permission", defaultRepositoryPermission).put("members_can_create_repositories", membersCanCreateRepositories).put("two_factor_requirement_enabled", twoFactorRequirementEnabled).put("members_allowed_repository_creation_type", membersAllowedRepositoryCreationType).put("members_can_create_public_repositories", membersCanCreatePublicRepositories).put("members_can_create_private_repositories", membersCanCreatePrivateRepositories).put("members_can_create_internal_repositories", membersCanCreateInternalRepositories).put("members_can_create_pages", membersCanCreatePages).put("members_can_fork_private_repositories", membersCanForkPrivateRepositories).put("web_commit_signoff_required", webCommitSignoffRequired).put("members_can_create_public_pages", membersCanCreatePublicPages).put("members_can_create_private_pages", membersCanCreatePrivatePages).put("advanced_security_enabled_for_new_repositories", advancedSecurityEnabledForNewRepositories).put("dependabot_alerts_enabled_for_new_repositories", dependabotAlertsEnabledForNewRepositories).put("dependabot_security_updates_enabled_for_new_repositories", dependabotSecurityUpdatesEnabledForNewRepositories).put("dependency_graph_enabled_for_new_repositories", dependencyGraphEnabledForNewRepositories).put("secret_scanning_enabled_for_new_repositories", secretScanningEnabledForNewRepositories).put("secret_scanning_push_protection_enabled_for_new_repositories", secretScanningPushProtectionEnabledForNewRepositories).put("secret_scanning_push_protection_custom_link_enabled", secretScanningPushProtectionCustomLinkEnabled).put("secret_scanning_push_protection_custom_link", secretScanningPushProtectionCustomLink).put("secret_scanning_validity_checks_enabled", secretScanningValidityChecksEnabled);
+    }
+
+    public List<GHTeam> getTeams() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/teams", GHTeam::new, github.getToken());
+    }
+
+    public List<GHTeam> listTeams() {
+        return getTeams();
+    }
+
+    public void getTeam(Long id) {
+        //TODO: Implement Function
+    }
+
+    public GHTeam findTeamByName(String name) {
+        return GHTeam.getTeamByName(this.github, name, this);
+    }
+
+    public GHTeam findTeamBySlug(String slug) {
+        return GHTeam.getTeamByName(this.github, slug, this);
+    }
+
+    public Boolean hasMember(GHUser user) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/members/" + user.getLogin();
+        return sendGetRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public void addMember(GHUser user) {
+        //TODO: Implement Function
+    }
+
+    public void removeMember(GHUser user) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/members/" + user.getLogin();
+        HttpRequestHelper.sendDeleteRequest(url, github.getToken());
+    }
+
+    public Boolean hasPublicMember(GHUser user) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/public_members/" + user.getLogin();
+        return sendGetRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public void publicize(GHUser user) {
+        //TODO: Implement Function
+    }
+
+    public List<GHUser> listMembers() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/members", GHUser::new, github.getToken());
+    }
+
+    public List<GHUser> listPublicMembers() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/public_members", GHUser::new, github.getToken());
+    }
+
+    public List<GHUser> listOutsideCollaborators() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/outside_collaborators", GHUser::new, github.getToken());
+    }
+
+    public void listMembersWithRole(String role) {
+        //TODO: Implement Function
+    }
+
+    public void isOrganisationProjectsEnabled() {
+        //TODO: Implement Function
+    }
+
+    public void enableOrganisationProjects() {
+        //TODO: Implement Function
+    }
+
+    public List<GHProject> listProjects() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/projects", GHProject::new, github.getToken());
+    }
+
+    public void createProject() {
+        //TODO: Implement Function
+    }
+
+    public void createTeam(String name) {
+        //TODO: Implement Function
+    }
+
+    public void getRepositorysWithOpenPullRequests() {
+        //TODO: Implement Function
+    }
+
+    public void getPullRequests() {
+        //TODO: Implement Function
+    }
+
+    public void listEvents() {
+        //TODO: Implement Function
+    }
+
+    public void getHooks() {
+        //TODO: Implement Function
+    }
+
+    public void getHook(Long id) {
+        //TODO: Implement Function
+    }
+
+    public void createHook() {
+        //TODO: Implement Function
+    }
+
+    public void deleteHook(Long id) {
+        //TODO: Implement Function
+    }
+
+    public void createWebhook() {
+        //TODO: Implement Function
     }
 }
