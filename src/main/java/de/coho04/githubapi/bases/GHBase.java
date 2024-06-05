@@ -9,16 +9,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * GHBase is a class that implements JSONHelper and HttpRequestInterface. It represents a base class for GitHub objects.
+ * It contains several methods such as toJSONObject, getBaseUrl, and fetchPaginatedData.
+ *
+ * @author Coho04
+ * @version 1.0
+ * @since 2024-1.2
+ */
 public class GHBase implements JSONHelper, HttpRequestInterface {
 
+    /**
+     * Returns a new JSONObject.
+     *
+     * @return a new JSONObject.
+     */
     public JSONObject toJSONObject() {
         return new JSONObject();
     }
 
+    /**
+     * Returns the base URL for the GitHub API.
+     *
+     * @return the base URL for the GitHub API.
+     */
     public static String getBaseUrl() {
         return "https://api.github.com";
     }
 
+    /**
+     * Fetches paginated data from a given endpoint and maps the data to a list of objects of type T.
+     *
+     * @param <T> the type of objects in the returned list
+     * @param endpoint the endpoint to fetch data from
+     * @param mapper a function that maps a JSONObject to an object of type T
+     * @param token the authentication token to use for the request
+     * @return a list of objects of type T representing the fetched data
+     */
     protected <T> List<T> fetchPaginatedData(String endpoint, Function<JSONObject, T> mapper, String token) {
         List<T> result = new ArrayList<>();
         String url = getBaseUrl() + endpoint + "?per_page=100";

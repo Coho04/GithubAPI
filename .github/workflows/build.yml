@@ -20,23 +20,36 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn clean install
-      - name: Run Unit Tests
-        run: mvn test
       - name: Get Maven Artifact ID
         env:
           VERSION: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec 2>/dev/null)
           ARTIFACT: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec 2>/dev/null)
         run: echo '${{ github.repository }}'
-      - name: Archive Test Results
-        if: always()
-        uses: actions/upload-artifact@v2
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java version
+        uses: actions/setup-java@v3
         with:
-          name: test-results
-          path: target/surefire-reports
-      - name: Archive Maven Dependencies
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Restore Maven Cache
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
+      - name: Run Unit Tests
+        run: mvn test
+      - name: Archive Test Results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: target/surefire-reports
