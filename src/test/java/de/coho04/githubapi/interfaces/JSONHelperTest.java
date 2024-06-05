@@ -69,7 +69,7 @@ class JSONHelperTest implements JSONHelper {
         List<String> resultList = getArrayOrNull(jsonObject, "jsonArrayKey", jsonObject -> jsonObject.getString("arrayObjectKey"));
         assertNotNull(resultList);
         assertEquals(1, resultList.size());
-        assertEquals("arrayObjectValue", resultList.getFirst());
+        assertEquals("arrayObjectValue", resultList.get(0));
         assertNull(getArrayOrNull(jsonObject, "nonExistentKey", jsonObject -> jsonObject.getString("arrayObjectKey")));
     }
 }

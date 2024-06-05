@@ -3,10 +3,10 @@ name: Generate and Deploy Javadocs
 on:
   push:
     branches:
-      - main  # Ändern Sie dies entsprechend Ihrem Default-Branch
+      - main
   pull_request:
     branches:
-      - main  # Ändern Sie dies entsprechend Ihrem Default-Branch
+      - main
 
 jobs:
   build:
