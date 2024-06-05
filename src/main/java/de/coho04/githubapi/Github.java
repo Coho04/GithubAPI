@@ -36,10 +36,6 @@ public class Github extends GHBase {
         return token;
     }
 
-    @Override
-    public JSONObject toJSONObject() {
-        return super.toJSONObject();
-    }
 
 
     public List<GHAdvisory> listGlobalAdvisories() {
