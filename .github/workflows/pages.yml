@@ -1,0 +1,47 @@
+name: Generate and Deploy Javadocs
+
+on:
+  push:
+    branches:
+      - main  # Ändern Sie dies entsprechend Ihrem Default-Branch
+  pull_request:
+    branches:
+      - main  # Ändern Sie dies entsprechend Ihrem Default-Branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build with Maven
+        run: mvn clean install
+
+      - name: Generate Javadocs
+        run: mvn javadoc:javadoc
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Deploy Javadocs to GitHub Pages
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          mv target/site/apidocs $HOME/javadocs
+          cd $HOME
+          git clone --depth 1 --branch gh-pages git@github.com:<USERNAME>/<REPO>.git gh-pages
+          cd gh-pages
+          rm -rf *
+          mv $HOME/javadocs/* .
+          git add .
+          git commit -m "Deploy Javadocs"
+          git push
