@@ -6,6 +6,10 @@ import org.json.JSONObject;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+/**
+ * Represents a GitHub Workflow Job.
+ * This class provides methods and properties to access information about a workflow job in GitHub Actions.
+ */
 @SuppressWarnings("unused")
 public class GHWorkflowJob extends ClassBase {
 
@@ -27,6 +31,11 @@ public class GHWorkflowJob extends ClassBase {
     public String workflowName;
     public String headBranch;
 
+    /**
+     * Constructs a new GHWorkflowJob instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the workflow job data
+     */
     public GHWorkflowJob(JSONObject jsonObject) {
         super(jsonObject);
         this.runId = getIntOrNull(jsonObject, "run_id");
@@ -52,70 +61,155 @@ public class GHWorkflowJob extends ClassBase {
         this.headBranch = getStringOrNull(jsonObject, "head_branch");
     }
 
+    /**
+     * Returns the name of the workflow job.
+     *
+     * @return the name of the workflow job
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the start time of the workflow job.
+     *
+     * @return the start time of the workflow job
+     */
     public OffsetDateTime getStartedAt() {
         return startedAt;
     }
 
+    /**
+     * Returns the completion time of the workflow job.
+     *
+     * @return the completion time of the workflow job
+     */
     public OffsetDateTime getCompletedAt() {
         return completedAt;
     }
 
+    /**
+     * Returns the status of the workflow job.
+     *
+     * @return the status of the workflow job
+     */
     public String getStatus() {
         return status;
     }
 
+    /**
+     * Returns the conclusion of the workflow job.
+     *
+     * @return the conclusion of the workflow job
+     */
     public String getConclusion() {
         return conclusion;
     }
 
+    /**
+     * Returns the head SHA of the workflow job.
+     *
+     * @return the head SHA of the workflow job
+     */
     public String getHeadSha() {
         return headSha;
     }
 
+    /**
+     * Returns the head branch of the workflow job.
+     *
+     * @return the head branch of the workflow job
+     */
     public String getHeadBranch() {
         return headBranch;
     }
 
+    /**
+     * Returns the run ID of the workflow job.
+     *
+     * @return the run ID of the workflow job
+     */
     public int getRunId() {
         return runId;
     }
 
+    /**
+     * Returns the runner group ID of the workflow job.
+     *
+     * @return the runner group ID of the workflow job
+     */
     public int getRunnerGroupId() {
         return runnerGroupId;
     }
 
+    /**
+     * Returns the list of steps in the workflow job.
+     *
+     * @return the list of steps
+     */
     public List<GHStep> getSteps() {
         return steps;
     }
 
+    /**
+     * Returns the runner ID of the workflow job.
+     *
+     * @return the runner ID of the workflow job
+     */
     public int getRunnerId() {
         return runnerId;
     }
 
+    /**
+     * Returns the list of labels associated with the workflow job.
+     *
+     * @return the list of labels
+     */
     public List<String> getLabels() {
         return labels;
     }
 
+    /**
+     * Returns the URL for the check run associated with the workflow job.
+     *
+     * @return the check run URL
+     */
     public String getCheckRunUrl() {
         return checkRunUrl;
     }
 
+    /**
+     * Returns the runner group name of the workflow job.
+     *
+     * @return the runner group name
+     */
     public String getRunnerGroupName() {
         return runnerGroupName;
     }
 
+    /**
+     * Returns the runner name of the workflow job.
+     *
+     * @return the runner name
+     */
     public String getRunnerName() {
         return runnerName;
     }
 
+    /**
+     * Returns the run URL of the workflow job.
+     *
+     * @return the run URL
+     */
     public String getRunUrl() {
         return runUrl;
     }
 
+    /**
+     * Returns the workflow name of the workflow job.
+     *
+     * @return the workflow name
+     */
     public String getWorkflowName() {
         return workflowName;
     }
