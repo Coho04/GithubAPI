@@ -9,7 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GHPublicKeyBuilderTest {
+class GHPublicKeyBuilderTest {
 
     @Mock
     private Github github;
@@ -24,7 +24,7 @@ public class GHPublicKeyBuilderTest {
 
     @Test
     @DisplayName("Should return the same builder instance after setting title and key")
-    public void returnsSameBuilderInstanceAfterSettingTitleAndKey() {
+    void returnsSameBuilderInstanceAfterSettingTitleAndKey() {
         GHPublicKeyBuilder resultTitle = builder.setTitle("testTitle");
         GHPublicKeyBuilder resultKey = builder.setKey("testKey");
 
