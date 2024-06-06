@@ -40,4 +40,26 @@ public class GHPublicKey extends GHBase {
     public String getKeyId() {
         return keyId;
     }
+
+    public static class Builder {
+        private String keyId;
+        private String key;
+
+        public Builder setKeyId(String keyId) {
+            this.keyId = keyId;
+            return this;
+        }
+
+        public Builder setKey(String key) {
+            this.key = key;
+            return this;
+        }
+
+        public GHPublicKey build() {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("key_id", keyId);
+            jsonObject.put("key", key);
+            return new GHPublicKey(jsonObject);
+        }
+    }
 }

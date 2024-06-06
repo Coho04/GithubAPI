@@ -65,6 +65,15 @@ public class EntityBase extends ClassBase {
     }
 
     /**
+     * Returns the login of this EntityBase object.
+     *
+     * @return the login of this EntityBase object.
+     */
+    public String getUsername() {
+        return login;
+    }
+
+    /**
      * Returns the avatarUrl of this EntityBase object.
      *
      * @return the avatarUrl of this EntityBase object.
