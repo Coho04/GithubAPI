@@ -13,23 +13,23 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHWorkflowJob extends ClassBase {
 
-    public int runId;
-    public String runUrl;
-    public String headSha;
-    public String status;
-    public String conclusion;
-    public OffsetDateTime startedAt;
-    public OffsetDateTime completedAt;
-    public String name;
-    public List<GHStep> steps;
-    public String checkRunUrl;
-    public List<String> labels;
-    public int runnerId;
-    public String runnerName;
-    public int runnerGroupId;
-    public String runnerGroupName;
-    public String workflowName;
-    public String headBranch;
+    private final int runId;
+    private final String runUrl;
+    private final String headSha;
+    private final String status;
+    private final String conclusion;
+    private final OffsetDateTime startedAt;
+    private final OffsetDateTime completedAt;
+    private final String name;
+    private List<GHStep> steps;
+    private final String checkRunUrl;
+    private List<String> labels;
+    private final int runnerId;
+    private final String runnerName;
+    private final int runnerGroupId;
+    private final String runnerGroupName;
+    private final String workflowName;
+    private final String headBranch;
 
     /**
      * Constructs a new GHWorkflowJob instance with the provided JSON object.

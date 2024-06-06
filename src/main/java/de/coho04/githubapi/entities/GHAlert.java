@@ -14,25 +14,25 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHAlert extends GHBase {
 
-    public final Github github;
-    public final int number;
-    public final OffsetDateTime createdAt;
-    public final String url;
-    public final String htmlUrl;
-    public final String locationsUrl;
-    public final String state;
-    public final String resolution;
-    public final OffsetDateTime resolvedAt;
-    public final GHUser resolvedBy;
-    public final String secretType;
-    public final String secretTypeDisplayName;
-    public final String secret;
-    public final GHRepository repository;
-    public final GHUser pushProtectionBypassedBy;
-    public final boolean pushProtectionBypassed;
-    public final OffsetDateTime pushProtectionBypassedAt;
-    public final String resolutionComment;
-    public final String validity;
+    private final Github github;
+    private final int number;
+    private final OffsetDateTime createdAt;
+    private final String url;
+    private final String htmlUrl;
+    private final String locationsUrl;
+    private final String state;
+    private final String resolution;
+    private final OffsetDateTime resolvedAt;
+    private final GHUser resolvedBy;
+    private final String secretType;
+    private final String secretTypeDisplayName;
+    private final String secret;
+    private final GHRepository repository;
+    private final GHUser pushProtectionBypassedBy;
+    private final boolean pushProtectionBypassed;
+    private final OffsetDateTime pushProtectionBypassedAt;
+    private final String resolutionComment;
+    private final String validity;
 
     /**
      * Constructs a new GHAlert instance with the provided JSON object and GitHub instance.

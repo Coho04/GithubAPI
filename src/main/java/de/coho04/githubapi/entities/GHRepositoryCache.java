@@ -10,9 +10,9 @@ import org.json.JSONObject;
 @SuppressWarnings("unused")
 public class GHRepositoryCache extends GHBase {
 
-    public String fullName;
-    public int activeCachesSizeInBytes;
-    public int activeCachesCount;
+    private final String fullName;
+    private final int activeCachesSizeInBytes;
+    private final int activeCachesCount;
 
     /**
      * Constructs a new GHRepositoryCache instance with the provided JSON object.

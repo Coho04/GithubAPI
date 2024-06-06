@@ -1,7 +1,6 @@
 package de.coho04.githubapi.builders;
 
 import de.coho04.githubapi.Github;
-import de.coho04.githubapi.SelfUser;
 import de.coho04.githubapi.bases.GHBase;
 import de.coho04.githubapi.repositories.GHBranch;
 import de.coho04.githubapi.repositories.GHRepository;

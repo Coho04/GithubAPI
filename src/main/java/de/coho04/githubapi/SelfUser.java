@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class SelfUser extends GHUser {
 
     /**

@@ -10,8 +10,8 @@ import org.json.JSONObject;
 @SuppressWarnings("unused")
 public class GHPublicKey extends GHBase {
 
-    public String keyId;
-    public String key;
+    private final String keyId;
+    private final String key;
 
     /**
      * Constructs a new GHPublicKey instance with the provided JSON object.

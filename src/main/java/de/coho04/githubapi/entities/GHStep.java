@@ -12,12 +12,12 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHStep extends GHBase {
 
-    public String name;
-    public String status;
-    public String conclusion;
-    public int number;
-    public OffsetDateTime startedAt;
-    public OffsetDateTime completedAt;
+    private final String name;
+    private final String status;
+    private final String conclusion;
+    private final int number;
+    private final OffsetDateTime startedAt;
+    private final OffsetDateTime completedAt;
 
     /**
      * Constructs a new GHStep instance with the provided JSON object.

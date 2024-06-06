@@ -12,13 +12,13 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHEvent extends GHBase {
 
-    public String id;
-    public String type;
-    public JSONObject actor;
-    public JSONObject repo;
-    public JSONObject payload;
-    public boolean isPublic;
-    public OffsetDateTime createdAt;
+    private final String id;
+    private final String type;
+    private final JSONObject actor;
+    private final JSONObject repo;
+    private final JSONObject payload;
+    private final boolean isPublic;
+    private final OffsetDateTime createdAt;
 
     /**
      * Constructs a new GHEvent instance with the provided JSON object.

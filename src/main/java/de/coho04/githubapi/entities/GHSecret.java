@@ -12,11 +12,11 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHSecret extends GHBase {
 
-    public String name;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime updatedAt;
-    public String visibility;
-    public String selectedRepositoriesUrl;
+    private final String name;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final String visibility;
+    private final String selectedRepositoriesUrl;
 
     /**
      * Constructs a new GHSecret instance with the provided JSON object.

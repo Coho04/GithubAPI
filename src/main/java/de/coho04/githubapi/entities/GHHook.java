@@ -13,17 +13,17 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHHook extends GHBase {
 
-    public final int id;
-    public final String url;
-    public final String pingUrl;
-    public final String deliveriesUrl;
-    public final String name;
-    public final List<String> events;
-    public final boolean active;
-    public final JSONObject config;
-    public final OffsetDateTime updatedAt;
-    public final OffsetDateTime createdAt;
-    public final String type;
+    private final int id;
+    private final String url;
+    private final String pingUrl;
+    private final String deliveriesUrl;
+    private final String name;
+    private final List<String> events;
+    private final boolean active;
+    private final JSONObject config;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime createdAt;
+    private final String type;
 
     /**
      * Constructs a new GHHook instance with the provided JSON object.

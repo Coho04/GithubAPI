@@ -15,28 +15,28 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHAdvisory extends GHBase {
 
-    public int id;
-    public String ghsaId;
-    public String cveId;
-    public String url;
-    public String htmlUrl;
-    public String repositoryAdvisoryUrl;
-    public String summary;
-    public String description;
-    public String type;
-    public String severity;
-    public String sourceCodeLocation;
-    public JSONObject[] identifiers;
-    public String[] references;
-    public OffsetDateTime publishedAt;
-    public OffsetDateTime updatedAt;
-    public OffsetDateTime githubReviewedAt;
-    public OffsetDateTime nvdPublishedAt;
-    public OffsetDateTime withdrawnAt;
-    public List<GHVulnerability> vulnerabilities;
-    public JSONObject cvss;
-    public JSONArray cwes;
-    public List<GHUser> credits;
+    private final int id;
+    private final String ghsaId;
+    private final String cveId;
+    private final String url;
+    private final String htmlUrl;
+    private final String repositoryAdvisoryUrl;
+    private final String summary;
+    private final String description;
+    private final String type;
+    private final String severity;
+    private final String sourceCodeLocation;
+    private final JSONObject[] identifiers;
+    private final String[] references;
+    private final OffsetDateTime publishedAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime githubReviewedAt;
+    private final OffsetDateTime nvdPublishedAt;
+    private final OffsetDateTime withdrawnAt;
+    private final List<GHVulnerability> vulnerabilities;
+    private final JSONObject cvss;
+    private final JSONArray cwes;
+    private final List<GHUser> credits;
 
     /**
      * Constructs a new GHAdvisory instance with the provided JSON object.

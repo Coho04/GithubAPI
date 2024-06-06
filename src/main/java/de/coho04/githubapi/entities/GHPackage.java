@@ -11,13 +11,13 @@ import org.json.JSONObject;
 @SuppressWarnings("unused")
 public class GHPackage extends ClassBase {
 
-    public String name;
-    public String packageType;
-    public GHUser owner;
-    public String versionCount;
-    public String visibility;
-    public String createdAt;
-    public String updatedAt;
+    private final String name;
+    private final String packageType;
+    private final GHUser owner;
+    private final String versionCount;
+    private final String visibility;
+    private final String createdAt;
+    private final String updatedAt;
 
     /**
      * Constructs a new GHPackage instance with the provided JSON object.

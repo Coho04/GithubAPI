@@ -12,15 +12,15 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHArtifact extends ClassBase {
 
-    public String name;
-    public int sizeInBytes;
-    public String url;
-    public String archiveDownloadUrl;
-    public boolean expired;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime expiresAt;
-    public OffsetDateTime updatedAt;
-    public GHWorkflowRun workflowRun;
+    private final String name;
+    private final int sizeInBytes;
+    private final String url;
+    private final String archiveDownloadUrl;
+    private final boolean expired;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime expiresAt;
+    private final OffsetDateTime updatedAt;
+    private final GHWorkflowRun workflowRun;
 
     /**
      * Constructs a new GHArtifact instance with the provided JSON object.

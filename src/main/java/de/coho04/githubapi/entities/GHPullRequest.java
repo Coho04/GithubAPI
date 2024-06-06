@@ -17,37 +17,37 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHPullRequest extends ClassBase {
 
-    public String diffUrl;
-    public String patchUrl;
-    public String issueUrl;
-    public String commitsUrl;
-    public String reviewCommentsUrl;
-    public String reviewCommentUrl;
-    public String commentsUrl;
-    public String statusesUrl;
-    public int number;
-    public GHState state;
-    public boolean locked;
-    public String title;
-    public GHUser user;
-    public String body;
-    public List<GHLabel> labels;
-    public GHMilestone milestone;
-    public String activeLockReason;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime updatedAt;
-    public OffsetDateTime closedAt;
-    public OffsetDateTime mergedAt;
-    public String mergeCommitSha;
-    public GHUser assignee;
-    public List<GHUser> assignees;
-    public List<GHUser> requestedReviewers;
-    public List<GHUser> requestedTeams;
+    private final String diffUrl;
+    private final String patchUrl;
+    private final String issueUrl;
+    private final String commitsUrl;
+    private final String reviewCommentsUrl;
+    private final String reviewCommentUrl;
+    private final String commentsUrl;
+    private final String statusesUrl;
+    private final int number;
+    private GHState state;
+    private final boolean locked;
+    private final String title;
+    private final GHUser user;
+    private final String body;
+    private final List<GHLabel> labels;
+    private GHMilestone milestone;
+    private final String activeLockReason;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime closedAt;
+    private final OffsetDateTime mergedAt;
+    private final String mergeCommitSha;
+    private GHUser assignee;
+    private final List<GHUser> assignees;
+    private final List<GHUser> requestedReviewers;
+    private final List<GHUser> requestedTeams;
     //    public GHHead head;
 //    public GHBase base;
-    public String authorAssociation;
-    public String autoMerge;
-    public boolean draft;
+    private final String authorAssociation;
+    private final String autoMerge;
+    private final boolean draft;
 
     /**
      * Constructs a new GHPullRequest instance with the provided JSON object.

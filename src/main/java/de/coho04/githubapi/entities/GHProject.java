@@ -18,17 +18,17 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHProject extends ClassBase {
 
-    public String ownerUrl;
-    public String columnsUrl;
-    public String name;
-    public String body;
-    public int number;
-    public String state;
-    public GHUser creator;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime updatedAt;
-    public String organizationPermission;
-    public boolean isPrivate;
+    private final String ownerUrl;
+    private final String columnsUrl;
+    private final String name;
+    private final String body;
+    private final int number;
+    private final String state;
+    private final GHUser creator;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final String organizationPermission;
+    private final boolean isPrivate;
 
     /**
      * Constructs a new GHProject object.
