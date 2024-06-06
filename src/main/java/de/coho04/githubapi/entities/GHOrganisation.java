@@ -434,8 +434,8 @@ public class GHOrganisation extends EntityBase {
         //TODO: Implement Function
     }
 
-    public List<GHEvents> listEvents() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/events", GHEvents::new, github.getToken());
+    public List<GHEvent> listEvents() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/events", GHEvent::new, github.getToken());
     }
 
     public List<GHHook> getHooks() {
@@ -477,6 +477,73 @@ public class GHOrganisation extends EntityBase {
     }
 
     public List<GHAlert> listSecretScanningAlerts() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/secret-scanning/alerts",  json -> new GHAlert(json, github), github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/secret-scanning/alerts", json -> new GHAlert(json, github), github.getToken());
     }
+
+    public int getCacheUsageActiveCount() {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/cache/usage";
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new JSONObject(response).getInt("total_active_caches_count");
+    }
+
+    public int getCacheUsageSizeInBytes() {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/cache/usage";
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new JSONObject(response).getInt("total_active_caches_size_in_bytes");
+    }
+
+    public List<GHRepositoryCache> listRepositoryCaches() {
+        return fetchPaginatedData("/orgs/" + this.givenName + "/actions/actions/cache/usage-by-repository", GHRepositoryCache::new, github.getToken());
+    }
+
+    public List<GHSecret> listSecrets() {
+        return fetchArrayData("/orgs/" + this.givenName + "/actions/secrets", GHSecret::new, github.getToken(), "secrets");
+    }
+
+    public GHPublicKey getPublicKey() {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/secrets/public-key";
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new GHPublicKey(new JSONObject(response));
+    }
+
+    public GHSecret getSecret(String name) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/secrets/" + name;
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new GHSecret(new JSONObject(response));
+    }
+
+    public boolean deleteSecret(String name) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/secrets/" + name;
+        return sendDeleteRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public List<GHRepository> listSecretRepositorys() {
+        return fetchArrayData("/orgs/" + this.givenName + "/actions/secrets", jsonObject -> new GHRepository(jsonObject, github), github.getToken(), "repositories");
+    }
+
+    public boolean deleteRepositoryFromSecret(String secretName, String repoId) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/secrets/" + secretName + "/repositories/" + repoId;
+        return sendDeleteRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public List<GHVariable> listVariables() {
+        return fetchArrayData("/orgs/" + this.givenName + "/actions/variables", GHVariable::new, github.getToken(), "variables");
+    }
+
+    public GHVariable getVariable(String name) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/actions/variables/" + name;
+        String response = sendGetRequest(url, github.getToken());
+        assert response != null;
+        return new GHVariable(new JSONObject(response));
+    }
+
+    public List<GHRepository> listVariableRepositorys(String name) {
+        return fetchArrayData("/orgs/" + this.givenName + "/actions/variables/" + name, jsonObject -> new GHRepository(jsonObject, github), github.getToken(), "repositories");
+    }
+
+
 }

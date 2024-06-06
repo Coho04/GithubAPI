@@ -17,6 +17,9 @@ public interface HttpRequestInterface {
         HttpRequestHelper.sendDeleteRequest(url, githubToken);
     }
 
+    default Boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
+        return HttpRequestHelper.sendDeleteRequestWithResponseCode(url, githubToken, responseCode);
+    }
 
     default String[] sendGetRequestWithLinkHeader(String url, String githubToken) {
         return HttpRequestHelper.sendGetRequestWithLinkHeader(url, githubToken);

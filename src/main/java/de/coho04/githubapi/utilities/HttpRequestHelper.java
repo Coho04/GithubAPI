@@ -127,7 +127,23 @@ public class HttpRequestHelper {
         }
     }
 
-    public static Boolean sendGetRequestWithResponseCode(String url , String githubToken, int responseCode) {
+    public static Boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
+        try {
+            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Authorization", "Bearer " + githubToken);
+            return responseCode == con.getResponseCode();
+        } catch (IOException exception) {
+            if (!exception.getMessage().contains("404")) {
+                System.out.println("Failed to send GET request to: " + url);
+                System.out.println("ErrorMessage: " + exception.getMessage());
+            }
+        }
+        return false;
+    }
+
+
+    public static Boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
             con.setRequestMethod("GET");

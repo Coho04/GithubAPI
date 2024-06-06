@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import java.time.OffsetDateTime;
 
 @SuppressWarnings("unused")
-public class GHEvents extends GHBase {
+public class GHEvent extends GHBase {
 
     public String id;
     public String type;
@@ -17,7 +17,7 @@ public class GHEvents extends GHBase {
     public OffsetDateTime createdAt;
 
 
-    public GHEvents(JSONObject jsonObject) {
+    public GHEvent(JSONObject jsonObject) {
         this.id = getStringOrNull(jsonObject, "id");
         this.type = getStringOrNull(jsonObject, "type");
         this.actor = getJSONObjectOrNull(jsonObject, "actor");

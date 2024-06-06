@@ -4,7 +4,7 @@ import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
 
 @SuppressWarnings("unused")
-public class GHPermissions extends GHBase {
+public class GHPermission extends GHBase {
 
     private final boolean pull;
     private final boolean push;
@@ -12,7 +12,7 @@ public class GHPermissions extends GHBase {
     private final boolean triage;
     private final boolean maintain;
 
-    public GHPermissions(JSONObject jsonObject) {
+    public GHPermission(JSONObject jsonObject) {
         this.pull = getBooleanOrNull(jsonObject, "pull");
         this.maintain = getBooleanOrNull(jsonObject, "maintain");
         this.admin = getBooleanOrNull(jsonObject, "admin");
