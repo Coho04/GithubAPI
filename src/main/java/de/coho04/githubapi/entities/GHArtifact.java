@@ -3,28 +3,112 @@ package de.coho04.githubapi.entities;
 import de.coho04.githubapi.bases.ClassBase;
 import org.json.JSONObject;
 
+import java.time.OffsetDateTime;
+
+/**
+ * This class represents a GitHub Artifact.
+ * It provides methods for fetching data about the artifact such as its name, size in bytes, url, archive download url, expired status, creation date, expiry date, update date, and associated workflow run.
+ */
+@SuppressWarnings("unused")
 public class GHArtifact extends ClassBase {
 
     public String name;
-    public int size_in_bytes;
+    public int sizeInBytes;
     public String url;
-    public String archive_download_url;
+    public String archiveDownloadUrl;
     public boolean expired;
-    public String created_at;
-    public String expires_at;
-    public String updated_at;
-    public GHWorkflowRun workflow_run;
+    public OffsetDateTime createdAt;
+    public OffsetDateTime expiresAt;
+    public OffsetDateTime updatedAt;
+    public GHWorkflowRun workflowRun;
 
+    /**
+     * Constructs a new GHArtifact instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the artifact data
+     */
     public GHArtifact(JSONObject jsonObject) {
         super(jsonObject);
         this.name = getStringOrNull(jsonObject, "name");
-        this.size_in_bytes = getIntOrNull(jsonObject, "size_in_bytes");
+        this.sizeInBytes = getIntOrNull(jsonObject, "size_in_bytes");
         this.url = getStringOrNull(jsonObject, "url");
-        this.archive_download_url = getStringOrNull(jsonObject, "archive_download_url");
+        this.archiveDownloadUrl = getStringOrNull(jsonObject, "archive_download_url");
         this.expired = getBooleanOrNull(jsonObject, "expired");
-        this.created_at = getStringOrNull(jsonObject, "created_at");
-        this.expires_at = getStringOrNull(jsonObject, "expires_at");
-        this.updated_at = getStringOrNull(jsonObject, "updated_at");
-        this.workflow_run = new GHWorkflowRun(getJSONObjectOrNull(jsonObject, "workflow_run"));
+        this.createdAt = getLocalDateOrNull(jsonObject, "created_at");
+        this.expiresAt = getLocalDateOrNull(jsonObject, "expires_at");
+        this.updatedAt = getLocalDateOrNull(jsonObject, "updated_at");
+        this.workflowRun = new GHWorkflowRun(getJSONObjectOrNull(jsonObject, "workflow_run"));
+    }
+
+    /**
+     * Returns the name of the artifact.
+     *
+     * @return the name of the artifact
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the update date of the artifact.
+     *
+     * @return the update date of the artifact
+     */
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * Returns the creation date of the artifact.
+     *
+     * @return the creation date of the artifact
+     */
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Returns the size in bytes of the artifact.
+     *
+     * @return the size in bytes of the artifact
+     */
+    public int getSizeInBytes() {
+        return sizeInBytes;
+    }
+
+    /**
+     * Returns the workflow run of the artifact.
+     *
+     * @return the workflow run of the artifact
+     */
+    public GHWorkflowRun getWorkflowRun() {
+        return workflowRun;
+    }
+
+    /**
+     * Returns the expiry date of the artifact.
+     *
+     * @return the expiry date of the artifact
+     */
+    public OffsetDateTime getExpiresAt() {
+        return expiresAt;
+    }
+
+    /**
+     * Returns the archive download url of the artifact.
+     *
+     * @return the archive download url of the artifact
+     */
+    public String getArchiveDownloadUrl() {
+        return archiveDownloadUrl;
+    }
+
+    /**
+     * Returns the expired status of the artifact.
+     *
+     * @return the expired status of the artifact
+     */
+    public boolean isExpired() {
+        return expired;
     }
 }

@@ -5,6 +5,10 @@ import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
 
+/**
+ * This class represents a GitHub Event.
+ * It provides methods for fetching data about the event such as its id, type, actor, repo, payload, public status, and creation date.
+ */
 @SuppressWarnings("unused")
 public class GHEvent extends GHBase {
 
@@ -16,7 +20,11 @@ public class GHEvent extends GHBase {
     public boolean isPublic;
     public OffsetDateTime createdAt;
 
-
+    /**
+     * Constructs a new GHEvent instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the event data
+     */
     public GHEvent(JSONObject jsonObject) {
         this.id = getStringOrNull(jsonObject, "id");
         this.type = getStringOrNull(jsonObject, "type");
@@ -27,26 +35,56 @@ public class GHEvent extends GHBase {
         this.createdAt = getLocalDateOrNull(jsonObject, "created_at");
     }
 
+    /**
+     * Returns the type of the event.
+     *
+     * @return the type of the event
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Returns the actor of the event.
+     *
+     * @return the actor of the event
+     */
     public JSONObject getActor() {
         return actor;
     }
 
+    /**
+     * Returns the payload of the event.
+     *
+     * @return the payload of the event
+     */
     public JSONObject getPayload() {
         return payload;
     }
 
+    /**
+     * Returns the repo of the event.
+     *
+     * @return the repo of the event
+     */
     public JSONObject getRepo() {
         return repo;
     }
 
+    /**
+     * Returns the creation date of the event.
+     *
+     * @return the creation date of the event
+     */
     public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * Returns the id of the event.
+     *
+     * @return the id of the event
+     */
     public String getId() {
         return id;
     }

@@ -9,8 +9,18 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.stream.Collectors;
 
+/**
+ * This class provides helper methods for sending HTTP requests.
+ */
 public class HttpRequestHelper {
 
+    /**
+     * Sends a POST request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject the JSON object to send
+     */
     public static void sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
@@ -32,6 +42,13 @@ public class HttpRequestHelper {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     * @return the response body as a string
+     */
     public static String sendGetRequest(String url, String githubToken) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
@@ -60,6 +77,13 @@ public class HttpRequestHelper {
         return null;
     }
 
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token and returns the response body and the Link header.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     * @return an array containing the response body and the Link header
+     */
     public static String[] sendGetRequestWithLinkHeader(String url, String githubToken) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
@@ -85,6 +109,12 @@ public class HttpRequestHelper {
         }
     }
 
+    /**
+     * Extracts the URL of the next page from the Link header.
+     *
+     * @param linkHeader the Link header
+     * @return the URL of the next page
+     */
     public static String extractNextPageUrl(String linkHeader) {
         if (linkHeader == null) {
             return null;
@@ -102,6 +132,12 @@ public class HttpRequestHelper {
         return null;
     }
 
+    /**
+     * Sends a DELETE request to the specified URL with the provided GitHub token.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     */
     public static void sendDeleteRequest(String url, String githubToken) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
@@ -127,7 +163,15 @@ public class HttpRequestHelper {
         }
     }
 
-    public static Boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
+    /**
+     * Sends a DELETE request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param responseCode the expected response code
+     * @return true if the response code matches the expected response code, false otherwise
+     */
+    public static boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
             con.setRequestMethod("DELETE");
@@ -142,8 +186,15 @@ public class HttpRequestHelper {
         return false;
     }
 
-
-    public static Boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
+     *
+     * @param url the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param responseCode the expected response code
+     * @return true if the response code matches the expected response code, false otherwise
+     */
+    public static boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
             con.setRequestMethod("GET");
