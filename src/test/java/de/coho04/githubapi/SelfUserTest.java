@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class SelfUserTest {
+class SelfUserTest {
 
     @Mock
     private Github mockGithub;
@@ -23,7 +23,7 @@ public class SelfUserTest {
     }
 
     @Test
-    public void testGetSelfUser() throws Exception {
+    void testGetSelfUser() throws Exception {
 //        // Simulierte Antwort
 //        String mockResponse = "{\"login\":\"mockuser\",\"id\":123456}";
 //        InputStream mockInputStream = new ByteArrayInputStream(mockResponse.getBytes());
