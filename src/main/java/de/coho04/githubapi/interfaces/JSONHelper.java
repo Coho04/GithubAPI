@@ -88,11 +88,11 @@ public interface JSONHelper {
      * @return the list of objects or null
      */
     default <T> List<T> getArrayOrNull(JSONObject jsonObject, String key, JSONToObject<T> factory) {
+        List<T> list = new ArrayList<>();
         if (jsonObject.isNull(key)) {
-            return null;
+            return list;
         }
         JSONArray jsonArray = jsonObject.getJSONArray(key);
-        List<T> list = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             list.add(factory.apply(jsonArray.getJSONObject(i)));
         }
