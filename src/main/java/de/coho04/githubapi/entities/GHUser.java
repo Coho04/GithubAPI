@@ -171,18 +171,39 @@ public class GHUser extends EntityBase {
                 .put("organizationsUrl", organizationsUrl);
     }
 
+    /**
+     * Finds and returns a repository by its name for the current user.
+     *
+     * @param name the name of the repository to find
+     * @return the GHRepository instance representing the found repository
+     */
     public GHRepository findRepositoryByName(String name) {
         return GHRepository.getRepository(github, this.getLogin(), name);
     }
 
+    /**
+     * Fetches and returns a list of users who are followers of the current user.
+     *
+     * @return a list of GHUser instances representing the followers of the current user
+     */
     public List<GHUser> getFollowers() {
         return fetchPaginatedData(getUrl(), "/followers", jsonObject -> new GHUser(github, jsonObject), github.getToken());
     }
 
+    /**
+     * Fetches and returns a list of users who the current user is following.
+     *
+     * @return a list of GHUser instances representing the users the current user is following
+     */
     public List<GHUser> getFollowing() {
         return fetchPaginatedData(getUrl(), "/following", jsonObject -> new GHUser(github, jsonObject), github.getToken());
     }
 
+    /**
+     * Fetches and returns a list of public keys associated with the current user.
+     *
+     * @return a list of GHPublicKey instances representing the public keys of the current user
+     */
     public List<GHPublicKey> getPublicKeys() {
         return fetchPaginatedData(getUrl(), "/keys", GHPublicKey::new, github.getToken());
     }
