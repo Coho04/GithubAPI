@@ -107,6 +107,11 @@ public class Github extends GHBase {
         return new GHGitignoreTemplate(new JSONObject(response));
     }
 
+    /**
+     * Lists all user advisories.
+     *
+     * @return a list of all user advisories
+     */
     public SelfUser getSelfUser() {
         return SelfUser.getSelfUser(this);
     }

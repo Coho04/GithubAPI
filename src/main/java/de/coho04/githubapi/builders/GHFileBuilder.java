@@ -123,6 +123,60 @@ public class GHFileBuilder extends GHBase {
     }
 
     /**
+     * Returns the Github instance associated with this file builder.
+     *
+     * @return the Github instance
+     */
+    public Github getGithub() {
+        return github;
+    }
+
+    /**
+     * Returns the repository where this file will be committed.
+     *
+     * @return the GHRepository instance
+     */
+    public GHRepository getRepository() {
+        return repository;
+    }
+
+    /**
+     * Returns the branch where this file will be committed.
+     *
+     * @return the GHBranch instance
+     */
+    public GHBranch getBranch() {
+        return branch;
+    }
+
+    /**
+     * Returns the content of the file to be committed.
+     *
+     * @return the content of the file
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Returns the commit message for the file commit.
+     *
+     * @return the commit message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * Returns the path where the file will be committed.
+     *
+     * @return the path of the file
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
      * Commits the file to the repository.
      * This method is not yet implemented.
      */
