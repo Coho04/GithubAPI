@@ -26,7 +26,6 @@ public class HttpRequestHelper {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
             System.out.println(url);
             con.setRequestMethod("POST");
-//            con.setRequestProperty("Content-Type", "application/json");
             con.setRequestProperty("Accept", "application/vnd.github+json");
             con.addRequestProperty("Authorization", "Bearer " + githubToken);
             con.setDoOutput(true);
@@ -208,6 +207,13 @@ public class HttpRequestHelper {
         return false;
     }
 
+    /**
+     * Sends a PUT request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject  the JSON object to send
+     */
     public static void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
