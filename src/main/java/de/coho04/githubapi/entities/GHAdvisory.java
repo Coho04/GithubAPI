@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,7 +43,7 @@ public class GHAdvisory extends GHBase {
      *
      * @param jsonObject the JSON object containing the advisory data
      */
-    public GHAdvisory(JSONObject jsonObject) {
+    public GHAdvisory(Github github, JSONObject jsonObject) {
         this.id = getIntOrNull(jsonObject, "id");
         this.ghsaId = getStringOrNull(jsonObject, "ghsa_id");
         this.cveId = getStringOrNull(jsonObject, "cve_id");
@@ -61,10 +62,10 @@ public class GHAdvisory extends GHBase {
         this.githubReviewedAt = getLocalDateOrNull(jsonObject, "github_reviewed_at");
         this.nvdPublishedAt = getLocalDateOrNull(jsonObject, "nvd_published_at");
         this.withdrawnAt = getLocalDateOrNull(jsonObject, "withdrawn_at");
-        this.vulnerabilities = getArrayOrNull(jsonObject, "vulnerabilities", GHVulnerability::new);
+        this.vulnerabilities = getArrayOrNull(jsonObject, "vulnerabilities", json -> new GHVulnerability(github, json));
         this.cvss = jsonObject.getJSONObject("cvss");
         this.cwes = jsonObject.getJSONArray("cwes");
-        this.credits = getArrayOrNull(jsonObject, "credits", GHUser::new);
+        this.credits = getArrayOrNull(jsonObject, "credits", json -> new GHUser(github, json));
     }
 
     /**

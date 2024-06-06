@@ -78,11 +78,7 @@ public class GHBase implements JSONHelper, HttpRequestInterface {
      */
     protected <T> List<T> fetchPaginatedData(String url, String endpoint, Function<JSONObject, T> mapper, String token) {
         List<T> result = new ArrayList<>();
-        if (url == null) {
-            url = getBaseUrl() + endpoint + "?per_page=100";
-        } else {
-            url = url + "&per_page=100";
-        }
+        url = Objects.requireNonNullElseGet(url, GHBase::getBaseUrl) + endpoint + "?per_page=100";
         while (url != null) {
             String[] responseAndLink = sendGetRequestWithLinkHeader(url, token);
             String response = responseAndLink[0];

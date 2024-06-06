@@ -1,8 +1,13 @@
 package de.coho04.githubapi.builders;
 
+import de.coho04.githubapi.Github;
+import de.coho04.githubapi.SelfUser;
 import de.coho04.githubapi.bases.GHBase;
 import de.coho04.githubapi.repositories.GHBranch;
 import de.coho04.githubapi.repositories.GHRepository;
+import org.json.JSONObject;
+
+import java.util.Base64;
 
 /**
  * GHFileBuilder is a class that extends GHBase. It represents a builder for creating and committing files to a GitHub repository.
@@ -20,15 +25,17 @@ public class GHFileBuilder extends GHBase {
     private String path;
     private String content;
     private String message;
-    private GHRepository repository;
+    private final GHRepository repository;
+    private final Github github;
 
     /**
      * Constructs a new GHFileBuilder object for a given repository.
      *
      * @param repository a GHRepository object representing the repository to which the file will be committed.
      */
-    public GHFileBuilder(GHRepository repository) {
+    public GHFileBuilder(GHRepository repository, Github github) {
         this.repository = repository;
+        this.github = github;
     }
 
     /**
@@ -37,8 +44,10 @@ public class GHFileBuilder extends GHBase {
      * @param repository a GHRepository object representing the repository to which the file will be committed.
      * @param branch a GHBranch object representing the branch to which the file will be committed.
      */
-    public GHFileBuilder(GHRepository repository, GHBranch branch) {
+    public GHFileBuilder(GHRepository repository, GHBranch branch, Github github) {
         this.branch = branch;
+        this.github = github;
+        this.repository = repository;
     }
 
     /**
@@ -50,11 +59,13 @@ public class GHFileBuilder extends GHBase {
      * @param content a String representing the content of the file.
      * @param message a String representing the commit message.
      */
-    public GHFileBuilder(GHRepository repository, GHBranch branch, String path, String content, String message) {
+    public GHFileBuilder(GHRepository repository, GHBranch branch, String path, String content, String message, Github github) {
+        this.repository = repository;
         this.branch = branch;
         this.path = path;
         this.content = content;
         this.message = message;
+        this.github = github;
     }
 
     /**
@@ -116,7 +127,23 @@ public class GHFileBuilder extends GHBase {
      * Commits the file to the repository.
      * This method is not yet implemented.
      */
+    public void commit(String email, String name) {
+        String url = repository.getUrl() + "/contents/" + path;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message", message);
+        JSONObject committer = new JSONObject();
+        committer.put("name", name);
+        committer.put("email", email);
+        jsonObject.put("committer", committer);
+        String encodedString = Base64.getEncoder().encodeToString(content.getBytes());
+        jsonObject.put("content", encodedString);
+        sendPutRequest(url,github.getToken(), jsonObject);
+    }
+
+
     public void commit() {
-        //TODO: Implement
+        String response = sendGetRequest(getBaseUrl() + "/user/email", github.getToken());
+        JSONObject jsonObject = new JSONObject(response);
+        commit(jsonObject.getString("email"), github.getSelfUser().getLogin());
     }
 }

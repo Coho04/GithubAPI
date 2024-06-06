@@ -50,12 +50,12 @@ public class GHAlert extends GHBase {
         this.state = getStringOrNull(jsonObject, "state");
         this.resolution = getStringOrNull(jsonObject, "resolution");
         this.resolvedAt = getLocalDateOrNull(jsonObject, "resolved_at");
-        this.resolvedBy = new GHUser(jsonObject.getJSONObject("resolved_by"));
+        this.resolvedBy = new GHUser(github, jsonObject.getJSONObject("resolved_by"));
         this.secretType = getStringOrNull(jsonObject, "secret_type");
         this.secretTypeDisplayName = getStringOrNull(jsonObject, "secret_type_display_name");
         this.secret = getStringOrNull(jsonObject, "secret");
         this.repository = new GHRepository(jsonObject.getJSONObject("repository"), github);
-        this.pushProtectionBypassedBy = new GHUser(jsonObject.getJSONObject("push_protection_bypassed_by"));
+        this.pushProtectionBypassedBy = new GHUser(github, jsonObject.getJSONObject("push_protection_bypassed_by"));
         this.pushProtectionBypassed = getBooleanOrNull(jsonObject, "push_protection_bypassed");
         this.pushProtectionBypassedAt = getLocalDateOrNull(jsonObject, "push_protection_bypassed_at");
         this.resolutionComment = getStringOrNull(jsonObject, "resolution_comment");

@@ -738,7 +738,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHUser instances
      */
     public List<GHUser> listMembers() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/members", GHUser::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/members", jsonObject ->  new GHUser(github, jsonObject), github.getToken());
     }
 
     /**
@@ -747,7 +747,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHUser instances
      */
     public List<GHUser> listPublicMembers() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/public_members", GHUser::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/public_members",jsonObject ->  new GHUser(github, jsonObject), github.getToken());
     }
 
     /**
@@ -756,7 +756,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHUser instances
      */
     public List<GHUser> listOutsideCollaborators() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/outside_collaborators", GHUser::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/outside_collaborators", jsonObject ->  new GHUser(github, jsonObject), github.getToken());
     }
 
     /**
@@ -788,7 +788,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHProject instances
      */
     public List<GHProject> listProjects() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/projects", GHProject::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/projects", json -> new GHProject(github, json), github.getToken());
     }
 
     /**
@@ -886,7 +886,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHPackage instances
      */
     public List<GHPackage> listDockerConflictsPackages() {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/docker/conflicts", GHPackage::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/docker/conflicts", json -> new GHPackage(github, json), github.getToken());
     }
 
     /**
@@ -896,7 +896,7 @@ public class GHOrganisation extends EntityBase {
      * @return a list of GHPackage instances
      */
     public List<GHPackage> listPackages(GHPackageType packageType) {
-        return fetchPaginatedData("/orgs/" + this.givenName + "/packages?package_type=" + packageType.toURL(), GHPackage::new, github.getToken());
+        return fetchPaginatedData("/orgs/" + this.givenName + "/packages?package_type=" + packageType.toURL(), json -> new GHPackage(github, json), github.getToken());
     }
 
     /**
@@ -910,7 +910,7 @@ public class GHOrganisation extends EntityBase {
         String url = getBaseUrl() + "/orgs/" + this.givenName + "/packages/" + packageType.toURL() + name;
         String response = sendGetRequest(url, github.getToken());
         assert response != null;
-        return new GHPackage(new JSONObject(response));
+        return new GHPackage(github, new JSONObject(response));
     }
 
     /**

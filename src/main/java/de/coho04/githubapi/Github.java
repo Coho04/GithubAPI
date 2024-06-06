@@ -15,17 +15,14 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class Github extends GHBase {
 
-    private final String username;
     private final String token;
 
     /**
      * Constructs a new GitHub instance with the provided username and token.
      *
-     * @param username the GitHub username
      * @param token the GitHub token
      */
-    public Github(String username, String token) {
-        this.username = username;
+    public Github(String token) {
         this.token = token;
     }
 
@@ -49,14 +46,6 @@ public class Github extends GHBase {
         return GHUser.getUser(this, name);
     }
 
-    /**
-     * Returns the GitHub username.
-     *
-     * @return the GitHub username
-     */
-    public String getUsername() {
-        return username;
-    }
 
     /**
      * Returns the GitHub token.
@@ -74,7 +63,7 @@ public class Github extends GHBase {
      * @return a list of all global advisories
      */
     public List<GHAdvisory> listGlobalAdvisories() {
-        return fetchPaginatedData("/advisories", GHAdvisory::new, getToken());
+        return fetchPaginatedData("/advisories", json -> new GHAdvisory(this, json), getToken());
     }
 
     /**
@@ -86,7 +75,7 @@ public class Github extends GHBase {
     public GHAdvisory getGlobalAdvisories(String id) {
         String response = sendGetRequest("/advisories/" + id, getToken());
         assert response != null;
-        return new GHAdvisory(new JSONObject(response));
+        return new GHAdvisory(this, new JSONObject(response));
     }
 
     /**
@@ -116,5 +105,9 @@ public class Github extends GHBase {
         String response = sendGetRequest(getBaseUrl() + "/gitignore/templates/" + name, getToken());
         assert response != null;
         return new GHGitignoreTemplate(new JSONObject(response));
+    }
+
+    public SelfUser getSelfUser() {
+        return SelfUser.getSelfUser(this);
     }
 }

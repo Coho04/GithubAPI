@@ -1,9 +1,11 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.enums.GHState;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,35 +23,40 @@ class GHMilestoneTest {
 
     @Test
     void shouldReturnCorrectTitle() {
-        assertEquals("Milestone 1", new GHMilestone(jsonObject).getTitle());
+        assertEquals("Milestone 1", getMilestone(jsonObject).getTitle());
     }
 
     @Test
     void shouldReturnNullWhenTitleIsNotPresent() {
         jsonObject.remove("title");
-        assertNull(new GHMilestone(jsonObject).getTitle());
+        assertNull(getMilestone(jsonObject).getTitle());
     }
 
     @Test
     void shouldReturnCorrectState() {
-        assertEquals(GHState.OPEN, new GHMilestone(jsonObject).getState());
+        assertEquals(GHState.OPEN, getMilestone(jsonObject).getState());
     }
 
     @Test
     void shouldReturnNullWhenStateIsNotPresent() {
         jsonObject.remove("state");
-        assertNull(new GHMilestone(jsonObject).getState());
+        assertNull(getMilestone(jsonObject).getState());
     }
 
     @Test
     void shouldReturnCorrectCreator() {
-        assertEquals("octocat", new GHMilestone(jsonObject).getCreator().getLogin());
+        assertEquals("octocat", getMilestone(jsonObject).getCreator().getLogin());
     }
 
     @Test
     void shouldReturnNullWhenCreatorIsNotPresent() {
         jsonObject.remove("creator");
-        assertNull(new GHMilestone(jsonObject).getCreator());
+        assertNull(getMilestone(jsonObject).getCreator());
+    }
+
+    private GHMilestone getMilestone(JSONObject jsonObject) {
+        Github github = Mockito.mock(Github.class);
+        return new GHMilestone(github, jsonObject);
     }
 
     // Similar tests can be written for the remaining fields: number, dueOn, openIssues, closedAt, createdAt, updatedAt, closedIssues, labelsUrl, description

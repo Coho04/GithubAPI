@@ -21,26 +21,33 @@ public class HttpRequestHelper {
      * @param githubToken the GitHub token
      * @param jsonObject the JSON object to send
      */
-    public static void sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
+    public static String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
             HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            System.out.println(url);
             con.setRequestMethod("POST");
-            con.setRequestProperty("Content-Type", "application/json");
+//            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/vnd.github+json");
             con.addRequestProperty("Authorization", "Bearer " + githubToken);
             con.setDoOutput(true);
+            System.out.println(jsonObject.toString());
             con.getOutputStream().write(jsonObject.toString().getBytes());
             int responseCode = con.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_CREATED) {
-                System.out.println("Failed to send POST request to: " + url);
-                System.out.println("Response Message: " + con.getResponseMessage());
-                System.out.println("Response Code: " + responseCode);
+                throw new UnsupportedOperationException("Not supported yet.");
+            } else {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+                    return in.lines().collect(Collectors.joining());
+                }
             }
         } catch (IOException exception) {
             System.out.println("Failed to send POST request to: " + url);
             System.out.println("ErrorMessage: " + exception.getMessage());
         }
         throw new UnsupportedOperationException("Not supported yet.");
+
     }
+
 
     /**
      * Sends a GET request to the specified URL with the provided GitHub token.
@@ -60,7 +67,6 @@ public class HttpRequestHelper {
                     return in.lines().collect(Collectors.joining());
                 }
             } else if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
-                System.out.println("Token: " + githubToken);
                 System.out.println("Failed to send GET request to: " + url);
                 System.out.println("Response Message: " + con.getResponseMessage());
                 System.out.println("Response Code: " + responseCode);
@@ -207,5 +213,26 @@ public class HttpRequestHelper {
             }
         }
         return false;
+    }
+
+    public static void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
+        try {
+            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.addRequestProperty("Authorization", "Bearer " + githubToken);
+            con.setDoOutput(true);
+            System.out.println(jsonObject.toString());
+            con.getOutputStream().write(jsonObject.toString().getBytes());
+            int responseCode = con.getResponseCode();
+            if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
+                System.out.println("Failed to send PUT request to: " + url);
+                System.out.println("Response Message: " + con.getResponseMessage());
+                System.out.println("Response Code: " + responseCode);
+            }
+        } catch (IOException exception) {
+            System.out.println("Failed to send PUT request to: " + url);
+            System.out.println("ErrorMessage: " + exception.getMessage());
+        }
     }
 }

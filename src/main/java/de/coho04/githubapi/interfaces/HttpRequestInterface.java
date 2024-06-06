@@ -16,8 +16,8 @@ public interface HttpRequestInterface {
      * @param githubToken the GitHub token
      * @param jsonObject the JSON object
      */
-    default void sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
-        HttpRequestHelper.sendPostRequest(url, githubToken, jsonObject);
+    default String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
+        return HttpRequestHelper.sendPostRequest(url, githubToken, jsonObject);
     }
 
     /**
@@ -84,5 +84,9 @@ public interface HttpRequestInterface {
      */
     default String extractNextPageUrl(String linkHeader) {
         return HttpRequestHelper.extractNextPageUrl(linkHeader);
+    }
+
+    default void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
+        HttpRequestHelper.sendPutRequest(url, githubToken, jsonObject);
     }
 }
