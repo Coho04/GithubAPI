@@ -1,17 +1,16 @@
 package de.coho04.githubapi.repositories;
 
-import de.coho04.githubapi.entities.GHEvents;
-import de.coho04.githubapi.entities.GHPermissions;
+import de.coho04.githubapi.entities.*;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.builders.GHFileBuilder;
 import de.coho04.githubapi.builders.GHIssueBuilder;
-import de.coho04.githubapi.entities.GHPullRequest;
-import de.coho04.githubapi.entities.GHUser;
+import de.coho04.githubapi.entities.GHPermission;
 import de.coho04.githubapi.enums.GHState;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +96,7 @@ public class GHRepository extends ClassBase {
     private final int watchersCount;
     private final String homepage;
     private final int forksCount;
-    private final GHPermissions permissions;
+    private final GHPermission permissions;
 
     private final boolean webCommitSignoffRequired;
 
@@ -181,7 +180,7 @@ public class GHRepository extends ClassBase {
         if (jsonObject.has("license") && !jsonObject.isNull("license")) {
             this.license = new GHLicense(getJSONObjectOrNull(jsonObject, "license"));
         }
-        this.permissions = new GHPermissions(getJSONObjectOrNull(jsonObject, "permissions"));
+        this.permissions = new GHPermission(getJSONObjectOrNull(jsonObject, "permissions"));
         this.topics = jsonObject.getJSONArray("topics").toList().stream().map(Object::toString).collect(Collectors.toList());
     }
 
@@ -598,7 +597,111 @@ public class GHRepository extends ClassBase {
         //TODO: Implement
     }
 
-    public List<GHEvents> listEvents() {
-        return fetchPaginatedData("/repos/" + this.getOwner().getLogin() + "/" + this.getName() + "/events", GHEvents::new, github.getToken());
+    public List<GHEvent> listEvents() {
+        return fetchPaginatedData(getUrl(), "/events", GHEvent::new, github.getToken());
     }
+
+    public List<GHArtifact> listArtifacts() {
+        return fetchPaginatedData(getUrl(), "/actions/artifacts", GHArtifact::new, github.getToken());
+    }
+
+    public GHArtifact getArtifact(int id) {
+        String response = sendGetRequest(getUrl() + "/actions/artifacts/" + id, github.getToken());
+        return new GHArtifact(new JSONObject(response));
+    }
+
+    public Boolean deleteArtifact(int id) {
+        return sendDeleteRequestWithResponseCode(getUrl() + "/actions/artifacts/" + id, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public GHRepositoryCache getCache() {
+        String response = sendGetRequest(getUrl() + "/actions/cache/usage", github.getToken());
+        assert response != null;
+        return new GHRepositoryCache(new JSONObject(response));
+    }
+
+    public List<GHActionsCache> listActionsCaches() {
+        return fetchPaginatedData(getUrl(), "/actions/artifacts", GHActionsCache::new, github.getToken());
+    }
+
+    public void deleteActionsCache(String key) {
+        sendDeleteRequest(getUrl() + "/actions/caches?key=" + key, github.getToken());
+    }
+
+    public boolean deleteActionsCache(int id) {
+        return sendDeleteRequestWithResponseCode(getUrl() + "/actions/caches/" + id, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
+    }
+
+    public List<GHSecret> listOrganisationSecrets() {
+        return fetchArrayData(getUrl(), "/actions/organization-secrets", GHSecret::new, github.getToken(), "secrets");
+    }
+
+    public List<GHSecret> listRepositorySecrets() {
+        return fetchArrayData(getUrl(), "/actions/secrets", GHSecret::new, github.getToken(), "secrets");
+    }
+
+    public GHPublicKey getPublicKey() {
+        String response = sendGetRequest(getUrl() + "/actions/secrets/public-key", github.getToken());
+        return new GHPublicKey(new JSONObject(response));
+    }
+
+    public GHSecret getSecret(String name) {
+        String response = sendGetRequest(getUrl() + "/actions/secrets/" + name, github.getToken());
+        return new GHSecret(new JSONObject(response));
+    }
+
+    public List<GHSecret> listEnvironmentSecrets(String environment) {
+        return fetchArrayData(getUrl(), "/actions/environments/" + environment + "/secrets", GHSecret::new, github.getToken(), "secrets");
+    }
+
+    public GHPublicKey getEnvironmentPublicKey(String environment) {
+        String response = sendGetRequest(getUrl() + "/actions/environments/" + environment + "/secrets/public-key", github.getToken());
+        return new GHPublicKey(new JSONObject(response));
+    }
+
+    public GHSecret getEnvironmentSecret(String environment, String name) {
+        String response = sendGetRequest(getUrl() + "/actions/environments/" + environment + "/secrets/" + name, github.getToken());
+        return new GHSecret(new JSONObject(response));
+    }
+
+    public List<GHVariable> listOrganisationVariables() {
+        return fetchArrayData(getUrl(), "/actions/organization-variables", GHVariable::new, github.getToken(), "secrets");
+    }
+
+    public List<GHVariable> listRepositoryVariables() {
+        return fetchArrayData(getUrl(), "/actions/variables", GHVariable::new, github.getToken(), "variables");
+    }
+
+    public GHVariable getVariable(String name) {
+        String response = sendGetRequest(getUrl() + "/actions/variables/" + name, github.getToken());
+        return new GHVariable(new JSONObject(response));
+    }
+
+    public List<GHVariable> listEnvironmentVariables(String environment) {
+        return fetchArrayData(getUrl(), "/environments/" + environment + "/variables", GHVariable::new, github.getToken(), "variables");
+    }
+
+    public GHVariable getEnvironmentVariable(String environment, String name) {
+        String response = sendGetRequest(getUrl() + "/environments/" + environment + "/variables/" + name, github.getToken());
+        return new GHVariable(new JSONObject(response));
+    }
+
+    public GHWorkflowJob getJobFromWorkflowRun(int id) {
+        String response = sendGetRequest(getUrl() + "/actions/jobs/" + id, github.getToken());
+        return new GHWorkflowJob(new JSONObject(response));
+    }
+
+    public List<GHWorkflowJob> listJobsFromWorkflowRun(int id) {
+        return fetchArrayData(getUrl(), "/actions/runs/" + id + "/jobs", GHWorkflowJob::new, github.getToken(), "jobs");
+    }
+
+    public List<GHWorkflowJob> listJobsForWorkflowAttempt(int id, int attempt) {
+        return fetchArrayData(getUrl(), "/actions/runs/" + id + "/attempts/" + attempt + "/jobs", GHWorkflowJob::new, github.getToken(), "jobs");
+    }
+
+    public GHWorkflowRun getWorkflowRun(int id) {
+        String response = sendGetRequest(getUrl() + "/actions/runs/" + id, github.getToken());
+        return new GHWorkflowRun(new JSONObject(response));
+    }
+
 }
