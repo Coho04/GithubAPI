@@ -17,9 +17,9 @@ public class HttpRequestHelper {
     /**
      * Sends a POST request to the specified URL with the provided GitHub token and JSON object.
      *
-     * @param url the URL to send the request to
+     * @param url         the URL to send the request to
      * @param githubToken the GitHub token
-     * @param jsonObject the JSON object to send
+     * @param jsonObject  the JSON object to send
      */
     public static String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
@@ -52,7 +52,7 @@ public class HttpRequestHelper {
     /**
      * Sends a GET request to the specified URL with the provided GitHub token.
      *
-     * @param url the URL to send the request to
+     * @param url         the URL to send the request to
      * @param githubToken the GitHub token
      * @return the response body as a string
      */
@@ -86,7 +86,7 @@ public class HttpRequestHelper {
     /**
      * Sends a GET request to the specified URL with the provided GitHub token and returns the response body and the Link header.
      *
-     * @param url the URL to send the request to
+     * @param url         the URL to send the request to
      * @param githubToken the GitHub token
      * @return an array containing the response body and the Link header
      */
@@ -141,7 +141,7 @@ public class HttpRequestHelper {
     /**
      * Sends a DELETE request to the specified URL with the provided GitHub token.
      *
-     * @param url the URL to send the request to
+     * @param url         the URL to send the request to
      * @param githubToken the GitHub token
      */
     public static void sendDeleteRequest(String url, String githubToken) {
@@ -150,14 +150,7 @@ public class HttpRequestHelper {
             con.setRequestMethod("DELETE");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             int responseCode = con.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                System.out.println("Successfully sent DELETE request to: " + url);
-            } else if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
-                System.out.println("Token: " + githubToken);
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("Response Message: " + con.getResponseMessage());
-                System.out.println("Response Code: " + responseCode);
-            } else {
+            if (responseCode >= 300 || responseCode < 200) {
                 System.out.println("Failed to send DELETE request to: " + url);
                 System.out.println("Response Code: " + responseCode);
             }
@@ -172,8 +165,8 @@ public class HttpRequestHelper {
     /**
      * Sends a DELETE request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
      *
-     * @param url the URL to send the request to
-     * @param githubToken the GitHub token
+     * @param url          the URL to send the request to
+     * @param githubToken  the GitHub token
      * @param responseCode the expected response code
      * @return true if the response code matches the expected response code, false otherwise
      */
@@ -195,8 +188,8 @@ public class HttpRequestHelper {
     /**
      * Sends a GET request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
      *
-     * @param url the URL to send the request to
-     * @param githubToken the GitHub token
+     * @param url          the URL to send the request to
+     * @param githubToken  the GitHub token
      * @param responseCode the expected response code
      * @return true if the response code matches the expected response code, false otherwise
      */
@@ -222,12 +215,12 @@ public class HttpRequestHelper {
             con.setRequestProperty("Content-Type", "application/json");
             con.addRequestProperty("Authorization", "Bearer " + githubToken);
             con.setDoOutput(true);
-            System.out.println(jsonObject.toString());
-            con.getOutputStream().write(jsonObject.toString().getBytes());
+            if (jsonObject != null) {
+                con.getOutputStream().write(jsonObject.toString().getBytes());
+            }
             int responseCode = con.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK && responseCode != HttpURLConnection.HTTP_CREATED) {
+            if (responseCode >= 300 || responseCode < 200) {
                 System.out.println("Failed to send PUT request to: " + url);
-                System.out.println("Response Message: " + con.getResponseMessage());
                 System.out.println("Response Code: " + responseCode);
             }
         } catch (IOException exception) {

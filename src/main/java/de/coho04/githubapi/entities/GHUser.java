@@ -6,6 +6,8 @@ import de.coho04.githubapi.repositories.GHRepository;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * Represents a GitHub user.
  * This class provides methods and properties to access information about a user on GitHub.
@@ -171,5 +173,17 @@ public class GHUser extends EntityBase {
 
     public GHRepository findRepositoryByName(String name) {
         return GHRepository.getRepository(github, this.getLogin(), name);
+    }
+
+    public List<GHUser> getFollowers() {
+        return fetchPaginatedData(getUrl(), "/followers", jsonObject -> new GHUser(github, jsonObject), github.getToken());
+    }
+
+    public List<GHUser> getFollowing() {
+        return fetchPaginatedData(getUrl(), "/following", jsonObject -> new GHUser(github, jsonObject), github.getToken());
+    }
+
+    public List<GHPublicKey> getPublicKeys() {
+        return fetchPaginatedData(getUrl(), "/keys", GHPublicKey::new, github.getToken());
     }
 }
