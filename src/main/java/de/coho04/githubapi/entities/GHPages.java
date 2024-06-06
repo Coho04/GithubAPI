@@ -12,17 +12,17 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHPages extends GHBase {
 
-    public String url;
-    public String status;
-    public String cname;
-    public boolean custom404;
-    public String htmlUrl;
-    public JSONObject source;
-    public boolean isPublic;
-    public OffsetDateTime pendingDomainUnverifiedAt;
-    public String protectedDomainState;
-    public HttpsCertificate httpsCertificate;
-    public boolean httpsEnforced;
+    private final String url;
+    private final String status;
+    private final String cname;
+    private final boolean custom404;
+    private final String htmlUrl;
+    private final JSONObject source;
+    private final boolean isPublic;
+    private final OffsetDateTime pendingDomainUnverifiedAt;
+    private final String protectedDomainState;
+    private final HttpsCertificate httpsCertificate;
+    private final boolean httpsEnforced;
 
     /**
      * Constructs a new GHPages instance with the provided JSON object.

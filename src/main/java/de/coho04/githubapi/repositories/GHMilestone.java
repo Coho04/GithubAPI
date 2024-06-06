@@ -1,5 +1,6 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.entities.GHUser;
 import de.coho04.githubapi.enums.GHState;
@@ -32,10 +33,10 @@ public class GHMilestone extends ClassBase {
      *
      * @param jsonObject the JSON object containing the milestone data
      */
-    public GHMilestone(JSONObject jsonObject) {
+    public GHMilestone(Github github, JSONObject jsonObject) {
         super(jsonObject);
         if (jsonObject.has("creator")) {
-            this.creator = new GHUser(jsonObject.getJSONObject("creator"));
+            this.creator = new GHUser(github, jsonObject.getJSONObject("creator"));
         }
         this.closedAt = getLocalDateOrNull(jsonObject, "closed_at");
         this.description = getStringOrNull(jsonObject, "description");

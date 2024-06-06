@@ -1,5 +1,6 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.entities.GHUser;
 import de.coho04.githubapi.enums.GHState;
@@ -43,7 +44,7 @@ public class GHIssue extends ClassBase {
      * Constructs a GHIssue object from a JSONObject.
      * @param jsonObject JSONObject representing a GitHub issue.
      */
-    public GHIssue(JSONObject jsonObject) {
+    public GHIssue(Github github, JSONObject jsonObject) {
         super(jsonObject);
         this.number = getIntOrNull(jsonObject, "number");
         this.body = getStringOrNull(jsonObject, "body");
@@ -65,16 +66,16 @@ public class GHIssue extends ClassBase {
         this.closedAt = getLocalDateOrNull(jsonObject, "closed_at");
         JSONObject milestoneJSONObject = getJSONObjectOrNull(jsonObject, "milestone");
         if (milestoneJSONObject != null) {
-            this.milestone = new GHMilestone(milestoneJSONObject);
+            this.milestone = new GHMilestone(github, milestoneJSONObject);
         }
         this.labels = getArrayOrNull(jsonObject, "labels", GHLabel::new);
-        this.assignees = getArrayOrNull(jsonObject, "assignees", GHUser::new);
+        this.assignees = getArrayOrNull(jsonObject, "assignees",jsonObject1 -> new GHUser(github, jsonObject1));
         if (jsonObject.has("user")) {
-            this.user = new GHUser(getJSONObjectOrNull(jsonObject, "user"));
+            this.user = new GHUser(github, getJSONObjectOrNull(jsonObject, "user"));
         }
         JSONObject assigneeJSONObject = getJSONObjectOrNull(jsonObject, "assignee");
         if (assigneeJSONObject != null) {
-            this.assignee = new GHUser(assigneeJSONObject);
+            this.assignee = new GHUser(github, assigneeJSONObject);
         }
     }
 

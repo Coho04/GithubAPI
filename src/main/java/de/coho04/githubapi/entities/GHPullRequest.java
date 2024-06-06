@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.enums.GHState;
 import de.coho04.githubapi.repositories.GHLabel;
@@ -16,44 +17,44 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHPullRequest extends ClassBase {
 
-    public String diffUrl;
-    public String patchUrl;
-    public String issueUrl;
-    public String commitsUrl;
-    public String reviewCommentsUrl;
-    public String reviewCommentUrl;
-    public String commentsUrl;
-    public String statusesUrl;
-    public int number;
-    public GHState state;
-    public boolean locked;
-    public String title;
-    public GHUser user;
-    public String body;
-    public List<GHLabel> labels;
-    public GHMilestone milestone;
-    public String activeLockReason;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime updatedAt;
-    public OffsetDateTime closedAt;
-    public OffsetDateTime mergedAt;
-    public String mergeCommitSha;
-    public GHUser assignee;
-    public List<GHUser> assignees;
-    public List<GHUser> requestedReviewers;
-    public List<GHUser> requestedTeams;
-//    public GHHead head;
+    private final String diffUrl;
+    private final String patchUrl;
+    private final String issueUrl;
+    private final String commitsUrl;
+    private final String reviewCommentsUrl;
+    private final String reviewCommentUrl;
+    private final String commentsUrl;
+    private final String statusesUrl;
+    private final int number;
+    private GHState state;
+    private final boolean locked;
+    private final String title;
+    private final GHUser user;
+    private final String body;
+    private final List<GHLabel> labels;
+    private GHMilestone milestone;
+    private final String activeLockReason;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime closedAt;
+    private final OffsetDateTime mergedAt;
+    private final String mergeCommitSha;
+    private GHUser assignee;
+    private final List<GHUser> assignees;
+    private final List<GHUser> requestedReviewers;
+    private final List<GHUser> requestedTeams;
+    //    public GHHead head;
 //    public GHBase base;
-    public String authorAssociation;
-    public String autoMerge;
-    public boolean draft;
+    private final String authorAssociation;
+    private final String autoMerge;
+    private final boolean draft;
 
     /**
      * Constructs a new GHPullRequest instance with the provided JSON object.
      *
      * @param jsonObject the JSON object containing the pull request data
      */
-    public GHPullRequest(JSONObject jsonObject) {
+    public GHPullRequest(Github github, JSONObject jsonObject) {
         super(jsonObject);
         this.diffUrl = getStringOrNull(jsonObject, "diff_url");
         this.patchUrl = getStringOrNull(jsonObject, "patch_Url");
@@ -69,7 +70,7 @@ public class GHPullRequest extends ClassBase {
         }
         this.locked = getBooleanOrNull(jsonObject, "locked");
         this.title = getStringOrNull(jsonObject, "title");
-        this.user = new GHUser(jsonObject.getJSONObject("user"));
+        this.user = new GHUser(github, jsonObject.getJSONObject("user"));
         this.body = getStringOrNull(jsonObject, "body");
         this.labels = getArrayOrNull(jsonObject, "labels", GHLabel::new);
 //        this.milestone = new GHMilestone(jsonObject.getJSONObject("milestone")); //TODO: FIX
@@ -80,9 +81,9 @@ public class GHPullRequest extends ClassBase {
         this.mergedAt = getLocalDateOrNull(jsonObject, "merged_at");
         this.mergeCommitSha = getStringOrNull(jsonObject, "merge_commit_sha");
 //        this.assignee = new GHUser(jsonObject.getJSONObject("assignee")); //TODO: FIX
-        this.assignees = getArrayOrNull(jsonObject, "assignees", GHUser::new);
-        this.requestedReviewers = getArrayOrNull(jsonObject, "requested_reviewers", GHUser::new);
-        this.requestedTeams = getArrayOrNull(jsonObject, "requested_teams", GHUser::new);
+        this.assignees = getArrayOrNull(jsonObject, "assignees", json -> new GHUser(github, json));
+        this.requestedReviewers = getArrayOrNull(jsonObject, "requested_reviewers", json -> new GHUser(github, json));
+        this.requestedTeams = getArrayOrNull(jsonObject, "requested_teams", json -> new GHUser(github, json));
         this.authorAssociation = getStringOrNull(jsonObject, "author_association");
         this.autoMerge = getStringOrNull(jsonObject, "auto_merge");
         this.draft = getBooleanOrNull(jsonObject, "draft");

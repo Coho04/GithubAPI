@@ -14,19 +14,19 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHTeam extends ClassBase {
 
-    public final String name;
-    public final String slug;
-    public final String description;
-    public final String privacy;
-    public final String notificationSetting;
-    public final String permission;
-    public final String membersUrl;
-    public final String repositoriesUrl;
-    public final OffsetDateTime createdAt;
-    public final OffsetDateTime updatedAt;
-    public final int membersCount;
-    public final int reposCount;
-    public GHTeam parent;
+    private final String name;
+    private final String slug;
+    private final String description;
+    private final String privacy;
+    private final String notificationSetting;
+    private final String permission;
+    private final String membersUrl;
+    private final String repositoriesUrl;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final int membersCount;
+    private final int reposCount;
+    private GHTeam parent;
 
     /**
      * Constructs a new GHTeam instance with the provided JSON object.

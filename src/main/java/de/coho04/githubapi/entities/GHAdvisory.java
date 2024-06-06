@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,35 +15,35 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class GHAdvisory extends GHBase {
 
-    public int id;
-    public String ghsaId;
-    public String cveId;
-    public String url;
-    public String htmlUrl;
-    public String repositoryAdvisoryUrl;
-    public String summary;
-    public String description;
-    public String type;
-    public String severity;
-    public String sourceCodeLocation;
-    public JSONObject[] identifiers;
-    public String[] references;
-    public OffsetDateTime publishedAt;
-    public OffsetDateTime updatedAt;
-    public OffsetDateTime githubReviewedAt;
-    public OffsetDateTime nvdPublishedAt;
-    public OffsetDateTime withdrawnAt;
-    public List<GHVulnerability> vulnerabilities;
-    public JSONObject cvss;
-    public JSONArray cwes;
-    public List<GHUser> credits;
+    private final int id;
+    private final String ghsaId;
+    private final String cveId;
+    private final String url;
+    private final String htmlUrl;
+    private final String repositoryAdvisoryUrl;
+    private final String summary;
+    private final String description;
+    private final String type;
+    private final String severity;
+    private final String sourceCodeLocation;
+    private final JSONObject[] identifiers;
+    private final String[] references;
+    private final OffsetDateTime publishedAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime githubReviewedAt;
+    private final OffsetDateTime nvdPublishedAt;
+    private final OffsetDateTime withdrawnAt;
+    private final List<GHVulnerability> vulnerabilities;
+    private final JSONObject cvss;
+    private final JSONArray cwes;
+    private final List<GHUser> credits;
 
     /**
      * Constructs a new GHAdvisory instance with the provided JSON object.
      *
      * @param jsonObject the JSON object containing the advisory data
      */
-    public GHAdvisory(JSONObject jsonObject) {
+    public GHAdvisory(Github github, JSONObject jsonObject) {
         this.id = getIntOrNull(jsonObject, "id");
         this.ghsaId = getStringOrNull(jsonObject, "ghsa_id");
         this.cveId = getStringOrNull(jsonObject, "cve_id");
@@ -61,10 +62,10 @@ public class GHAdvisory extends GHBase {
         this.githubReviewedAt = getLocalDateOrNull(jsonObject, "github_reviewed_at");
         this.nvdPublishedAt = getLocalDateOrNull(jsonObject, "nvd_published_at");
         this.withdrawnAt = getLocalDateOrNull(jsonObject, "withdrawn_at");
-        this.vulnerabilities = getArrayOrNull(jsonObject, "vulnerabilities", GHVulnerability::new);
+        this.vulnerabilities = getArrayOrNull(jsonObject, "vulnerabilities", json -> new GHVulnerability(github, json));
         this.cvss = jsonObject.getJSONObject("cvss");
         this.cwes = jsonObject.getJSONArray("cwes");
-        this.credits = getArrayOrNull(jsonObject, "credits", GHUser::new);
+        this.credits = getArrayOrNull(jsonObject, "credits", json -> new GHUser(github, json));
     }
 
     /**

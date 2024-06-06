@@ -2,6 +2,7 @@ package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.EntityBase;
+import de.coho04.githubapi.repositories.GHRepository;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
 
@@ -22,14 +23,16 @@ public class GHUser extends EntityBase {
     private final String subscriptionsUrl;
     private final String receivedEventsUrl;
     private final String organizationsUrl;
+    protected final Github github;
 
     /**
      * Constructs a new GHUser instance with the provided JSON object.
      *
      * @param jsonObject the JSON object containing the user data
      */
-    public GHUser(JSONObject jsonObject) {
+    public GHUser(Github github, JSONObject jsonObject) {
         super(jsonObject);
+        this.github = github;
         this.contributions = getIntOrNull(jsonObject, "contributions");
         this.gistsUrl = getStringOrNull(jsonObject, "gists_url");
         this.siteAdmin = getBooleanOrNull(jsonObject, "site_admin");
@@ -46,14 +49,14 @@ public class GHUser extends EntityBase {
      * Fetches a GitHub user by their username.
      *
      * @param github the GitHub instance
-     * @param name the username of the user to fetch
+     * @param name   the username of the user to fetch
      * @return a GHUser instance representing the fetched user
      */
     public static GHUser getUser(Github github, String name) {
         String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + "/users/" + name, github.getToken());
         assert response != null;
         JSONObject json = new JSONObject(response);
-        return new GHUser(json);
+        return new GHUser(github,json);
     }
 
     /**
@@ -164,5 +167,9 @@ public class GHUser extends EntityBase {
                 .put("subscriptionsUrl", subscriptionsUrl)
                 .put("receivedEventsUrl", receivedEventsUrl)
                 .put("organizationsUrl", organizationsUrl);
+    }
+
+    public GHRepository findRepositoryByName(String name) {
+        return GHRepository.getRepository(github, this.getLogin(), name);
     }
 }

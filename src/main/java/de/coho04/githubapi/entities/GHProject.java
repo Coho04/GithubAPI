@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import org.json.JSONObject;
 
@@ -17,24 +18,24 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHProject extends ClassBase {
 
-    public String ownerUrl;
-    public String columnsUrl;
-    public String name;
-    public String body;
-    public int number;
-    public String state;
-    public GHUser creator;
-    public OffsetDateTime createdAt;
-    public OffsetDateTime updatedAt;
-    public String organizationPermission;
-    public boolean isPrivate;
+    private final String ownerUrl;
+    private final String columnsUrl;
+    private final String name;
+    private final String body;
+    private final int number;
+    private final String state;
+    private final GHUser creator;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final String organizationPermission;
+    private final boolean isPrivate;
 
     /**
      * Constructs a new GHProject object.
      *
      * @param jsonObject a JSONObject containing the data for initializing the GHProject object.
      */
-    public GHProject(JSONObject jsonObject) {
+    public GHProject(Github github, JSONObject jsonObject) {
         super(jsonObject);
         this.ownerUrl = getStringOrNull(jsonObject, "owner_url");
         this.columnsUrl = getStringOrNull(jsonObject, "columns_url");
@@ -42,7 +43,7 @@ public class GHProject extends ClassBase {
         this.body = getStringOrNull(jsonObject, "body");
         this.number = getIntOrNull(jsonObject, "number");
         this.state = getStringOrNull(jsonObject, "state");
-        this.creator = new GHUser(jsonObject.getJSONObject("creator"));
+        this.creator = new GHUser(github, jsonObject.getJSONObject("creator"));
         this.createdAt = getLocalDateOrNull(jsonObject, "created_at");
         this.updatedAt = getLocalDateOrNull(jsonObject, "updated_at");
         this.organizationPermission = getStringOrNull(jsonObject, "organization_permission");

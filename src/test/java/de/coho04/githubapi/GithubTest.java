@@ -29,15 +29,8 @@ class GithubTest {
     }
 
     @Test
-    void shouldReturnUsername() {
-        Github github = new Github("username", "token");
-        String result = github.getUsername();
-        assertEquals("username", result);
-    }
-
-    @Test
     void shouldReturnToken() {
-        Github github = new Github("username", "token");
+        Github github = new Github( "token");
         String result = github.getToken();
         assertEquals("token", result);
     }

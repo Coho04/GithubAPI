@@ -2,13 +2,13 @@ package de.coho04.githubapi.builders;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
-import de.coho04.githubapi.entities.GHUser;
 import de.coho04.githubapi.enums.GHState;
 import de.coho04.githubapi.repositories.GHIssue;
 import de.coho04.githubapi.repositories.GHMilestone;
-import org.json.JSONArray;
+import de.coho04.githubapi.repositories.GHRepository;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,12 +21,12 @@ import java.util.List;
 public class GHIssueBuilder extends GHBase {
 
     private final Github github;
+    private final GHRepository repository;
     private String title;
     private String body;
-    private GHUser assignee;
     private GHMilestone milestone;
-    private List<String> labels;
-    private List<GHUser> assignees;
+    private final List<String> labels = new ArrayList<>();
+    private final List<String> assignees = new ArrayList<>();
     private final GHState state = GHState.OPEN;
 
     /**
@@ -35,8 +35,9 @@ public class GHIssueBuilder extends GHBase {
      * @param github the GitHub instance
      * @param title  the title of the issue
      */
-    public GHIssueBuilder(Github github, String title) {
+    public GHIssueBuilder(Github github, GHRepository repository, String title) {
         this.title = title;
+        this.repository = repository;
         this.github = github;
     }
 
@@ -47,9 +48,10 @@ public class GHIssueBuilder extends GHBase {
      * @param title  the title of the issue
      * @param body   the body of the issue
      */
-    public GHIssueBuilder(Github github, String title, String body) {
+    public GHIssueBuilder(Github github, GHRepository repository, String title, String body) {
         this.title = title;
         this.body = body;
+        this.repository = repository;
         this.github = github;
     }
 
@@ -69,7 +71,12 @@ public class GHIssueBuilder extends GHBase {
      * @return the current instance of GHIssueBuilder
      */
     public GHIssueBuilder assignee(String user) {
-        this.assignee = github.findUserByName(user);
+        this.assignees.add(user);
+        return this;
+    }
+
+    public GHIssueBuilder addLabel(String label) {
+        this.labels.add(label);
         return this;
     }
 
@@ -79,7 +86,10 @@ public class GHIssueBuilder extends GHBase {
      * @return a new GHIssue instance
      */
     public GHIssue create() {
-        return new GHIssue(this.toJSONObject());
+        JSONObject object = this.toJSONObject();
+        object.remove("state");
+        String response = sendPostRequest(repository.getUrl() + "/issues", github.getToken(), object);
+        return new GHIssue(github, new JSONObject(response));
     }
 
     /**
@@ -98,17 +108,12 @@ public class GHIssueBuilder extends GHBase {
      */
     @Override
     public JSONObject toJSONObject() {
-        JSONObject jsonObject = super.toJSONObject()
+        return super.toJSONObject()
                 .put("title", title)
                 .put("body", body)
                 .put("milestone", milestone)
-                .put("labels", new JSONArray(labels))
+                .put("labels", labels.toArray())
                 .put("state", state.toString())
-                .put("assignees", new JSONArray(assignees));
-
-        if (assignee != null) {
-            jsonObject.put("assignee", assignee.toJSONObject());
-        }
-        return jsonObject;
+                .put("assignees", assignees.toArray());
     }
 }

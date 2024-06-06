@@ -10,8 +10,8 @@ import org.json.JSONObject;
 @SuppressWarnings("unused")
 public class GHGitignoreTemplate extends GHBase {
 
-    public String name;
-    public String source;
+    private final String name;
+    private final String source;
 
     /**
      * Constructs a new GHGitignoreTemplate instance with the provided JSON object.

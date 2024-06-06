@@ -1,9 +1,11 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.enums.GHState;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.Collections;
 
@@ -27,37 +29,37 @@ class GHIssueTest {
 
     @Test
     void shouldReturnCorrectNumber() {
-        assertEquals(123, new GHIssue(jsonObject).getNumber());
+        assertEquals(123, getIssue(jsonObject).getNumber());
     }
 
     @Test
     void shouldReturnCorrectComments() {
-        assertEquals(10, new GHIssue(jsonObject).getComments());
+        assertEquals(10, getIssue(jsonObject).getComments());
     }
 
     @Test
     void shouldReturnCorrectBody() {
-        assertEquals("Test Body", new GHIssue(jsonObject).getBody());
+        assertEquals("Test Body", getIssue(jsonObject).getBody());
     }
 
     @Test
     void shouldReturnCorrectState() {
-        assertEquals(GHState.OPEN, new GHIssue(jsonObject).getState());
+        assertEquals(GHState.OPEN, getIssue(jsonObject).getState());
     }
 
     @Test
     void shouldReturnCorrectUser() {
-        assertEquals("TestUser", new GHIssue(jsonObject).getUser().getLogin());
+        assertEquals("TestUser", getIssue(jsonObject).getUser().getLogin());
     }
 
     @Test
     void shouldReturnCorrectLabels() {
-        assertEquals("TestLabel", new GHIssue(jsonObject).getLabels().get(0).getName());
+        assertEquals("TestLabel", getIssue(jsonObject).getLabels().get(0).getName());
     }
 
     @Test
     void shouldReturnCorrectAssignees() {
-        assertEquals("TestAssignee", new GHIssue(jsonObject).getAssignees().get(0).getLogin());
+        assertEquals("TestAssignee", getIssue(jsonObject).getAssignees().get(0).getLogin());
     }
 
     /**
@@ -94,5 +96,10 @@ class GHIssueTest {
     @Test
     void shouldThrowIllegalArgumentExceptionWhenFromStringCalledWithInvalidString() {
         assertThrows(IllegalArgumentException.class, () -> GHState.fromString("invalid"));
+    }
+
+    public GHIssue getIssue(JSONObject jsonObject) {
+        Github github = Mockito.mock(Github.class);
+        return new GHIssue(github, jsonObject);
     }
 }

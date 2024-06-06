@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import org.json.JSONObject;
 
@@ -10,24 +11,24 @@ import org.json.JSONObject;
 @SuppressWarnings("unused")
 public class GHPackage extends ClassBase {
 
-    public String name;
-    public String packageType;
-    public GHUser owner;
-    public String versionCount;
-    public String visibility;
-    public String createdAt;
-    public String updatedAt;
+    private final String name;
+    private final String packageType;
+    private final GHUser owner;
+    private final String versionCount;
+    private final String visibility;
+    private final String createdAt;
+    private final String updatedAt;
 
     /**
      * Constructs a new GHPackage instance with the provided JSON object.
      *
      * @param jsonObject the JSON object containing the package data
      */
-    public GHPackage(JSONObject jsonObject) {
+    public GHPackage(Github github, JSONObject jsonObject) {
         super(jsonObject);
         this.name = getStringOrNull(jsonObject, "name");
         this.packageType = getStringOrNull(jsonObject, "package_type");
-        this.owner = new GHUser(jsonObject.getJSONObject("owner"));
+        this.owner = new GHUser(github, jsonObject.getJSONObject("owner"));
         this.versionCount = getStringOrNull(jsonObject, "version_count");
         this.visibility = getStringOrNull(jsonObject, "visibility");
         this.createdAt = getStringOrNull(jsonObject, "created_at");

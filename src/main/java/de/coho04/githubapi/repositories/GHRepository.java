@@ -7,6 +7,7 @@ import de.coho04.githubapi.builders.GHFileBuilder;
 import de.coho04.githubapi.builders.GHIssueBuilder;
 import de.coho04.githubapi.entities.GHPermission;
 import de.coho04.githubapi.enums.GHState;
+import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -186,13 +187,19 @@ public class GHRepository extends ClassBase {
         this.homepage = getStringOrNull(jsonObject, "homepage");
         this.forksCount = getIntOrNull(jsonObject, "forks_count");
         if (jsonObject.has("owner") && !jsonObject.isNull("owner")) {
-            this.owner = new GHUser(getJSONObjectOrNull(jsonObject, "owner"));
+            this.owner = new GHUser(github, getJSONObjectOrNull(jsonObject, "owner"));
         }
         if (jsonObject.has("license") && !jsonObject.isNull("license")) {
             this.license = new GHLicense(getJSONObjectOrNull(jsonObject, "license"));
         }
         this.permissions = new GHPermission(getJSONObjectOrNull(jsonObject, "permissions"));
         this.topics = jsonObject.getJSONArray("topics").toList().stream().map(Object::toString).collect(Collectors.toList());
+    }
+
+    public static GHRepository getRepository(Github github, String owner, String name) {
+        String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + "/repos/" + owner + "/" + name, github.getToken());
+        assert response != null;
+        return new GHRepository(new JSONObject(response), github);
     }
 
     /**
@@ -202,7 +209,7 @@ public class GHRepository extends ClassBase {
      * @return a GHIssueBuilder instance for building the new issue
      */
     public GHIssueBuilder createIssue(String title) {
-        return new GHIssueBuilder(github, title);
+        return new GHIssueBuilder(github,this, title);
     }
 
     /**
@@ -233,7 +240,7 @@ public class GHRepository extends ClassBase {
         if (response != null) {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
-                contributors.add(new GHUser(jsonArray.getJSONObject(i)));
+                contributors.add(new GHUser(github, jsonArray.getJSONObject(i)));
             }
         }
         return contributors;
@@ -251,7 +258,7 @@ public class GHRepository extends ClassBase {
         if (response != null) {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
-                issues.add(new GHIssue(jsonArray.getJSONObject(i)));
+                issues.add(new GHIssue(github, jsonArray.getJSONObject(i)));
             }
         }
         return issues;
@@ -272,7 +279,7 @@ public class GHRepository extends ClassBase {
      * @return a GHFileBuilder instance for building the new file
      */
     public GHFileBuilder addFile() {
-        return new GHFileBuilder(this);
+        return new GHFileBuilder(this, github);
     }
 
     /**
@@ -282,7 +289,7 @@ public class GHRepository extends ClassBase {
      * @return a GHFileBuilder instance for building the new file
      */
     public GHFileBuilder addFile(GHBranch branch) {
-        return new GHFileBuilder(this, branch);
+        return new GHFileBuilder(this, branch, github);
     }
 
     /**
@@ -295,7 +302,7 @@ public class GHRepository extends ClassBase {
      * @return a GHFileBuilder instance for building the new file
      */
     public GHFileBuilder addFile(GHBranch branch, String path, String content, String message) {
-        return new GHFileBuilder(this, branch, path, content, message);
+        return new GHFileBuilder(this, branch, path, content, message, github);
     }
 
     /**
@@ -1025,7 +1032,7 @@ public class GHRepository extends ClassBase {
      */
     public List<GHPullRequest> listPullRequests() {
         String url = "/repos/" + this.getOwner().getLogin() + "/" + this.getName() + "/pulls";
-        return fetchPaginatedData(url, GHPullRequest::new, github.getToken(), "&state=all");
+        return fetchPaginatedData(url, json -> new GHPullRequest(github, json), github.getToken(), "&state=all");
     }
 
     /**

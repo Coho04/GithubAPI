@@ -12,13 +12,13 @@ import java.time.OffsetDateTime;
 @SuppressWarnings("unused")
 public class GHActionsCache extends GHBase {
 
-    public int id;
-    public String ref;
-    public String key;
-    public String version;
-    public OffsetDateTime lastAccessedAt;
-    public OffsetDateTime createdAt;
-    public int sizeInBytes;
+    private final int id;
+    private final String ref;
+    private final String key;
+    private final String version;
+    private final OffsetDateTime lastAccessedAt;
+    private final OffsetDateTime createdAt;
+    private final int sizeInBytes;
 
     /**
      * Constructs a new GHActionsCache instance with the provided JSON object.
