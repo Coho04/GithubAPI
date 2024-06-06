@@ -16,7 +16,7 @@ public class GHPublicKeyBuilder extends GHBase {
     private final Github github;
 
     /**
-     * Constructs a new GHPublicKeyBuilder instance with the provided Github instance.
+     * Constructs a new GHPublicKeyBuilder instance with the provided GitHub instance.
      *
      * @param github the GitHub instance associated with this public key builder
      */
@@ -25,7 +25,7 @@ public class GHPublicKeyBuilder extends GHBase {
     }
 
     /**
-     * Constructs a new GHPublicKeyBuilder instance with the provided title, key, and Github instance.
+     * Constructs a new GHPublicKeyBuilder instance with the provided title, key, and GitHub instance.
      *
      * @param title the title of the public key
      * @param key the key of the public key
@@ -59,18 +59,32 @@ public class GHPublicKeyBuilder extends GHBase {
         return this;
     }
 
+    /**
+     * Returns the title of the public key.
+     *
+     * @return the title of the public key
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the GitHub instance associated with this public key builder.
+     *
+     * @return the GitHub instance
+     */
     public Github getGithub() {
         return github;
     }
 
+    /**
+     * Returns the key of the public key.
+     *
+     * @return the key of the public key
+     */
     public String getKey() {
         return key;
     }
-
     /**
      * Builds a new GHPublicKey instance with the set title and key.
      *

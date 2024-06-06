@@ -86,6 +86,13 @@ public interface HttpRequestInterface {
         return HttpRequestHelper.extractNextPageUrl(linkHeader);
     }
 
+    /**
+     * Sends a PUT request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url the URL
+     * @param githubToken the GitHub token
+     * @param jsonObject the JSON object to be sent in the request body
+     */
     default void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
         HttpRequestHelper.sendPutRequest(url, githubToken, jsonObject);
     }

@@ -123,9 +123,9 @@ public class GHFileBuilder extends GHBase {
     }
 
     /**
-     * Returns the Github instance associated with this file builder.
+     * Returns the GitHub instance associated with this file builder.
      *
-     * @return the Github instance
+     * @return the GitHub instance
      */
     public Github getGithub() {
         return github;
@@ -193,7 +193,11 @@ public class GHFileBuilder extends GHBase {
         sendPutRequest(url,github.getToken(), jsonObject);
     }
 
-
+    /**
+     * Commits the file to the repository using the authenticated user's email and login as the committer's details.
+     * This method first sends a GET request to retrieve the authenticated user's email.
+     * Then, it calls the overloaded commit method with the retrieved email and the authenticated user's login.
+     */
     public void commit() {
         String response = sendGetRequest(getBaseUrl() + "/user/email", github.getToken());
         JSONObject jsonObject = new JSONObject(response);

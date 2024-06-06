@@ -196,6 +196,14 @@ public class GHRepository extends ClassBase {
         this.topics = jsonObject.getJSONArray("topics").toList().stream().map(Object::toString).collect(Collectors.toList());
     }
 
+    /**
+     * Fetches and returns a GitHub repository based on the provided owner and name.
+     *
+     * @param github the GitHub instance associated with this repository
+     * @param owner the username of the owner of the repository
+     * @param name the name of the repository
+     * @return a GHRepository instance representing the fetched repository
+     */
     public static GHRepository getRepository(Github github, String owner, String name) {
         String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + "/repos/" + owner + "/" + name, github.getToken());
         assert response != null;

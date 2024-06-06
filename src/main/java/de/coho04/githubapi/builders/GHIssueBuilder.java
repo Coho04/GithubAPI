@@ -75,6 +75,12 @@ public class GHIssueBuilder extends GHBase {
         return this;
     }
 
+    /**
+     * Adds a label to the issue.
+     *
+     * @param label the label to be added to the issue
+     * @return the current instance of GHIssueBuilder
+     */
     public GHIssueBuilder addLabel(String label) {
         this.labels.add(label);
         return this;
