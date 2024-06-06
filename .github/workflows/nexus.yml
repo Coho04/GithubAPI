@@ -27,4 +27,4 @@ jobs:
           repository: maven-releases
           coordinates: groupId=de.goldendeveloper artifactId=GithubAPI version=${{ env.RELEASE_VERSION }}
           assets: extension=jar
-          filename: ./target/GithubAPI-${{ env.RELEASE_VERSION }}.jar
+          filename: ./target/githubapi-${{ env.RELEASE_VERSION }}.jar
