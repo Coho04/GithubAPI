@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -209,8 +210,8 @@ public class GHRepository extends ClassBase {
      *
      * @return a HashMap mapping branch names to GHBranch instances
      */
-    public HashMap<String, GHBranch> getBranches() {
-        HashMap<String, GHBranch> branches = new HashMap<>();
+    public Map<String, GHBranch> getBranches() {
+        Map<String, GHBranch> branches = new HashMap<>();
         String response = sendGetRequest(getUrl() + "/branches", github.getToken());
         JSONArray jsonArray = new JSONArray(response);
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -337,7 +338,7 @@ public class GHRepository extends ClassBase {
                 }
             }
         } catch (Exception e) {
-            return null;
+            return new ArrayList<>();
         }
         return files;
     }
