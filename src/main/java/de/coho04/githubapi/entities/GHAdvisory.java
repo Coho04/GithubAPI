@@ -26,8 +26,8 @@ public class GHAdvisory extends GHBase {
     private final String type;
     private final String severity;
     private final String sourceCodeLocation;
-    private final JSONObject[] identifiers;
-    private final String[] references;
+    private final List<JSONObject> identifiers;
+    private final List<String> references;
     private final OffsetDateTime publishedAt;
     private final OffsetDateTime updatedAt;
     private final OffsetDateTime githubReviewedAt;
@@ -55,8 +55,8 @@ public class GHAdvisory extends GHBase {
         this.type = getStringOrNull(jsonObject, "type");
         this.severity = getStringOrNull(jsonObject, "severity");
         this.sourceCodeLocation = getStringOrNull(jsonObject, "source_code_location");
-        this.identifiers = getArrayOrNull(jsonObject, "identifiers", JSONObject::new).toArray(new JSONObject[0]);
-        this.references = getArrayOrNull(jsonObject, "references", JSONObject::toString).toArray(new String[0]);
+        this.identifiers = getArrayOrNull(jsonObject, "identifiers", JSONObject::new).stream().toList();
+        this.references = getJSONArrayToStringList(jsonObject, "references");
         this.publishedAt = getLocalDateOrNull(jsonObject, "published_at");
         this.updatedAt = getLocalDateOrNull(jsonObject, "updated_at");
         this.githubReviewedAt = getLocalDateOrNull(jsonObject, "github_reviewed_at");
@@ -127,7 +127,7 @@ public class GHAdvisory extends GHBase {
      *
      * @return the identifiers of the advisory
      */
-    public JSONObject[] getIdentifiers() {
+    public List<JSONObject> getIdentifiers() {
         return identifiers;
     }
 
@@ -262,7 +262,7 @@ public class GHAdvisory extends GHBase {
      *
      * @return the references of the advisory
      */
-    public String[] getReferences() {
+    public List<String> getReferences() {
         return references;
     }
 }

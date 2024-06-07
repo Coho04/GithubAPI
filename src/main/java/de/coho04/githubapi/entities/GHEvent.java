@@ -88,4 +88,13 @@ public class GHEvent extends GHBase {
     public String getId() {
         return id;
     }
+
+    /**
+     * Returns whether the event is public.
+     *
+     * @return whether the event is public
+     */
+    public boolean isPublic() {
+        return isPublic;
+    }
 }

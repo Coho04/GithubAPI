@@ -82,4 +82,12 @@ class EntityBaseTest {
 
         assertNull(entityBase.getAvatarUrl());
     }
+
+    @Test
+    void shouldReturnCorrectUsername() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("login", "octocat");
+        EntityBase entityBase = new EntityBase(jsonObject);
+        assertEquals("octocat", entityBase.getUsername());
+    }
 }

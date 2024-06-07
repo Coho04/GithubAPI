@@ -122,11 +122,13 @@ public class GHBase implements JSONHelper, HttpRequestInterface {
         List<T> result = new ArrayList<>();
         url = Objects.requireNonNullElseGet(url, GHBase::getBaseUrl) + endpoint;
         String response = sendGetRequest(url, token);
-        JSONObject json = new JSONObject(response);
-        JSONArray jsonArray = json.getJSONArray(entryPoint);
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            result.add(mapper.apply(jsonObject));
+        if (response != null) {
+            JSONObject json = new JSONObject(response);
+            JSONArray jsonArray = json.getJSONArray(entryPoint);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                result.add(mapper.apply(jsonObject));
+            }
         }
         return result;
     }

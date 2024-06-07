@@ -3,6 +3,8 @@ package de.coho04.githubapi.repositories;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -101,5 +103,65 @@ class GHFileTest {
         GHFile ghFile = new GHFile(jsonObject);
 
         assertNull(ghFile.getUrl());
+    }
+
+    @Test
+    void shouldReturnCorrectHtmlUrl() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("html_url", "https://example.com/html_url");
+        GHFile ghFile = new GHFile(jsonObject);
+        assertEquals("https://example.com/html_url", ghFile.getHtmlUrl());
+    }
+
+    @Test
+    void shouldReturnNullWhenHtmlUrlIsNotPresent() {
+        JSONObject jsonObject = new JSONObject();
+        GHFile ghFile = new GHFile(jsonObject);
+        assertNull(ghFile.getHtmlUrl());
+    }
+
+    @Test
+    void shouldReturnCorrectDownloadUrl() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("download_url", "https://example.com/download_url");
+        GHFile ghFile = new GHFile(jsonObject);
+        assertEquals("https://example.com/download_url", ghFile.getDownloadUrl());
+    }
+
+    @Test
+    void shouldReturnNullWhenDownloadUrlIsNotPresent() {
+        JSONObject jsonObject = new JSONObject();
+        GHFile ghFile = new GHFile(jsonObject);
+        assertNull(ghFile.getDownloadUrl());
+    }
+
+    @Test
+    void shouldReturnCorrectGitUrl() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("git_url", "https://example.com/git_url");
+        GHFile ghFile = new GHFile(jsonObject);
+        assertEquals("https://example.com/git_url", ghFile.getGitUrl());
+    }
+
+    @Test
+    void shouldReturnNullWhenGitUrlIsNotPresent() {
+        JSONObject jsonObject = new JSONObject();
+        GHFile ghFile = new GHFile(jsonObject);
+        assertNull(ghFile.getGitUrl());
+    }
+
+    @Test
+    void shouldReturnCorrectType() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("type", "Sevenworm stands upon somebody else's legs.");
+        GHFile ghFile = new GHFile(jsonObject);
+        assertEquals("Sevenworm stands upon somebody else's legs.", ghFile.getType());
+    }
+
+    @Test
+    void shouldReturnNullWhenTypeIsNotPresent() {
+        JSONObject jsonObject = new JSONObject();
+        GHFile ghFile = new GHFile(jsonObject);
+        assertNull(ghFile.getType());
     }
 }

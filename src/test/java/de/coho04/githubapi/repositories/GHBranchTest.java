@@ -43,6 +43,12 @@ class GHBranchTest {
     }
 
     @Test
+    void shouldReturnCorrectJsonObject() {
+        GHBranch branch = new GHBranch(jsonObject);
+        assertEquals(jsonObject.toString(), branch.toJSONObject().toString());
+    }
+
+    @Test
     void shouldReturnFalseWhenProtectionStatusIsNotPresent() {
         jsonObject.remove("protected");
         assertFalse(new GHBranch(jsonObject).isProtected());

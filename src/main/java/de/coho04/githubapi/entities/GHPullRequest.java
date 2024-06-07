@@ -57,7 +57,7 @@ public class GHPullRequest extends ClassBase {
     public GHPullRequest(Github github, JSONObject jsonObject) {
         super(jsonObject);
         this.diffUrl = getStringOrNull(jsonObject, "diff_url");
-        this.patchUrl = getStringOrNull(jsonObject, "patch_Url");
+        this.patchUrl = getStringOrNull(jsonObject, "patch_url");
         this.issueUrl = getStringOrNull(jsonObject, "issue_url");
         this.commitsUrl = getStringOrNull(jsonObject, "commits_url");
         this.reviewCommentsUrl = getStringOrNull(jsonObject, "review_comments_url");

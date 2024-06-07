@@ -18,7 +18,7 @@ public class GHHook extends GHBase {
     private final String pingUrl;
     private final String deliveriesUrl;
     private final String name;
-    private final List<String> events;
+    private List<String> events;
     private final boolean active;
     private final JSONObject config;
     private final OffsetDateTime updatedAt;
@@ -36,7 +36,9 @@ public class GHHook extends GHBase {
         this.pingUrl = getStringOrNull(jsonObject,"ping_url");
         this.deliveriesUrl = getStringOrNull(jsonObject,"deliveries_url");
         this.name = getStringOrNull(jsonObject,"name");
-        this.events = getArrayOrNull(jsonObject,"events", JSONObject::toString);
+        if (jsonObject.has("events") && !jsonObject.isNull("events")) {
+            this.events = getJSONArrayToStringList(jsonObject,"events");
+        }
         this.active = getBooleanOrNull(jsonObject,"active");
         this.config = getJSONObjectOrNull(jsonObject,"config");
         this.updatedAt = getLocalDateOrNull(jsonObject,"updated_at");
@@ -132,5 +134,14 @@ public class GHHook extends GHBase {
      */
     public String getUrl() {
         return url;
+    }
+
+    /**
+     * Returns whether the hook is active.
+     *
+     * @return whether the hook is active
+     */
+    public boolean isActive() {
+        return active;
     }
 }

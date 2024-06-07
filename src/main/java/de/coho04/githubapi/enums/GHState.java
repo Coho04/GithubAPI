@@ -26,6 +26,9 @@ public enum GHState {
      * @return the GHState
      */
     public static GHState fromString(String state) {
+        if (state == null || state.isEmpty()) {
+            return null;
+        }
         return GHState.valueOf(state.toUpperCase());
     }
 }

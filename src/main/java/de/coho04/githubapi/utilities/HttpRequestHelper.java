@@ -1,18 +1,20 @@
 package de.coho04.githubapi.utilities;
 
+import de.coho04.githubapi.factories.HttpURLConnectionFactory;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.util.stream.Collectors;
 
 /**
  * This class provides helper methods for sending HTTP requests.
  */
 public class HttpRequestHelper {
+
+    public static HttpURLConnectionFactory connectionFactory = new HttpURLConnectionFactory();
 
     /**
      * Sends a POST request to the specified URL with the provided GitHub token and JSON object.
@@ -23,17 +25,15 @@ public class HttpRequestHelper {
      */
     public static String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
-            System.out.println(url);
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("POST");
             con.setRequestProperty("Accept", "application/vnd.github+json");
             con.addRequestProperty("Authorization", "Bearer " + githubToken);
             con.setDoOutput(true);
-            System.out.println(jsonObject.toString());
             con.getOutputStream().write(jsonObject.toString().getBytes());
             int responseCode = con.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_CREATED) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                throw new UnsupportedOperationException("Not supported yet. Response Code" + responseCode);
             } else {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                     return in.lines().collect(Collectors.joining());
@@ -44,7 +44,6 @@ public class HttpRequestHelper {
             System.out.println("ErrorMessage: " + exception.getMessage());
         }
         throw new UnsupportedOperationException("Not supported yet.");
-
     }
 
 
@@ -57,7 +56,7 @@ public class HttpRequestHelper {
      */
     public static String sendGetRequest(String url, String githubToken) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("GET");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             int responseCode = con.getResponseCode();
@@ -69,8 +68,6 @@ public class HttpRequestHelper {
                 System.out.println("Failed to send GET request to: " + url);
                 System.out.println("Response Message: " + con.getResponseMessage());
                 System.out.println("Response Code: " + responseCode);
-                return null;
-            } else {
                 return null;
             }
         } catch (IOException exception) {
@@ -91,7 +88,7 @@ public class HttpRequestHelper {
      */
     public static String[] sendGetRequestWithLinkHeader(String url, String githubToken) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("GET");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             int responseCode = con.getResponseCode();
@@ -100,8 +97,7 @@ public class HttpRequestHelper {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                     responseBody = in.lines().collect(Collectors.joining());
                 }
-                String linkHeader = con.getHeaderField("Link");
-                return new String[]{responseBody, linkHeader};
+                return new String[]{responseBody, con.getHeaderField("Link")};
             } else {
                 System.out.println("Failed to send GET request to: " + url);
                 System.out.println("Response Code: " + responseCode);
@@ -129,7 +125,7 @@ public class HttpRequestHelper {
             if (link.contains("rel=\"next\"")) {
                 int start = link.indexOf('<') + 1;
                 int end = link.indexOf('>');
-                if (start != -1 && end != -1) {
+                if (end != -1) {
                     return link.substring(start, end);
                 }
             }
@@ -145,7 +141,7 @@ public class HttpRequestHelper {
      */
     public static void sendDeleteRequest(String url, String githubToken) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("DELETE");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             int responseCode = con.getResponseCode();
@@ -171,7 +167,7 @@ public class HttpRequestHelper {
      */
     public static boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("DELETE");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             return responseCode == con.getResponseCode();
@@ -194,7 +190,7 @@ public class HttpRequestHelper {
      */
     public static boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("GET");
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             return con.getResponseCode() == responseCode;
@@ -216,7 +212,7 @@ public class HttpRequestHelper {
      */
     public static void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
-            HttpURLConnection con = (HttpURLConnection) URI.create(url).toURL().openConnection();
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
             con.setRequestMethod("PUT");
             con.setRequestProperty("Content-Type", "application/json");
             con.addRequestProperty("Authorization", "Bearer " + githubToken);
