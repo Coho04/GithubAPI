@@ -1,9 +1,11 @@
 package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.bases.ClassBase;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public class GHWorkflowJob extends ClassBase {
     private final OffsetDateTime startedAt;
     private final OffsetDateTime completedAt;
     private final String name;
-    private List<GHStep> steps;
+    private final List<GHStep> steps;
     private final String checkRunUrl;
     private List<String> labels;
     private final int runnerId;
@@ -38,6 +40,7 @@ public class GHWorkflowJob extends ClassBase {
      */
     public GHWorkflowJob(JSONObject jsonObject) {
         super(jsonObject);
+        this.steps = new ArrayList<>();
         this.runId = getIntOrNull(jsonObject, "run_id");
         this.runUrl = getStringOrNull(jsonObject, "run_url");
         this.headSha = getStringOrNull(jsonObject, "head_sha");
@@ -47,11 +50,14 @@ public class GHWorkflowJob extends ClassBase {
         this.completedAt = getLocalDateOrNull(jsonObject, "completed_at");
         this.name = getStringOrNull(jsonObject, "name");
         if (jsonObject.has("steps")) {
-            jsonObject.getJSONArray("steps").toList().stream().map(JSONObject::new).map(GHStep::new).forEach(steps::add);
+            JSONArray stepsArray = jsonObject.getJSONArray("steps");
+            for (int i = 0; i < stepsArray.length(); i++) {
+                steps.add(new GHStep(stepsArray.getJSONObject(i)));
+            }
         }
         this.checkRunUrl = getStringOrNull(jsonObject, "check_run_url");
         if (jsonObject.has("labels")) {
-            jsonObject.getJSONArray("labels").toList().stream().map(Object::toString).forEach(labels::add);
+            this.labels = getJSONArrayToStringList(jsonObject, "labels");
         }
         this.runnerId = getIntOrNull(jsonObject, "runner_id");
         this.runnerName = getStringOrNull(jsonObject, "runner_name");

@@ -94,7 +94,7 @@ public class GHPublicKeyBuilder extends GHBase {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("title", title);
         jsonObject.put("key", key);
-        String response = sendPostRequest(" https://api.github.com/user/keys", github.getToken(), jsonObject);
+        String response = sendPostRequest("https://api.github.com/user/keys", github.getToken(), jsonObject);
         return new GHPublicKey(new JSONObject(response));
     }
 }

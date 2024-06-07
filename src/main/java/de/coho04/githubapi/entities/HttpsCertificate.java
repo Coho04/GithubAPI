@@ -26,7 +26,7 @@ public class HttpsCertificate extends GHBase {
     public HttpsCertificate(JSONObject jsonObject) {
         this.state = getStringOrNull(jsonObject, "state");
         this.description = getStringOrNull(jsonObject, "description");
-        this.domains = getArrayOrNull(jsonObject, "domains", JSONObject::toString);
+        this.domains = getJSONArrayToStringList(jsonObject, "domains");
         this.expiresAt = getLocalDateOrNull(jsonObject, "expires_at");
     }
 

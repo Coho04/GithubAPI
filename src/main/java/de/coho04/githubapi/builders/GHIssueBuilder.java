@@ -5,7 +5,7 @@ import de.coho04.githubapi.bases.GHBase;
 import de.coho04.githubapi.enums.GHState;
 import de.coho04.githubapi.repositories.GHIssue;
 import de.coho04.githubapi.repositories.GHMilestone;
-import de.coho04.githubapi.repositories.GHRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 public class GHIssueBuilder extends GHBase {
 
     private final Github github;
-    private final GHRepository repository;
+    private final String url;
     private String title;
     private String body;
     private GHMilestone milestone;
@@ -35,9 +35,9 @@ public class GHIssueBuilder extends GHBase {
      * @param github the GitHub instance
      * @param title  the title of the issue
      */
-    public GHIssueBuilder(Github github, GHRepository repository, String title) {
+    public GHIssueBuilder(Github github, String url, String title) {
         this.title = title;
-        this.repository = repository;
+        this.url = url;
         this.github = github;
     }
 
@@ -48,10 +48,10 @@ public class GHIssueBuilder extends GHBase {
      * @param title  the title of the issue
      * @param body   the body of the issue
      */
-    public GHIssueBuilder(Github github, GHRepository repository, String title, String body) {
+    public GHIssueBuilder(Github github, String url, String title, String body) {
         this.title = title;
         this.body = body;
-        this.repository = repository;
+        this.url = url;
         this.github = github;
     }
 
@@ -93,8 +93,10 @@ public class GHIssueBuilder extends GHBase {
      */
     public GHIssue create() {
         JSONObject object = this.toJSONObject();
-        object.remove("state");
-        String response = sendPostRequest(repository.getUrl() + "/issues", github.getToken(), object);
+        if (object.has("state")) {
+            object.remove("state");
+        }
+        String response = sendPostRequest(getUrl() + "/issues", github.getToken(), object);
         return new GHIssue(github, new JSONObject(response));
     }
 
@@ -107,6 +109,42 @@ public class GHIssueBuilder extends GHBase {
         return title;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setMilestone(GHMilestone milestone) {
+        this.milestone = milestone;
+    }
+
+    public Github getGithub() {
+        return github;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public GHMilestone getMilestone() {
+        return milestone;
+    }
+
+    public GHState getState() {
+        return state;
+    }
+
+    public List<String> getAssignees() {
+        return assignees;
+    }
+
     /**
      * Converts the current state of the builder to a JSONObject.
      *
@@ -117,9 +155,9 @@ public class GHIssueBuilder extends GHBase {
         return super.toJSONObject()
                 .put("title", title)
                 .put("body", body)
-                .put("milestone", milestone)
-                .put("labels", labels.toArray())
+                .put("milestone", milestone.toJSONObject())
+                .put("labels", new JSONArray(labels))
                 .put("state", state.toString())
-                .put("assignees", assignees.toArray());
+                .put("assignees", new JSONArray(assignees));
     }
 }

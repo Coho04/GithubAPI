@@ -147,4 +147,40 @@ public class GHTeam extends ClassBase {
     public String getSlug() {
         return slug;
     }
+
+    /**
+     * Returns the members count of the team.
+     *
+     * @return the members count of the team
+     */
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * Returns the repos count of the team.
+     *
+     * @return the repos count of the team
+     */
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * Returns the members count of the team.
+     *
+     * @return the members count of the team
+     */
+    public int getMembersCount() {
+        return membersCount;
+    }
+
+    /**
+     * Returns the repos count of the team.
+     *
+     * @return the repos count of the team
+     */
+    public int getReposCount() {
+        return reposCount;
+    }
 }

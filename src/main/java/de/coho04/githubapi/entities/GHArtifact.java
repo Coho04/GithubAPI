@@ -14,7 +14,6 @@ public class GHArtifact extends ClassBase {
 
     private final String name;
     private final int sizeInBytes;
-    private final String url;
     private final String archiveDownloadUrl;
     private final boolean expired;
     private final OffsetDateTime createdAt;
@@ -31,7 +30,6 @@ public class GHArtifact extends ClassBase {
         super(jsonObject);
         this.name = getStringOrNull(jsonObject, "name");
         this.sizeInBytes = getIntOrNull(jsonObject, "size_in_bytes");
-        this.url = getStringOrNull(jsonObject, "url");
         this.archiveDownloadUrl = getStringOrNull(jsonObject, "archive_download_url");
         this.expired = getBooleanOrNull(jsonObject, "expired");
         this.createdAt = getLocalDateOrNull(jsonObject, "created_at");

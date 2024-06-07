@@ -23,12 +23,12 @@ public class GHAlert extends GHBase {
     private final String state;
     private final String resolution;
     private final OffsetDateTime resolvedAt;
-    private final GHUser resolvedBy;
+    private GHUser resolvedBy;
     private final String secretType;
     private final String secretTypeDisplayName;
     private final String secret;
-    private final GHRepository repository;
-    private final GHUser pushProtectionBypassedBy;
+    private GHRepository repository;
+    private GHUser pushProtectionBypassedBy;
     private final boolean pushProtectionBypassed;
     private final OffsetDateTime pushProtectionBypassedAt;
     private final String resolutionComment;
@@ -38,7 +38,7 @@ public class GHAlert extends GHBase {
      * Constructs a new GHAlert instance with the provided JSON object and GitHub instance.
      *
      * @param jsonObject the JSON object containing the alert data
-     * @param github the GitHub instance associated with this alert
+     * @param github     the GitHub instance associated with this alert
      */
     public GHAlert(JSONObject jsonObject, Github github) {
         this.github = github;
@@ -50,12 +50,19 @@ public class GHAlert extends GHBase {
         this.state = getStringOrNull(jsonObject, "state");
         this.resolution = getStringOrNull(jsonObject, "resolution");
         this.resolvedAt = getLocalDateOrNull(jsonObject, "resolved_at");
-        this.resolvedBy = new GHUser(github, jsonObject.getJSONObject("resolved_by"));
+
+        if (jsonObject.has("resolved_by") && !jsonObject.isNull("resolved_by")) {
+            this.resolvedBy = new GHUser(github, jsonObject.getJSONObject("resolved_by"));
+        }
         this.secretType = getStringOrNull(jsonObject, "secret_type");
         this.secretTypeDisplayName = getStringOrNull(jsonObject, "secret_type_display_name");
         this.secret = getStringOrNull(jsonObject, "secret");
-        this.repository = new GHRepository(jsonObject.getJSONObject("repository"), github);
-        this.pushProtectionBypassedBy = new GHUser(github, jsonObject.getJSONObject("push_protection_bypassed_by"));
+        if (jsonObject.has("repository") && !jsonObject.isNull("repository")) {
+            this.repository = new GHRepository(jsonObject.getJSONObject("repository"), github);
+        }
+        if (jsonObject.has("push_protection_bypassed_by") && !jsonObject.isNull("push_protection_bypassed_by")) {
+            this.pushProtectionBypassedBy = new GHUser(github, jsonObject.getJSONObject("push_protection_bypassed_by"));
+        }
         this.pushProtectionBypassed = getBooleanOrNull(jsonObject, "push_protection_bypassed");
         this.pushProtectionBypassedAt = getLocalDateOrNull(jsonObject, "push_protection_bypassed_at");
         this.resolutionComment = getStringOrNull(jsonObject, "resolution_comment");

@@ -13,7 +13,7 @@ public class GHPackage extends ClassBase {
 
     private final String name;
     private final String packageType;
-    private final GHUser owner;
+    private GHUser owner;
     private final String versionCount;
     private final String visibility;
     private final String createdAt;
@@ -28,7 +28,9 @@ public class GHPackage extends ClassBase {
         super(jsonObject);
         this.name = getStringOrNull(jsonObject, "name");
         this.packageType = getStringOrNull(jsonObject, "package_type");
-        this.owner = new GHUser(github, jsonObject.getJSONObject("owner"));
+        if (jsonObject.has("owner") && !jsonObject.isNull("owner")) {
+            this.owner = new GHUser(github, jsonObject.getJSONObject("owner"));
+        }
         this.versionCount = getStringOrNull(jsonObject, "version_count");
         this.visibility = getStringOrNull(jsonObject, "visibility");
         this.createdAt = getStringOrNull(jsonObject, "created_at");

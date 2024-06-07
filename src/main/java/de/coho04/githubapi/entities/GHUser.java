@@ -48,6 +48,26 @@ public class GHUser extends EntityBase {
     }
 
     /**
+     * Converts this user instance to a JSONObject.
+     *
+     * @return a JSONObject representation of this user
+     */
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject()
+                .put("gists_url", gistsUrl)
+                .put("gravatar_id", gravatarId)
+                .put("site_admin", siteAdmin)
+                .put("starred_url", starredUrl)
+                .put("contributions", contributions)
+                .put("following_url", followingUrl)
+                .put("followers_url", followersUrl)
+                .put("subscriptions_url", subscriptionsUrl)
+                .put("received_events_url", receivedEventsUrl)
+                .put("organizations_url", organizationsUrl);
+    }
+
+    /**
      * Fetches a GitHub user by their username.
      *
      * @param github the GitHub instance
@@ -149,26 +169,6 @@ public class GHUser extends EntityBase {
      */
     public boolean isSiteAdmin() {
         return siteAdmin;
-    }
-
-    /**
-     * Converts this user instance to a JSONObject.
-     *
-     * @return a JSONObject representation of this user
-     */
-    @Override
-    public JSONObject toJSONObject() {
-        return super.toJSONObject()
-                .put("gistsUrl", gistsUrl)
-                .put("gravatarId", gravatarId)
-                .put("siteAdmin", siteAdmin)
-                .put("starredUrl", starredUrl)
-                .put("contributions", contributions)
-                .put("followingUrl", followingUrl)
-                .put("followersUrl", followersUrl)
-                .put("subscriptionsUrl", subscriptionsUrl)
-                .put("receivedEventsUrl", receivedEventsUrl)
-                .put("organizationsUrl", organizationsUrl);
     }
 
     /**

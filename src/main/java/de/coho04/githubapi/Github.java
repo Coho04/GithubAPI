@@ -12,7 +12,6 @@ import java.util.List;
  * This class represents the main entry point for interacting with the GitHub API.
  * It provides methods for fetching data about users, organizations, advisories, and gitignore templates.
  */
-@SuppressWarnings("unused")
 public class Github extends GHBase {
 
     private final String token;

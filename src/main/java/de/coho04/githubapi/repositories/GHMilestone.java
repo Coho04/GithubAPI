@@ -53,6 +53,23 @@ public class GHMilestone extends ClassBase {
         this.openIssues = getIntOrNull(jsonObject, "open_issues");
     }
 
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject()
+                .put("closed_at", this.closedAt.toString())
+                .put("description", this.description)
+                .put("created_at", this.createdAt.toString())
+                .put("title", this.title)
+                .put("closed_issues", this.closedIssues)
+                .put("due_on", this.dueOn)
+                .put("labels_url", this.labelsUrl)
+                .put("number", this.number)
+                .put("updated_at", this.updatedAt.toString())
+                .put("state", this.state.toString())
+                .put("creator", this.creator.toJSONObject())
+                .put("open_issues", this.openIssues);
+    }
+
     /**
      * Returns the description of the milestone.
      *

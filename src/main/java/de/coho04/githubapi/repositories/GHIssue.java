@@ -42,6 +42,7 @@ public class GHIssue extends ClassBase {
 
     /**
      * Constructs a GHIssue object from a JSONObject.
+     *
      * @param jsonObject JSONObject representing a GitHub issue.
      */
     public GHIssue(Github github, JSONObject jsonObject) {
@@ -64,12 +65,11 @@ public class GHIssue extends ClassBase {
         this.stateReason = getStringOrNull(jsonObject, "state_reason");
         this.comments = getIntOrNull(jsonObject, "comments");
         this.closedAt = getLocalDateOrNull(jsonObject, "closed_at");
-        JSONObject milestoneJSONObject = getJSONObjectOrNull(jsonObject, "milestone");
-        if (milestoneJSONObject != null) {
-            this.milestone = new GHMilestone(github, milestoneJSONObject);
+        if (jsonObject.has("milestone")) {
+            this.milestone = new GHMilestone(github, getJSONObjectOrNull(jsonObject, "milestone"));
         }
         this.labels = getArrayOrNull(jsonObject, "labels", GHLabel::new);
-        this.assignees = getArrayOrNull(jsonObject, "assignees",jsonObject1 -> new GHUser(github, jsonObject1));
+        this.assignees = getArrayOrNull(jsonObject, "assignees", jsonObject1 -> new GHUser(github, jsonObject1));
         if (jsonObject.has("user")) {
             this.user = new GHUser(github, getJSONObjectOrNull(jsonObject, "user"));
         }

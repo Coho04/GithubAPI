@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  * This class represents a GitHub repository.
  * It provides methods for fetching and manipulating data about the repository such as its size, forks, license, name, owner, watchers, and more.
  */
-@SuppressWarnings("unused")
 public class GHRepository extends ClassBase {
 
     private final int size;
@@ -102,7 +101,7 @@ public class GHRepository extends ClassBase {
     private final int watchersCount;
     private final String homepage;
     private final int forksCount;
-    private final GHPermission permissions;
+    private GHPermission permissions;
 
     private final boolean webCommitSignoffRequired;
 
@@ -192,7 +191,9 @@ public class GHRepository extends ClassBase {
         if (jsonObject.has("license") && !jsonObject.isNull("license")) {
             this.license = new GHLicense(getJSONObjectOrNull(jsonObject, "license"));
         }
-        this.permissions = new GHPermission(getJSONObjectOrNull(jsonObject, "permissions"));
+        if (jsonObject.has("permissions")) {
+            this.permissions = new GHPermission(getJSONObjectOrNull(jsonObject, "permissions"));
+        }
         this.topics = jsonObject.getJSONArray("topics").toList().stream().map(Object::toString).collect(Collectors.toList());
     }
 
@@ -200,8 +201,8 @@ public class GHRepository extends ClassBase {
      * Fetches and returns a GitHub repository based on the provided owner and name.
      *
      * @param github the GitHub instance associated with this repository
-     * @param owner the username of the owner of the repository
-     * @param name the name of the repository
+     * @param owner  the username of the owner of the repository
+     * @param name   the name of the repository
      * @return a GHRepository instance representing the fetched repository
      */
     public static GHRepository getRepository(Github github, String owner, String name) {
@@ -217,7 +218,7 @@ public class GHRepository extends ClassBase {
      * @return a GHIssueBuilder instance for building the new issue
      */
     public GHIssueBuilder createIssue(String title) {
-        return new GHIssueBuilder(github,this, title);
+        return new GHIssueBuilder(github, getUrl(), title);
     }
 
     /**
@@ -228,14 +229,17 @@ public class GHRepository extends ClassBase {
     public Map<String, GHBranch> getBranches() {
         Map<String, GHBranch> branches = new HashMap<>();
         String response = sendGetRequest(getUrl() + "/branches", github.getToken());
-        JSONArray jsonArray = new JSONArray(response);
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String name = getStringOrNull(jsonObject, "name");
-            branches.put(name, new GHBranch(jsonObject));
+        if (response != null) {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = getStringOrNull(jsonObject, "name");
+                branches.put(name, new GHBranch(jsonObject));
+            }
         }
         return branches;
     }
+
 
     /**
      * Fetches the contributors of this repository.
@@ -257,10 +261,9 @@ public class GHRepository extends ClassBase {
     /**
      * Fetches the issues of this repository with the given state.
      *
-     * @param state the state of the issues to fetch
      * @return a List of GHIssue instances representing the issues of this repository with the given state
      */
-    public List<GHIssue> getIssues(GHState state) {
+    public List<GHIssue> getIssues() {
         String response = sendGetRequest(getUrl() + "/issues", github.getToken());
         List<GHIssue> issues = new ArrayList<>();
         if (response != null) {
@@ -270,15 +273,6 @@ public class GHRepository extends ClassBase {
             }
         }
         return issues;
-    }
-
-    /**
-     * Fetches all issues of this repository.
-     *
-     * @return a List of GHIssue instances representing all issues of this repository
-     */
-    public List<GHIssue> getIssues() {
-        return getIssues(GHState.ALL);
     }
 
     /**
@@ -344,16 +338,12 @@ public class GHRepository extends ClassBase {
      */
     public List<GHFile> getDirectoryContent(String path) {
         List<GHFile> files = new ArrayList<>();
-        try {
-            String response = sendGetRequest(getUrl() + "/contents/" + path, github.getToken());
-            if (response != null) {
-                JSONArray jsonArray = new JSONArray(response);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    files.add(new GHFile(jsonArray.getJSONObject(i)));
-                }
+        String response = sendGetRequest(getUrl() + "/contents/" + path, github.getToken());
+        if (response != null) {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                files.add(new GHFile(jsonArray.getJSONObject(i)));
             }
-        } catch (Exception e) {
-            return new ArrayList<>();
         }
         return files;
     }
@@ -1069,9 +1059,8 @@ public class GHRepository extends ClassBase {
     /**
      * Updates the homepage of this repository.
      *
-     * @param url the new homepage URL
      */
-    public void updateHomePage(String url) {
+    public void updateHomePage() {
         //TODO: Implement
     }
 

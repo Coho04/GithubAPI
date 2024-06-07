@@ -29,6 +29,15 @@ public class GHLicense extends GHBase {
         this.nodeId = getStringOrNull(jsonObject, "node_id");
     }
 
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject()
+                .put("name", name)
+                .put("spdx_id", spdxId)
+                .put("key", key)
+                .put("url", url)
+                .put("node_id", nodeId);
+    }
     /**
      * Returns the URL of the license.
      *
