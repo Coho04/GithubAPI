@@ -31,7 +31,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPostRequest_Success() throws IOException {
+    void testSendPostRequest_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -58,7 +58,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPostRequest_Failure() throws IOException {
+    void testSendPostRequest_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -78,7 +78,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPostRequest_IOException() throws IOException {
+    void testSendPostRequest_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -102,7 +102,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequest_Success() throws IOException {
+    void testSendGetRequest_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -122,7 +122,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequest_Failure() throws IOException {
+    void testSendGetRequest_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -137,7 +137,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequest_IOException() throws IOException {
+    void testSendGetRequest_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -152,7 +152,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithLinkHeader_Success() throws IOException {
+    void testSendGetRequestWithLinkHeader_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -175,7 +175,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithLinkHeader_Failure() throws IOException {
+    void testSendGetRequestWithLinkHeader_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -192,7 +192,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithLinkHeader_IOException() throws IOException {
+    void testSendGetRequestWithLinkHeader_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -209,7 +209,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testExtractNextPageUrl() {
+    void testExtractNextPageUrl() {
         String linkHeader = "<https://api.github.com/some/next>; rel=\"next\", <https://api.github.com/some/prev>; rel=\"prev\"";
         String expectedNextPageUrl = "https://api.github.com/some/next";
 
@@ -222,7 +222,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequest_Success() throws IOException {
+    void testSendDeleteRequest_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -236,7 +236,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequest_Failure() throws IOException {
+    void testSendDeleteRequest_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -250,7 +250,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequest_IOException() throws IOException {
+    void testSendDeleteRequest_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
 
@@ -264,7 +264,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequestWithResponseCode_Success() throws IOException {
+    void testSendDeleteRequestWithResponseCode_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_NO_CONTENT;
@@ -280,7 +280,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequestWithResponseCode_Failure() throws IOException {
+    void testSendDeleteRequestWithResponseCode_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_NO_CONTENT;
@@ -296,7 +296,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendDeleteRequestWithResponseCode_IOException() throws IOException {
+    void testSendDeleteRequestWithResponseCode_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_NO_CONTENT;
@@ -312,7 +312,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithResponseCode_Success() throws IOException {
+    void testSendGetRequestWithResponseCode_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_OK;
@@ -328,7 +328,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithResponseCode_Failure() throws IOException {
+    void testSendGetRequestWithResponseCode_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_OK;
@@ -344,7 +344,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendGetRequestWithResponseCode_IOException() throws IOException {
+    void testSendGetRequestWithResponseCode_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         int expectedResponseCode = HttpURLConnection.HTTP_OK;
@@ -360,7 +360,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPutRequest_Success() throws IOException {
+    void testSendPutRequest_Success() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -380,7 +380,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPutRequest_Failure() throws IOException {
+    void testSendPutRequest_Failure() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -400,7 +400,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testSendPutRequest_IOException() throws IOException {
+    void testSendPutRequest_IOException() throws IOException {
         String url = "https://api.github.com/some/endpoint";
         String githubToken = "test_token";
         JSONObject jsonObject = new JSONObject();
@@ -420,7 +420,7 @@ class HttpRequestHelperTest {
     }
 
     @Test
-    public void testExtractNextPageUrlWithNull() {
+    void testExtractNextPageUrlWithNull() {
         String nextPageUrl = HttpRequestHelper.extractNextPageUrl(null);
         assertNull(nextPageUrl);
     }
