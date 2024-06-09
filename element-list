@@ -2,8 +2,8 @@ de.coho04.githubapi
 de.coho04.githubapi.bases
 de.coho04.githubapi.builders
 de.coho04.githubapi.entities
+de.coho04.githubapi.entities.repositories
 de.coho04.githubapi.enums
 de.coho04.githubapi.factories
 de.coho04.githubapi.interfaces
-de.coho04.githubapi.repositories
 de.coho04.githubapi.utilities
