@@ -8,7 +8,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Package.
  * It provides methods for fetching data about the package such as its name, package type, owner, version count, visibility, creation date, and update date.
  */
-@SuppressWarnings("unused")
 public class GHPackage extends ClassBase {
 
     private final String name;

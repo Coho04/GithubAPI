@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * Represents a GitHub Action workflow step.
  * This class provides methods and properties to access information about a specific step in a GitHub Action workflow job.
  */
-@SuppressWarnings("unused")
 public class GHStep extends GHBase {
 
     private final String name;

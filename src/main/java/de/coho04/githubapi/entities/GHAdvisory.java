@@ -12,7 +12,6 @@ import java.util.List;
  * Represents a GitHub Security Advisory.
  * This class provides methods and properties to access information about a security advisory on GitHub.
  */
-@SuppressWarnings("unused")
 public class GHAdvisory extends GHBase {
 
     private final int id;

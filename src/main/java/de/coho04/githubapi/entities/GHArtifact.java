@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub Artifact.
  * It provides methods for fetching data about the artifact such as its name, size in bytes, url, archive download url, expired status, creation date, expiry date, update date, and associated workflow run.
  */
-@SuppressWarnings("unused")
 public class GHArtifact extends ClassBase {
 
     private final String name;

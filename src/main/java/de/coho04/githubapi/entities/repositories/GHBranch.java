@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub branch.
  * It provides methods for fetching data about the branch such as its name, commit SHA, commit URL, and protection status.
  */
-@SuppressWarnings("unused")
 public class GHBranch extends GHBase {
 
     private final boolean isProtected;

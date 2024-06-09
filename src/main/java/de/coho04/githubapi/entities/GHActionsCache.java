@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub Actions Cache.
  * It provides methods for fetching data about the actions cache such as its id, ref, key, version, last accessed date, creation date, and size in bytes.
  */
-@SuppressWarnings("unused")
 public class GHActionsCache extends GHBase {
 
     private final int id;

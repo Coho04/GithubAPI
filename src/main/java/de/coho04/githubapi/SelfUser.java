@@ -3,7 +3,8 @@ package de.coho04.githubapi;
 import de.coho04.githubapi.builders.GHPublicKeyBuilder;
 import de.coho04.githubapi.entities.GHPublicKey;
 import de.coho04.githubapi.entities.GHUser;
-import de.coho04.githubapi.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
 
@@ -13,7 +14,6 @@ import java.util.List;
  * This class represents a GitHub user.
  * It provides methods for fetching data about the user such as their issues, blocked users, and public keys, and for following and unfollowing users.
  */
-@SuppressWarnings("unused")
 public class SelfUser extends GHUser {
 
     /**
@@ -112,5 +112,13 @@ public class SelfUser extends GHUser {
      */
     public void deletePublicKey(int id) {
         sendDeleteRequest(getBaseUrl() + "/user/keys/" + id, github.getToken());
+    }
+
+    public List<GHRepository> listCreatedRepositories() {
+        return fetchPaginatedData(getBaseUrl(), "/user/repos", jsonObject -> new GHRepository(jsonObject, github), github.getToken()).stream().filter(repo -> repo.getOwner().getLogin().equals(this.getLogin())).toList();
+    }
+
+    public List<GHRepository> listRepositoriesWithAccess() {
+        return fetchPaginatedData(getBaseUrl(), "/user/repos", jsonObject -> new GHRepository(jsonObject, github), github.getToken());
     }
 }

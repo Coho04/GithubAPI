@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * Represents a GitHub variable.
  * This class provides methods and properties to access information about a variable in GitHub Actions.
  */
-@SuppressWarnings("unused")
 public class GHVariable extends GHBase {
 
     private final String name;

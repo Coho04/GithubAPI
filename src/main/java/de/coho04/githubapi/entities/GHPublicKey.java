@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Public Key.
  * It provides methods for fetching data about the public key such as its key id and key.
  */
-@SuppressWarnings("unused")
 public class GHPublicKey extends GHBase {
 
     private final String keyId;

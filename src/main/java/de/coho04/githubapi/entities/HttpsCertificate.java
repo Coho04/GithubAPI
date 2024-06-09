@@ -10,7 +10,6 @@ import java.util.List;
  * This class represents an HTTPS certificate.
  * It provides methods for fetching data about the certificate such as its state, description, domains, and expiration date.
  */
-@SuppressWarnings("unused")
 public class HttpsCertificate extends GHBase {
 
     private final String state;

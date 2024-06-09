@@ -2,7 +2,7 @@ package de.coho04.githubapi;
 
 import de.coho04.githubapi.entities.GHPublicKey;
 import de.coho04.githubapi.entities.GHUser;
-import de.coho04.githubapi.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHIssue;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONArray;
 import org.json.JSONObject;

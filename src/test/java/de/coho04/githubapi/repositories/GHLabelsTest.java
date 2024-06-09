@@ -1,5 +1,6 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.entities.repositories.GHLabel;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 

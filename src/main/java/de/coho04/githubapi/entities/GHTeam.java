@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub Team.
  * It provides methods for fetching data about the team such as its name, slug, description, privacy, notification setting, permission, members URL, repositories URL, creation date, update date, members count, repos count, and parent team.
  */
-@SuppressWarnings("unused")
 public class GHTeam extends ClassBase {
 
     private final String name;

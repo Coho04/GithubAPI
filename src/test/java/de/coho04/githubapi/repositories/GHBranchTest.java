@@ -1,5 +1,6 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.entities.repositories.GHBranch;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -31,6 +31,9 @@ public interface JSONHelper {
      * @return the integer value or 0
      */
     default Integer getIntOrNull(JSONObject jsonObject, String key) {
+        if (!jsonObject.has(key)) {
+            return 0;
+        }
         return jsonObject.isNull(key) ? 0 : jsonObject.getInt(key);
     }
 

@@ -2,8 +2,8 @@ package de.coho04.githubapi.builders;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
-import de.coho04.githubapi.repositories.GHBranch;
-import de.coho04.githubapi.repositories.GHRepository;
+import de.coho04.githubapi.entities.repositories.GHBranch;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import org.json.JSONObject;
 
 import java.util.Base64;
@@ -17,7 +17,6 @@ import java.util.Base64;
  * @version 1.0
  * @since 2024-1.2
  */
-@SuppressWarnings("unused")
 public class GHFileBuilder extends GHBase {
 
     private GHBranch branch;

@@ -10,7 +10,6 @@ import java.util.List;
  * This class represents a GitHub Hook.
  * It provides methods for fetching data about the hook such as its id, url, pingUrl, deliveriesUrl, name, events, active status, config, updatedAt, createdAt, and type.
  */
-@SuppressWarnings("unused")
 public class GHHook extends GHBase {
 
     private final int id;

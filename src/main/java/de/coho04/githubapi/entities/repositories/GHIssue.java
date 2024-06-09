@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
@@ -13,9 +13,9 @@ import java.util.List;
  * Represents a GitHub issue.
  * This class is a part of the GitHub API library.
  */
-@SuppressWarnings("unused")
 public class GHIssue extends ClassBase {
 
+    private final Github github;
     private final int number;
     private final String body;
     private final String title;
@@ -47,6 +47,7 @@ public class GHIssue extends ClassBase {
      */
     public GHIssue(Github github, JSONObject jsonObject) {
         super(jsonObject);
+        this.github = github;
         this.number = getIntOrNull(jsonObject, "number");
         this.body = getStringOrNull(jsonObject, "body");
         this.title = getStringOrNull(jsonObject, "title");
@@ -65,7 +66,7 @@ public class GHIssue extends ClassBase {
         this.stateReason = getStringOrNull(jsonObject, "state_reason");
         this.comments = getIntOrNull(jsonObject, "comments");
         this.closedAt = getLocalDateOrNull(jsonObject, "closed_at");
-        if (jsonObject.has("milestone")) {
+        if (jsonObject.has("milestone") && !jsonObject.isNull("milestone")) {
             this.milestone = new GHMilestone(github, getJSONObjectOrNull(jsonObject, "milestone"));
         }
         this.labels = getArrayOrNull(jsonObject, "labels", GHLabel::new);
@@ -79,11 +80,45 @@ public class GHIssue extends ClassBase {
         }
     }
 
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject =  super.toJSONObject()
+                .put("number", number)
+                .put("body", body)
+                .put("title", title)
+                .put("state", state.toString())
+                .put("draft", draft)
+                .put("locked", locked)
+                .put("labels_url", labelsUrl)
+                .put("created_at", createdAt.toString())
+                .put("updated_at", updatedAt.toString())
+                .put("author_association", authorAssociation)
+                .put("comments_url", commentsUrl)
+                .put("active_lock_reason", activeLockReason)
+                .put("repository_url", repositoryUrl)
+                .put("timeline_url", timelineUrl)
+                .put("performed_via_github_app", performedViaGithubApp)
+                .put("state_reason", stateReason)
+                .put("comments", comments)
+                .put("labels", labels)
+                .put("assignees", assignees)
+                .put("user", user.toJSONObject())
+                .put("assignee", assignee.toJSONObject());
+        if (closedAt != null) {
+               jsonObject.put("closed_at", closedAt.toString());
+        }
+        if (milestone != null) {
+            jsonObject.put("milestone", milestone.toJSONObject());
+        }
+        return jsonObject;
+    }
+
     /**
      * Closes the issue.
      */
     public void close() {
-        //TODO: Implement
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("state", GHState.CLOSED.toString());
+        sendPatchRequest(getUrl(), github.getToken(), jsonObject);
     }
 
     /**

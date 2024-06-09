@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Repository Cache.
  * It provides methods for fetching data about the repository cache such as its full name, active caches size in bytes, and active caches count.
  */
-@SuppressWarnings("unused")
 public class GHRepositoryCache extends GHBase {
 
     private final String fullName;

@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub Event.
  * It provides methods for fetching data about the event such as its id, type, actor, repo, payload, public status, and creation date.
  */
-@SuppressWarnings("unused")
 public class GHEvent extends GHBase {
 
     private final String id;

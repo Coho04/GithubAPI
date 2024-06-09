@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Workflow Run.
  * It provides methods for fetching data about the workflow run such as its id, repository id, head repository id, head branch, and head SHA.
  */
-@SuppressWarnings("unused")
 public class GHWorkflowRun extends GHBase {
 
     private final int id;

@@ -1,6 +1,10 @@
 package de.coho04.githubapi.repositories;
 
 import de.coho04.githubapi.Github;
+import de.coho04.githubapi.entities.repositories.GHBranch;
+import de.coho04.githubapi.entities.repositories.GHFile;
+import de.coho04.githubapi.entities.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;

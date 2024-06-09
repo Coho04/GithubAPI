@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
@@ -12,7 +12,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub milestone.
  * It provides methods for fetching data about the milestone such as its number, title, due date, state, creator, open issues, closed issues, labels URL, and description.
  */
-@SuppressWarnings("unused")
 public class GHMilestone extends ClassBase {
 
     private final int number;

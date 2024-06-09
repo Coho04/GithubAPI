@@ -1,6 +1,7 @@
 package de.coho04.githubapi.repositories;
 
 import de.coho04.githubapi.Github;
+import de.coho04.githubapi.entities.repositories.GHMilestone;
 import de.coho04.githubapi.enums.GHState;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;

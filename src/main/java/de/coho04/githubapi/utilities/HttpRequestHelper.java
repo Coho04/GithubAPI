@@ -125,7 +125,7 @@ public class HttpRequestHelper {
             if (link.contains("rel=\"next\"")) {
                 int start = link.indexOf('<') + 1;
                 int end = link.indexOf('>');
-                if (end != -1) {
+                if (start != -1 && end != -1) {
                     return link.substring(start, end);
                 }
             }
@@ -227,6 +227,40 @@ public class HttpRequestHelper {
             }
         } catch (IOException exception) {
             System.out.println("Failed to send PUT request to: " + url);
+            System.out.println("ErrorMessage: " + exception.getMessage());
+        }
+    }
+
+    /**
+     * Sends a PATCH request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject  the JSON object to send
+     */
+    public static void sendPatchRequest(String url, String githubToken, JSONObject jsonObject) {
+        try {
+            System.out.println("Sending PATCH request to: " + url);
+            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
+
+            // Using reflection to enable PATCH method
+            con.setRequestMethod("POST");
+            con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Authorization", "Bearer " + githubToken);
+            con.setDoOutput(true);
+            if (jsonObject != null) {
+                con.getOutputStream().write(jsonObject.toString().getBytes());
+            }
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+            if (responseCode >= 300 || responseCode < 200) {
+                System.out.println("Failed to send PATCH request to: " + url);
+                System.out.println("Response Code: " + responseCode);
+            }
+        } catch (IOException exception) {
+            System.out.println("Failed to send PATCH request to: " + url);
             System.out.println("ErrorMessage: " + exception.getMessage());
         }
     }

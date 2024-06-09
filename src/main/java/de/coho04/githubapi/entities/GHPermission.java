@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * Represents the permissions for a GitHub repository.
  * This class provides methods to access the permissions associated with a repository.
  */
-@SuppressWarnings("unused")
 public class GHPermission extends GHBase {
 
     private final boolean pull;

@@ -2,7 +2,7 @@ package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
-import de.coho04.githubapi.repositories.GHRepository;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
@@ -11,7 +11,6 @@ import java.time.OffsetDateTime;
  * This class represents a GitHub Alert.
  * It provides methods for fetching data about the alert such as its number, creation date, url, html url, locations url, state, resolution, resolved at date, resolved by user, secret type, secret type display name, secret, repository, push protection bypassed by user, push protection bypassed status, push protection bypassed at date, resolution comment, and validity.
  */
-@SuppressWarnings("unused")
 public class GHAlert extends GHBase {
 
     private final Github github;

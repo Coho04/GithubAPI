@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub file.
  * It provides methods for fetching data about the file such as its name, path, SHA, size, URLs, and type.
  */
-@SuppressWarnings("unused")
 public class GHFile extends GHBase {
 
     private final String name;

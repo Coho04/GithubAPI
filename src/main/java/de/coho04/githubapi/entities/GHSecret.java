@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * Represents a GitHub secret.
  * This class provides methods and properties to access information about a secret in GitHub Actions.
  */
-@SuppressWarnings("unused")
 public class GHSecret extends GHBase {
 
     private final String name;

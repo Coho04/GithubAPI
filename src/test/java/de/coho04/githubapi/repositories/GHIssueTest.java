@@ -2,6 +2,8 @@ package de.coho04.githubapi.repositories;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.entities.GHUser;
+import de.coho04.githubapi.entities.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHMilestone;
 import de.coho04.githubapi.enums.GHState;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;

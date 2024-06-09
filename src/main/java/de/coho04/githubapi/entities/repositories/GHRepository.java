@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.entities.*;
 import de.coho04.githubapi.Github;
@@ -273,6 +273,20 @@ public class GHRepository extends ClassBase {
             }
         }
         return issues;
+    }
+
+    /**
+     * Fetches the issue with the given ID in this repository.
+     *
+     * @param id the ID of the issue to fetch
+     * @return a GHIssue instance representing the fetched issue
+     */
+    public GHIssue getIssueById(int id) {
+        String response = sendGetRequest(getUrl() + "/issues/" + id, github.getToken());
+        if (response != null) {
+            return new GHIssue(github, new JSONObject(response));
+        }
+        return null;
     }
 
     /**

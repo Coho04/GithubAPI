@@ -11,7 +11,6 @@ import org.json.JSONObject;
  * @version 1.0
  * @since 2024-1.2
  */
-@SuppressWarnings("unused")
 public class EntityBase extends ClassBase {
 
     private final String type;

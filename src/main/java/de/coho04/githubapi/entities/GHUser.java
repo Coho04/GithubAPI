@@ -2,7 +2,7 @@ package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.EntityBase;
-import de.coho04.githubapi.repositories.GHRepository;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
 
@@ -12,7 +12,6 @@ import java.util.List;
  * Represents a GitHub user.
  * This class provides methods and properties to access information about a user on GitHub.
  */
-@SuppressWarnings("unused")
 public class GHUser extends EntityBase {
 
     private final String gistsUrl;
@@ -78,7 +77,7 @@ public class GHUser extends EntityBase {
         String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + "/users/" + name, github.getToken());
         assert response != null;
         JSONObject json = new JSONObject(response);
-        return new GHUser(github,json);
+        return new GHUser(github, json);
     }
 
     /**
@@ -206,5 +205,9 @@ public class GHUser extends EntityBase {
      */
     public List<GHPublicKey> getPublicKeys() {
         return fetchPaginatedData(getUrl(), "/keys", GHPublicKey::new, github.getToken());
+    }
+
+    public List<GHRepository> listRepositories() {
+        return fetchPaginatedData(getUrl(), "/repos", jsonObject -> new GHRepository(jsonObject, github), github.getToken());
     }
 }

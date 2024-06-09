@@ -3,8 +3,8 @@ package de.coho04.githubapi.entities;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
 import de.coho04.githubapi.enums.GHState;
-import de.coho04.githubapi.repositories.GHLabel;
-import de.coho04.githubapi.repositories.GHMilestone;
+import de.coho04.githubapi.entities.repositories.GHLabel;
+import de.coho04.githubapi.entities.repositories.GHMilestone;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
@@ -14,7 +14,6 @@ import java.util.List;
  * Represents a GitHub Pull Request.
  * This class provides methods and properties to access information about a pull request in a GitHub repository.
  */
-@SuppressWarnings("unused")
 public class GHPullRequest extends ClassBase {
 
     private final String diffUrl;

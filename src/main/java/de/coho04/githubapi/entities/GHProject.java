@@ -15,7 +15,6 @@ import java.time.OffsetDateTime;
  * @version 1.0
  * @since 2024-1.2
  */
-@SuppressWarnings("unused")
 public class GHProject extends ClassBase {
 
     private final String ownerUrl;

@@ -3,8 +3,8 @@ package de.coho04.githubapi.builders;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.GHBase;
 import de.coho04.githubapi.enums.GHState;
-import de.coho04.githubapi.repositories.GHIssue;
-import de.coho04.githubapi.repositories.GHMilestone;
+import de.coho04.githubapi.entities.repositories.GHIssue;
+import de.coho04.githubapi.entities.repositories.GHMilestone;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +17,6 @@ import java.util.List;
  * It extends the GHBase class and implements the JSONHelper and HttpRequestInterface interfaces.
  * This class is part of the builder pattern to simplify issue creation on GitHub.
  */
-@SuppressWarnings("unused")
 public class GHIssueBuilder extends GHBase {
 
     private final Github github;

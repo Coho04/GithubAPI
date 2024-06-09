@@ -1,5 +1,6 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.entities.repositories.GHLicense;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 

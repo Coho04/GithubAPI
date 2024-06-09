@@ -3,7 +3,7 @@ package de.coho04.githubapi.entities;
 import de.coho04.githubapi.bases.EntityBase;
 import de.coho04.githubapi.enums.GHPackageType;
 import de.coho04.githubapi.enums.GHState;
-import de.coho04.githubapi.repositories.GHRepository;
+import de.coho04.githubapi.entities.repositories.GHRepository;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
@@ -16,7 +16,6 @@ import java.util.List;
  * Represents a GitHub organization.
  * This class provides methods and properties to access information about an organization on GitHub.
  */
-@SuppressWarnings("unused")
 public class GHOrganisation extends EntityBase {
 
     private final Github github;

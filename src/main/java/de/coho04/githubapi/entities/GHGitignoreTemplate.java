@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Gitignore Template.
  * It provides methods for fetching data about the gitignore template such as its name and source.
  */
-@SuppressWarnings("unused")
 public class GHGitignoreTemplate extends GHBase {
 
     private final String name;

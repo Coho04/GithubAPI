@@ -12,7 +12,6 @@ import java.util.List;
  * Represents a GitHub Workflow Job.
  * This class provides methods and properties to access information about a workflow job in GitHub Actions.
  */
-@SuppressWarnings("unused")
 public class GHWorkflowJob extends ClassBase {
 
     private final int runId;

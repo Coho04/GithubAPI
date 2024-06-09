@@ -96,4 +96,8 @@ public interface HttpRequestInterface {
     default void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
         HttpRequestHelper.sendPutRequest(url, githubToken, jsonObject);
     }
+
+    default void sendPatchRequest(String url, String githubToken, JSONObject jsonObject) {
+        HttpRequestHelper.sendPatchRequest(url, githubToken, jsonObject);
+    }
 }

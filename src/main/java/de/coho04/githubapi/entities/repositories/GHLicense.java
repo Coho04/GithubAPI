@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub license.
  * It provides methods for fetching data about the license such as its name, SPDX ID, key, URL, and node ID.
  */
-@SuppressWarnings("unused")
 public class GHLicense extends GHBase {
 
     private final String name;

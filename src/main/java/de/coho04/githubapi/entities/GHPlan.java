@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub Plan.
  * It provides methods for fetching data about the plan such as its name, space, private repositories, filled seats, and seats.
  */
-@SuppressWarnings("unused")
 public class GHPlan extends GHBase {
 
     private final String name;

@@ -1,4 +1,4 @@
-package de.coho04.githubapi.repositories;
+package de.coho04.githubapi.entities.repositories;
 
 import de.coho04.githubapi.bases.GHBase;
 import org.json.JSONObject;
@@ -7,7 +7,6 @@ import org.json.JSONObject;
  * This class represents a GitHub label.
  * It provides methods for fetching data about the label such as its ID, URL, name, color, node ID, default status, and description.
  */
-@SuppressWarnings("unused")
 public class GHLabel extends GHBase {
 
     private final int id;

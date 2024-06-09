@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
  * Represents the GitHub Pages configuration for a repository.
  * This class provides methods and properties to access information about the GitHub Pages configuration.
  */
-@SuppressWarnings("unused")
 public class GHPages extends GHBase {
 
     private final String url;

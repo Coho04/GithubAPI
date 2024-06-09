@@ -1,9 +1,8 @@
 package de.coho04.githubapi.repositories;
 
+import de.coho04.githubapi.entities.repositories.GHFile;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
