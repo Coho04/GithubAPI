@@ -1,5 +1,6 @@
 package de.coho04.githubapi.entities.repositories;
 
+import de.coho04.githubapi.builders.GHProjectBuilder;
 import de.coho04.githubapi.entities.*;
 import de.coho04.githubapi.Github;
 import de.coho04.githubapi.bases.ClassBase;
@@ -1322,4 +1323,20 @@ public class GHRepository extends ClassBase {
         return new GHWorkflowRun(new JSONObject(response));
     }
 
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProjectBuilder createProject() {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects");
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProject createProject(String name, String body) {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects")
+                .setName(name)
+                .setBody(body)
+                .build();
+    }
 }

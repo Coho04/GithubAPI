@@ -1,7 +1,10 @@
 package de.coho04.githubapi.entities;
 
 import de.coho04.githubapi.bases.EntityBase;
+import de.coho04.githubapi.builders.GHProjectBuilder;
+import de.coho04.githubapi.builders.GHTeamBuilder;
 import de.coho04.githubapi.enums.GHPackageType;
+import de.coho04.githubapi.enums.GHRole;
 import de.coho04.githubapi.enums.GHState;
 import de.coho04.githubapi.entities.repositories.GHRepository;
 import de.coho04.githubapi.Github;
@@ -704,15 +707,6 @@ public class GHOrganisation extends EntityBase {
     }
 
     /**
-     * Fetches a team within the organization by its ID.
-     *
-     * @param id the ID of the team to fetch
-     */
-    public void getTeam(Long id) {
-        //TODO: Implement Function
-    }
-
-    /**
      * Finds a team by its name within the organization.
      *
      * @param name the name of the team to find
@@ -743,13 +737,14 @@ public class GHOrganisation extends EntityBase {
         return sendGetRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);
     }
 
-    /**
-     * Adds a member to the organization.
-     *
-     * @param user the user to add
-     */
-    public void addMember(GHUser user) {
-        //TODO: Implement Function
+
+    public void addMember(String email, GHRole role, List<Integer> teamIds) {
+        String url = getBaseUrl() + "/orgs/" + this.givenName + "/invitations";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("email", email);
+        jsonObject.put("role", role.toString());
+        jsonObject.put("team_ids", teamIds);
+        HttpRequestHelper.sendPostRequest(url, github.getToken(), jsonObject);
     }
 
     /**
@@ -844,8 +839,18 @@ public class GHOrganisation extends EntityBase {
     /**
      * Creates a project in the organization.
      */
-    public void createProject() {
-        //TODO: Implement Function
+    public GHProjectBuilder createProject() {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects");
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProject createProject(String name, String body) {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects")
+                .setName(name)
+                .setBody(body)
+                .build();
     }
 
     /**
@@ -853,8 +858,17 @@ public class GHOrganisation extends EntityBase {
      *
      * @param name the name of the team to create
      */
-    public void createTeam(String name) {
-        //TODO: Implement Function
+    public GHTeam createTeam(String name) {
+        return new GHTeamBuilder(this.github, getUrl() + "/teams").setName(name).build();
+    }
+
+    /**
+     * Creates a team in the organization.
+     *
+     * @return a TeamBuilder instance to build the team
+     */
+    public GHTeamBuilder createTeam() {
+        return new GHTeamBuilder(this.github, getUrl() + "/teams");
     }
 
     /**
@@ -867,10 +881,12 @@ public class GHOrganisation extends EntityBase {
     }
 
     /**
-     * Lists pull requests in the organization.
+     * Returns a list of pull requests in the organization.
+     *
+     * @return a list of GHRepository instances
      */
-    public void getPullRequests() {
-        //TODO: Implement Function
+    public List<GHRepository> getPullRequests() {
+        return getRepositorysWithOpenPullRequests();
     }
 
     /**

@@ -198,7 +198,10 @@ public class GHFileBuilder extends GHBase {
      * Then, it calls the overloaded commit method with the retrieved email and the authenticated user's login.
      */
     public void commit() {
-        String response = sendGetRequest(getBaseUrl() + "/user/email", github.getToken());
+        String response =  sendGetRequest(getBaseUrl() + "/user/email", github.getToken());
+        if (response == null) {
+            response = new JSONObject().put("email", "example@example.com").toString();
+        }
         JSONObject jsonObject = new JSONObject(response);
         commit(jsonObject.getString("email"), github.getSelfUser().getLogin());
     }

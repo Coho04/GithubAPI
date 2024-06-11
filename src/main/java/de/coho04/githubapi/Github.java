@@ -2,11 +2,14 @@ package de.coho04.githubapi;
 
 import de.coho04.githubapi.bases.GHBase;
 import de.coho04.githubapi.entities.*;
+import de.coho04.githubapi.utilities.LogFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
 
 /**
  * This class represents the main entry point for interacting with the GitHub API.
@@ -15,6 +18,7 @@ import java.util.List;
 public class Github extends GHBase {
 
     private final String token;
+    private static Logger logger;
 
     /**
      * Constructs a new GitHub instance with the provided username and token.
@@ -23,6 +27,12 @@ public class Github extends GHBase {
      */
     public Github(String token) {
         this.token = token;
+        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        logger.setUseParentHandlers(false);
+
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new LogFormatter());
+        logger.addHandler(handler);
     }
 
     /**
@@ -113,5 +123,9 @@ public class Github extends GHBase {
      */
     public SelfUser getSelfUser() {
         return SelfUser.getSelfUser(this);
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

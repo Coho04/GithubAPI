@@ -1,5 +1,6 @@
 package de.coho04.githubapi.utilities;
 
+import de.coho04.githubapi.Github;
 import de.coho04.githubapi.factories.HttpURLConnectionFactory;
 import org.json.JSONObject;
 
@@ -7,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -40,8 +42,7 @@ public class HttpRequestHelper {
                 }
             }
         } catch (IOException exception) {
-            System.out.println("Failed to send POST request to: " + url);
-            System.out.println("ErrorMessage: " + exception.getMessage());
+            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
         }
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -72,8 +73,7 @@ public class HttpRequestHelper {
             }
         } catch (IOException exception) {
             if (!exception.getMessage().contains("404")) {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("ErrorMessage: " + exception.getMessage());
+                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             }
         }
         return null;
@@ -104,8 +104,7 @@ public class HttpRequestHelper {
                 return new String[]{null, null};
             }
         } catch (IOException exception) {
-            System.out.println("Failed to send GET request to: " + url);
-            System.out.println("ErrorMessage: " + exception.getMessage());
+            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             return new String[]{null, null};
         }
     }
@@ -151,8 +150,7 @@ public class HttpRequestHelper {
             }
         } catch (IOException exception) {
             if (!exception.getMessage().contains("404")) {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("ErrorMessage: " + exception.getMessage());
+                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             }
         }
     }
@@ -173,8 +171,7 @@ public class HttpRequestHelper {
             return responseCode == con.getResponseCode();
         } catch (IOException exception) {
             if (!exception.getMessage().contains("404")) {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("ErrorMessage: " + exception.getMessage());
+                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             }
         }
         return false;
@@ -196,8 +193,7 @@ public class HttpRequestHelper {
             return con.getResponseCode() == responseCode;
         } catch (IOException exception) {
             if (!exception.getMessage().contains("404")) {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("ErrorMessage: " + exception.getMessage());
+                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
             }
         }
         return false;
@@ -222,12 +218,12 @@ public class HttpRequestHelper {
             }
             int responseCode = con.getResponseCode();
             if (responseCode >= 300 || responseCode < 200) {
-                System.out.println("Failed to send PUT request to: " + url);
                 System.out.println("Response Code: " + responseCode);
+                System.out.println("Response Message: " + con.getResponseMessage());
+                throw new IOException("Failed to send PUT request to: " + url);
             }
         } catch (IOException exception) {
-            System.out.println("Failed to send PUT request to: " + url);
-            System.out.println("ErrorMessage: " + exception.getMessage());
+            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
         }
     }
 
@@ -240,7 +236,6 @@ public class HttpRequestHelper {
      */
     public static void sendPatchRequest(String url, String githubToken, JSONObject jsonObject) {
         try {
-            System.out.println("Sending PATCH request to: " + url);
             HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
 
             // Using reflection to enable PATCH method
@@ -254,14 +249,11 @@ public class HttpRequestHelper {
                 con.getOutputStream().write(jsonObject.toString().getBytes());
             }
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code: " + responseCode);
             if (responseCode >= 300 || responseCode < 200) {
-                System.out.println("Failed to send PATCH request to: " + url);
-                System.out.println("Response Code: " + responseCode);
+                throw new IOException("Failed to send PATCH request to: " + url);
             }
         } catch (IOException exception) {
-            System.out.println("Failed to send PATCH request to: " + url);
-            System.out.println("ErrorMessage: " + exception.getMessage());
+            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
         }
     }
 }

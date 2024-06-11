@@ -151,12 +151,15 @@ public class GHIssueBuilder extends GHBase {
      */
     @Override
     public JSONObject toJSONObject() {
-        return super.toJSONObject()
+        JSONObject jsonObject =  super.toJSONObject()
                 .put("title", title)
                 .put("body", body)
-                .put("milestone", milestone.toJSONObject())
                 .put("labels", new JSONArray(labels))
                 .put("state", state.toString())
                 .put("assignees", new JSONArray(assignees));
+        if (milestone != null) {
+            jsonObject.put("milestone", milestone.toJSONObject());
+        }
+        return jsonObject;
     }
 }

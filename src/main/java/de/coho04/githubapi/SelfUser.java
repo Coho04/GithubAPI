@@ -1,6 +1,8 @@
 package de.coho04.githubapi;
 
+import de.coho04.githubapi.builders.GHProjectBuilder;
 import de.coho04.githubapi.builders.GHPublicKeyBuilder;
+import de.coho04.githubapi.entities.GHProject;
 import de.coho04.githubapi.entities.GHPublicKey;
 import de.coho04.githubapi.entities.GHUser;
 import de.coho04.githubapi.entities.repositories.GHIssue;
@@ -114,11 +116,53 @@ public class SelfUser extends GHUser {
         sendDeleteRequest(getBaseUrl() + "/user/keys/" + id, github.getToken());
     }
 
+    /**
+     * Returns a list of repositories created by the user.
+     *
+     * @return a list of repositories created by the user
+     */
     public List<GHRepository> listCreatedRepositories() {
         return fetchPaginatedData(getBaseUrl(), "/user/repos", jsonObject -> new GHRepository(jsonObject, github), github.getToken()).stream().filter(repo -> repo.getOwner().getLogin().equals(this.getLogin())).toList();
     }
 
+    /**
+     * Returns a list of repositories the user has access to.
+     *
+     * @return a list of repositories the user has access to
+     */
     public List<GHRepository> listRepositoriesWithAccess() {
         return fetchPaginatedData(getBaseUrl(), "/user/repos", jsonObject -> new GHRepository(jsonObject, github), github.getToken());
+    }
+
+    /**
+     * Returns the email of the user.
+     *
+     * @return the email of the user
+     */
+    public String getEmail() {
+        return  sendGetRequest(getBaseUrl() + "/user/email", github.getToken());
+    }
+
+    /**
+     * Returns a new GHProjectBuilder instance for creating a project in the organization.
+     *
+     * @return a new GHProjectBuilder instance
+     */
+    public GHProjectBuilder createProject() {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects");
+    }
+
+    /**
+     * Creates a project in the organization with the provided name and body.
+     *
+     * @param name the name of the project
+     * @param body the body of the project
+     * @return the created project
+     */
+    public GHProject createProject(String name, String body) {
+        return new GHProjectBuilder(this.github, getUrl() + "/projects")
+                .setName(name)
+                .setBody(body)
+                .build();
     }
 }
