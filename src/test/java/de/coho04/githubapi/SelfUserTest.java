@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
-public class SelfUserTest {
+class SelfUserTest {
 
     @Test
     void testGetSelfUser() {

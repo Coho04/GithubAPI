@@ -29,7 +29,7 @@ class HttpURLConnectionFactoryTest {
     }
 
     @Test
-    public void testCreateHttpURLConnection() throws IOException {
+    void testCreateHttpURLConnection() throws IOException {
         String urlString = "https://api.github.com/some/endpoint";
 
         // Using PowerMockito to mock the static method URI.create(url).toURL()
