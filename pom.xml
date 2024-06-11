@@ -9,8 +9,8 @@
     <url>https://coho04.github.io/GithubAPI/</url>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/Coho04/GithubAPI.git</developerConnection>
-      <tag>-testbranch</tag>
+        <developerConnection>scm:git:git@github.com:Coho04/GithubAPI.git</developerConnection>
+    <tag>testbranch</tag>
   </scm>
 
     <properties>
