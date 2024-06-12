@@ -51,11 +51,11 @@ class GHFileTest {
     @Test
     void shouldReturnCorrectUrl() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("url", "http://test.com");
+        jsonObject.put("url", "https://test.com");
 
         GHFile ghFile = new GHFile(jsonObject);
 
-        assertEquals("http://test.com", ghFile.getUrl());
+        assertEquals("https://test.com", ghFile.getUrl());
     }
 
     @Test

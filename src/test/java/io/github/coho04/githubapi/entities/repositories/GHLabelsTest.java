@@ -21,11 +21,11 @@ class GHLabelsTest {
     @Test
     void shouldReturnCorrectUrl() {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("url", "http://test.com");
+        jsonObject.put("url", "https://test.com");
 
         GHLabel ghLabel = new GHLabel(jsonObject);
 
-        assertEquals("http://test.com", ghLabel.getUrl());
+        assertEquals("https://test.com", ghLabel.getUrl());
     }
 
     @Test

@@ -65,7 +65,7 @@ public class GHHookBuilderTest {
 
     @Test
     void testSetAndGetConfigURL() {
-        String hookUrl = "http://example.com/hook";
+        String hookUrl = "https://example.com/hook";
         builder.setConfigURL(hookUrl);
         assertEquals(hookUrl, builder.getConfigURL());
     }
@@ -109,7 +109,7 @@ public class GHHookBuilderTest {
     void testToJSONObject() {
         builder.setName("web");
         builder.setActive(true);
-        builder.setConfigURL("http://example.com/hook");
+        builder.setConfigURL("https://example.com/hook");
         builder.setConfigContentType("json");
         builder.setConfigSecret("secret");
         builder.setConfigInsecureSSL("0");
@@ -121,7 +121,7 @@ public class GHHookBuilderTest {
         assertEquals("web", jsonObject.getString("name"));
         assertTrue(jsonObject.getBoolean("active"));
         JSONObject config = jsonObject.getJSONObject("config");
-        assertEquals("http://example.com/hook", config.getString("url"));
+        assertEquals("https://example.com/hook", config.getString("url"));
         assertEquals("json", config.getString("content_type"));
         assertEquals("secret", config.getString("secret"));
         assertEquals("0", config.getString("insecure_ssl"));
@@ -134,7 +134,7 @@ public class GHHookBuilderTest {
     void testBuild() {
         builder.setName("web");
         builder.setActive(true);
-        builder.setConfigURL("http://example.com/hook");
+        builder.setConfigURL("https://example.com/hook");
         builder.setConfigContentType("json");
         builder.setConfigSecret("secret");
         builder.setConfigInsecureSSL("0");

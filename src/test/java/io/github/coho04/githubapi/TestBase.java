@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class TestBase {
 
-    public Random random = new Random();
+    public final Random random = new Random();
 
     protected GHUser setupUser() {
         return new GHUser(Mockito.mock(Github.class), new JSONObject()

@@ -124,7 +124,7 @@ public class HttpRequestHelper {
             if (link.contains("rel=\"next\"")) {
                 int start = link.indexOf('<') + 1;
                 int end = link.indexOf('>');
-                if (start != -1 && end != -1) {
+                if (end != -1) {
                     return link.substring(start, end);
                 }
             }
