@@ -20,7 +20,8 @@ jobs:
       - name: Create settings.xml
         run: |
           mkdir -p ~/.m2
-          echo "${{ secrets.MAVEN_SETTINGS }}" | sed 's/\\n/\n/g' > ~/.m2/settings.xml
+          echo "${{ secrets.MAVEN_SETTINGS }}" > ~/.m2/settings.xml
+          cat ~/.m2/settings.xml
 
       # Import GPG keys
       - name: Import GPG key
