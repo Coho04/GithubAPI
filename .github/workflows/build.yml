@@ -28,8 +28,9 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
           echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
-          GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | cut -d'/' -f2)
-          echo "$GPG_KEY_ID:6:" | gpg --import-ownertrust
+          # Fetch the key fingerprint
+          GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | cut -d: -f10)
+          echo "$GPG_FINGERPRINT:6:" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
           echo "use-agent" >> ~/.gnupg/gpg.conf
