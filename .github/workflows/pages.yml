@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Java version
         uses: actions/setup-java@v3
@@ -22,6 +22,22 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
+      # Import GPG keys
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
+          echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import --batch --yes
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key YOUR_KEY_ID trust quit
+
+      # Configure GPG for Maven
+      - name: Configure GPG for Maven
+        run: |
+          mkdir -p ~/.gnupg
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          gpgconf --kill gpg-agent
+          gpgconf --launch gpg-agent
 
       - name: Build with Maven
         run: mvn clean install
