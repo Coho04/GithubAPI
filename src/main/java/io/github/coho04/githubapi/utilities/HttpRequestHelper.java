@@ -66,9 +66,9 @@ public class HttpRequestHelper {
                     return in.lines().collect(Collectors.joining());
                 }
             } else if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("Response Message: " + con.getResponseMessage());
-                System.out.println("Response Code: " + responseCode);
+                Github.getLogger().warning("Failed to send GET request to: " + url);
+                Github.getLogger().warning("Response Message: " + con.getResponseMessage());
+                Github.getLogger().warning("Response Code: " + responseCode);
                 return null;
             }
         } catch (IOException exception) {
@@ -99,8 +99,9 @@ public class HttpRequestHelper {
                 }
                 return new String[]{responseBody, con.getHeaderField("Link")};
             } else {
-                System.out.println("Failed to send GET request to: " + url);
-                System.out.println("Response Code: " + responseCode);
+                Github.getLogger().warning("Failed to send GET request to: " + url);
+                Github.getLogger().warning("Response Message: " + con.getResponseMessage());
+                Github.getLogger().warning("Response Code: " + responseCode);
                 return new String[]{null, null};
             }
         } catch (IOException exception) {
@@ -145,8 +146,9 @@ public class HttpRequestHelper {
             con.setRequestProperty("Authorization", "Bearer " + githubToken);
             int responseCode = con.getResponseCode();
             if (responseCode >= 300 || responseCode < 200) {
-                System.out.println("Failed to send DELETE request to: " + url);
-                System.out.println("Response Code: " + responseCode);
+                Github.getLogger().warning("Failed to send DELETE request to: " + url);
+                Github.getLogger().warning("Response Message: " + con.getResponseMessage());
+                Github.getLogger().warning("Response Code: " + responseCode);
             }
         } catch (IOException exception) {
             if (!exception.getMessage().contains("404")) {
@@ -218,8 +220,9 @@ public class HttpRequestHelper {
             }
             int responseCode = con.getResponseCode();
             if (responseCode >= 300 || responseCode < 200) {
-                System.out.println("Response Code: " + responseCode);
-                System.out.println("Response Message: " + con.getResponseMessage());
+                Github.getLogger().warning("Failed to send PUT request to: " + url);
+                Github.getLogger().warning("Response Message: " + con.getResponseMessage());
+                Github.getLogger().warning("Response Code: " + responseCode);
                 throw new IOException("Failed to send PUT request to: " + url);
             }
         } catch (IOException exception) {
@@ -252,7 +255,6 @@ public class HttpRequestHelper {
             if (responseCode >= 300 || responseCode < 200) {
                 throw new IOException("Failed to send PATCH request to: " + url);
             }
-            System.out.println(responseCode);
         } catch (IOException exception) {
             Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);
         }

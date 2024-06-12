@@ -123,9 +123,6 @@ public class GHHookBuilder extends GHBase {
      * @param event the event to add
      */
     public void addEvent(String event) {
-        if (this.events == null) {
-            this.events = new ArrayList<>();
-        }
         this.events.add(event);
     }
 

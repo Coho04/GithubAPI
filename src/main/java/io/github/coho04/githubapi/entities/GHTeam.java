@@ -52,6 +52,24 @@ public class GHTeam extends ClassBase {
         }
     }
 
+    @Override
+    public JSONObject toJSONObject() {
+        return super.toJSONObject()
+                .put("name", name)
+                .put("slug", slug)
+                .put("description", description)
+                .put("privacy", privacy)
+                .put("notification_setting", notificationSetting)
+                .put("permission", permission)
+                .put("members_url", membersUrl)
+                .put("repositories_url", repositoriesUrl)
+                .put("created_at", createdAt.toString())
+                .put("updated_at", updatedAt.toString())
+                .put("members_count", membersCount)
+                .put("repos_count", reposCount)
+                .put("parent", parent == null ? JSONObject.NULL : parent.toJSONObject());
+    }
+
     /**
      * Returns a GHTeam instance by team name.
      *

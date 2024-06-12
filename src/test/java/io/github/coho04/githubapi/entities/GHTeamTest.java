@@ -1,6 +1,7 @@
 package io.github.coho04.githubapi.entities;
 
 import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.TestBase;
 import io.github.coho04.githubapi.utilities.HttpRequestHelper;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class GHTeamTest {
+class GHTeamTest extends TestBase {
 
     private GHTeam team;
     private Github github;
@@ -37,7 +38,7 @@ class GHTeamTest {
         jsonObject.put("updated_at", OffsetDateTime.now().toString());
         jsonObject.put("members_count", 10);
         jsonObject.put("repos_count", 5);
-        jsonObject.put("parent", JSONObject.NULL);
+        jsonObject.put("parent", setupTeam().toJSONObject());
 
         team = new GHTeam(jsonObject);
     }
@@ -104,6 +105,13 @@ class GHTeamTest {
 
     @Test
     void testGetParent() {
+        assertNotNull(team.getParent());
+    }
+
+    @Test
+    void testParentIfIsNull() {
+        jsonObject.put("parent", JSONObject.NULL);
+        team = new GHTeam(jsonObject);
         assertNull(team.getParent());
     }
 

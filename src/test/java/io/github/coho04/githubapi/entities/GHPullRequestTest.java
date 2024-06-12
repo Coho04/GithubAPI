@@ -1,6 +1,7 @@
 package io.github.coho04.githubapi.entities;
 
 import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.TestBase;
 import io.github.coho04.githubapi.enums.GHState;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,15 +14,16 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class GHPullRequestTest {
+class GHPullRequestTest extends TestBase {
 
     private GHPullRequest pullRequest;
+    private JSONObject jsonObject;
 
     @BeforeEach
     void setUp() {
         Github github = mock(Github.class);
 
-        JSONObject jsonObject = new JSONObject();
+        jsonObject = new JSONObject();
         jsonObject.put("diff_url", "https://api.github.com/repos/octocat/Hello-World/pull/1347.diff");
         jsonObject.put("patch_url", "https://api.github.com/repos/octocat/Hello-World/pull/1347.patch");
         jsonObject.put("issue_url", "https://api.github.com/repos/octocat/Hello-World/issues/1347");
@@ -49,7 +51,8 @@ class GHPullRequestTest {
         jsonObject.put("author_association", "OWNER");
         jsonObject.put("auto_merge", JSONObject.NULL);
         jsonObject.put("draft", false);
-
+        jsonObject.put("milestone", setupMileStone().toJSONObject());
+        jsonObject.put("assignee", setupUser().toJSONObject());
         pullRequest = new GHPullRequest(github, jsonObject);
     }
 
@@ -79,12 +82,26 @@ class GHPullRequestTest {
     }
 
     @Test
-    void testGetMilestone() {
+    void testGetMilestoneWhenNotNull() {
+        assertNotNull(pullRequest.getMilestone());
+    }
+
+    @Test
+    void testGetMilestoneWhenNull() {
+        jsonObject.put("milestone", JSONObject.NULL);
+        pullRequest = new GHPullRequest(mock(Github.class), jsonObject);
         assertNull(pullRequest.getMilestone());
     }
 
     @Test
-    void testGetAssignee() {
+    void testGetAssigneeWhenNotNull() {
+        assertNotNull(pullRequest.getAssignee());
+    }
+
+    @Test
+    void testGetAssigneeWhenNull() {
+        jsonObject.put("assignee", JSONObject.NULL);
+        pullRequest = new GHPullRequest(mock(Github.class), jsonObject);
         assertNull(pullRequest.getAssignee());
     }
 

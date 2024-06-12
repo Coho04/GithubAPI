@@ -102,6 +102,13 @@ public interface JSONHelper {
         return list;
     }
 
+    /**
+     * Returns a list of strings from a JSON array in the JSON object. If the key is not present or the array is empty, returns an empty list.
+     *
+     * @param jsonObject the JSON object
+     * @param key        the key
+     * @return the list of strings
+     */
     default List<String> getJSONArrayToStringList(JSONObject jsonObject, String key) {
         List<String> list = new ArrayList<>();
         if (jsonObject.isNull(key)) {
