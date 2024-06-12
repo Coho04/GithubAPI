@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
-public class GHHookBuilderTest {
+class GHHookBuilderTest {
 
     private Github github;
     private GHHookBuilder builder;
