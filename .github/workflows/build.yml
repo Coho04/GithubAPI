@@ -21,10 +21,16 @@ jobs:
 
       # Import GPG keys
       - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
-          echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import --batch --yes
-          echo -e "1234567890ABCDEF1234567890ABCDEF12345678:6:" | gpg --import-ownertrust
+          echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
+          echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
+          # Fetch the key ID
+          GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | cut -d'/' -f2)
+          # Set trust level to ultimate
+          echo -e "$GPG_KEY_ID:6:\n" | gpg --import-ownertrust
 
       # Configure GPG for Maven
       - name: Configure GPG for Maven
