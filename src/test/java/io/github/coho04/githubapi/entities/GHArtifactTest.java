@@ -10,17 +10,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GHArtifactTest {
 
-    private JSONObject jsonObject;
     private GHArtifact artifact;
     private OffsetDateTime now;
 
     @BeforeEach
     void setUp() {
         now = OffsetDateTime.now();
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "test-artifact");
         jsonObject.put("size_in_bytes", 12345);
-        jsonObject.put("archive_download_url", "http://example.com/archive.zip");
+        jsonObject.put("archive_download_url", "https://example.com/archive.zip");
         jsonObject.put("expired", true);
         jsonObject.put("created_at", now.toString());
         jsonObject.put("expires_at", now.plusDays(1).toString());
@@ -63,7 +62,7 @@ class GHArtifactTest {
 
     @Test
     void testGetArchiveDownloadUrl() {
-        assertEquals("http://example.com/archive.zip", artifact.getArchiveDownloadUrl());
+        assertEquals("https://example.com/archive.zip", artifact.getArchiveDownloadUrl());
     }
 
     @Test

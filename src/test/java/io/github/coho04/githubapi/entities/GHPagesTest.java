@@ -10,14 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GHPagesTest {
 
-    private JSONObject jsonObject;
     private GHPages pages;
     private OffsetDateTime now;
 
     @BeforeEach
     void setUp() {
         now = OffsetDateTime.now();
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("url", "https://example.github.io");
         jsonObject.put("status", "active");
         jsonObject.put("cname", "example.com");

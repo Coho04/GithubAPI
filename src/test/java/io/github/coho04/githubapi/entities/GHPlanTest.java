@@ -8,12 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GHPlanTest {
 
-    private JSONObject jsonObject;
     private GHPlan plan;
 
     @BeforeEach
     void setUp() {
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("name", "Pro Plan");
         jsonObject.put("space", 100000);
         jsonObject.put("seats", 10);

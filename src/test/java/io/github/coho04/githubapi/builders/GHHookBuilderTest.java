@@ -86,7 +86,7 @@ public class GHHookBuilderTest {
 
     @Test
     void testAddEvent() {
-        List<String> events = Arrays.asList("push");
+        List<String> events = List.of("push");
         builder.setEvents(events);
         builder.addEvent("pull_request");
         assertEquals(Arrays.asList("push", "pull_request"), builder.getEvents());

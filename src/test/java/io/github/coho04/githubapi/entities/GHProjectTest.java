@@ -12,15 +12,13 @@ import static org.mockito.Mockito.mock;
 
 class GHProjectTest {
 
-    private JSONObject jsonObject;
     private GHProject project;
-    private Github github;
 
     @BeforeEach
     void setUp() {
-        github = mock(Github.class);
+        Github github = mock(Github.class);
 
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("owner_url", "https://api.github.com/repos/octocat/Hello-World");
         jsonObject.put("columns_url", "https://api.github.com/projects/columns");
         jsonObject.put("name", "Project Board");

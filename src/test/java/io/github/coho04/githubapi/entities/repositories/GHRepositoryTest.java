@@ -30,7 +30,6 @@ class GHRepositoryTest extends TestBase {
     private Github github;
     private GHRepository repository;
     private JSONObject jsonObject;
-    private JSONObject issue;
     private OffsetDateTime now;
 
     @BeforeEach
@@ -137,7 +136,7 @@ class GHRepositoryTest extends TestBase {
 
         GHUser assignee = setupUser();
         GHMilestone milestone = setupMileStone();
-        issue = new JSONObject();
+        JSONObject issue = new JSONObject();
         issue.put("number", 123);
         issue.put("comments", 10);
         issue.put("body", "Test Body");

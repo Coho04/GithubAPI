@@ -10,14 +10,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GHEventTest {
 
-    private JSONObject jsonObject;
     private GHEvent event;
     private OffsetDateTime now;
 
     @BeforeEach
     void setUp() {
         now = OffsetDateTime.now();
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", "12345");
         jsonObject.put("type", "PushEvent");
         jsonObject.put("actor", new JSONObject().put("login", "octocat"));

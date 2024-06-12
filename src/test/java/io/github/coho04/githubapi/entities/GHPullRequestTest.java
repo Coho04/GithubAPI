@@ -15,15 +15,13 @@ import static org.mockito.Mockito.mock;
 
 class GHPullRequestTest {
 
-    private JSONObject jsonObject;
     private GHPullRequest pullRequest;
-    private Github github;
 
     @BeforeEach
     void setUp() {
-        github = mock(Github.class);
+        Github github = mock(Github.class);
 
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("diff_url", "https://api.github.com/repos/octocat/Hello-World/pull/1347.diff");
         jsonObject.put("patch_url", "https://api.github.com/repos/octocat/Hello-World/pull/1347.patch");
         jsonObject.put("issue_url", "https://api.github.com/repos/octocat/Hello-World/issues/1347");

@@ -13,11 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class GHWorkflowJobTest {
 
     private GHWorkflowJob workflowJob;
-    private JSONObject jsonObject;
 
     @BeforeEach
     void setUp() {
-        jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         jsonObject.put("run_id", 123);
         jsonObject.put("run_url", "https://api.github.com/repos/test/repo/actions/runs/123");
         jsonObject.put("head_sha", "abcdef1234567890");
