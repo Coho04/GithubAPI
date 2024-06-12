@@ -37,8 +37,7 @@ jobs:
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
           echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import --batch --yes
-          echo -e "5\ny\n" > trust.txt
-          gpg --batch --yes --import-ownertrust < trust.txt
+          echo -e "70BDB97868B8A36A:6:" | gpg --import-ownertrust
 
       # Configure GPG for Maven
       - name: Configure GPG for Maven
