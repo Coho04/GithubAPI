@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
           echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import --batch --yes
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key YOUR_KEY_ID trust quit
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --edit-key C76BB85ED1AA244BE2A86ABE70BDB97868B8A36A trust quit
 
       # Configure GPG for Maven
       - name: Configure GPG for Maven
