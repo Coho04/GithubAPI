@@ -19,8 +19,8 @@ jobs:
 
       - name: Create settings.xml
         run: |
-          touch ~/.m2/settings.xml
-          echo ${{ secrets.MAVEN_SETTINGS }} > ~/.m2/settings.xml
+          mkdir -p ~/.m2
+          echo "${{ secrets.MAVEN_SETTINGS }}" > ~/.m2/settings.xml
 
       # Import GPG keys
       - name: Import GPG key
@@ -48,9 +48,14 @@ jobs:
         run: mvn clean install -Dgpg.passphrase="${GPG_PASSPHRASE}"
 
       - name: Get Maven Artifact ID
+        id: get-version-and-artifact
+        run: |
+          echo "VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_ENV
+          echo "ARTIFACT=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec)" >> $GITHUB_ENV
         env:
-          VERSION: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec 2>/dev/null)
-          ARTIFACT: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec 2>/dev/null)
-        run: echo '${{ github.repository }}'
-      - name: Nexus Repo Publish
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish
         run: mvn deploy
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
