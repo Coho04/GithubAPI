@@ -17,6 +17,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Create settings.xml
+        run: echo ${{ secrets.MAVEN_SETTINGS }} > ~/.m2/settings.xml
+
       # Import GPG keys
       - name: Import GPG key
         env:
