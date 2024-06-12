@@ -25,22 +25,28 @@ jobs:
 
       # Import GPG keys
       - name: Import GPG key
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PUBLIC_KEY: ${{ secrets.GPG_PUBLIC_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --import --batch --yes
-          echo "${{ secrets.GPG_PUBLIC_KEY }}" | gpg --import --batch --yes
-          echo -e "1234567890ABCDEF1234567890ABCDEF12345678:6:" | gpg --import-ownertrust
-
-      # Configure GPG for Maven
-      - name: Configure GPG for Maven
-        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
+          echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
+          # Fetch the key fingerprint
+          GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | head -n 1 | cut -d: -f10)
+          echo "$GPG_FINGERPRINT:6" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
           echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           gpgconf --kill gpg-agent
           gpgconf --launch gpg-agent
 
+      # Build with Maven
       - name: Build with Maven
-        run: mvn clean install
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: mvn clean install -Dgpg.passphrase="${GPG_PASSPHRASE}"
 
       - name: Generate Javadocs
         run: mvn javadoc:javadoc
