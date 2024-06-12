@@ -1,18 +1,33 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.coho04</groupId>
+    <groupId>io.github.coho04</groupId>
     <artifactId>githubapi</artifactId>
     <version>1.0.3</version>
     <description>A powerful and user-friendly Java toolkit for the GitHub API, simplifying access and interaction with GitHub data for developers.</description>
     <url>https://coho04.github.io/GithubAPI/</url>
 
+    <name>${project.groupId}:${project.artifactId}</name>
+
+    <developers>
+        <developer>
+            <name>Collin Ilgner</name>
+            <email>cohohohn04@gmail.com</email>
+        </developer>
+    </developers>
+
     <scm>
-        <developerConnection>scm:git:https://github.com/Coho04/GithubAPI.git</developerConnection>
+        <connection>scm:git:git://github.com:Coho04/GithubAPI.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Coho04/GithubAPI.git</developerConnection>
+        <url>https://github.com:Coho04/GithubAPI/tree/main</url>
     </scm>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -22,6 +37,33 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <files>
+                        <file>target/githubapi-${project.version}.jar</file>
+                        <file>target/githubapi-${project.version}.pom</file>
+                        <file>target/githubapi-${project.version}-sources.jar</file>
+                        <file>target/githubapi-${project.version}-javadoc.jar</file>
+                    </files>
+                    <gpgArguments>
+                        <arg>--batch</arg>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -34,6 +76,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.4.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -56,11 +108,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
