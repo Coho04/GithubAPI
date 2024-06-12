@@ -1,4 +1,4 @@
-name: Deploy to Nexus Repository
+name: Deploy Repository
 
 on:
   release:
@@ -39,13 +39,4 @@ jobs:
         run: mvn clean install -DskipTests
 
       - name: Nexus Repo Publish
-        uses: sonatype-nexus-community/nexus-repo-github-action@master
-        with:
-          serverUrl: https://nexus.golden-developer.de
-          username: github
-          password: ${{ secrets.NEXUS_PASSWORD }}
-          format: maven2
-          repository: maven-releases
-          coordinates: groupId=de.goldendeveloper artifactId=GithubAPI version=${{ env.RELEASE_VERSION }}
-          assets: extension=jar
-          filename: ./target/githubapi-${{ env.RELEASE_VERSION }}.jar
+        run: mvn deploy

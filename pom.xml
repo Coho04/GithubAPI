@@ -3,7 +3,7 @@
 
     <groupId>io.github.coho04</groupId>
     <artifactId>githubapi</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <description>A powerful and user-friendly Java toolkit for the GitHub API, simplifying access and interaction with GitHub data for developers.</description>
     <url>https://coho04.github.io/GithubAPI/</url>
 
