@@ -1,5 +1,6 @@
 package io.github.coho04.githubapi;
 
+import io.github.coho04.githubapi.entities.GHTeam;
 import io.github.coho04.githubapi.entities.GHUser;
 import io.github.coho04.githubapi.entities.GHVulnerability;
 import io.github.coho04.githubapi.entities.repositories.GHMilestone;
@@ -8,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mockito.Mockito;
 
+import java.time.OffsetDateTime;
 import java.util.Random;
 
 public class TestBase {
@@ -35,6 +37,24 @@ public class TestBase {
                 .put("html_url", "https://example.com/html_url")
                 .put("url", "https://example.com/url")
                 .put("events_url", "https://example.com/events_url")
+        );
+    }
+
+    protected GHTeam setupTeam() {
+        return new GHTeam(new JSONObject()
+                .put("name", "Test Team")
+                .put("slug", "test-team")
+                .put("description", "A test team")
+                .put("privacy", "closed")
+                .put("notification_setting", "all")
+                .put("permission", "admin")
+                .put("members_url", "https://api.github.com/teams/1/members")
+                .put("repositories_url", "https://api.github.com/teams/1/repos")
+                .put("created_at", OffsetDateTime.now().toString())
+                .put("updated_at", OffsetDateTime.now().toString())
+                .put("members_count", 10)
+                .put("repos_count", 5)
+                .put("parent", JSONObject.NULL)
         );
     }
 
