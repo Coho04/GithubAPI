@@ -29,8 +29,8 @@ jobs:
           echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
           echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
           # Fetch the key fingerprint
-          GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | cut -d: -f10)
-          echo "$GPG_FINGERPRINT:6:" | gpg --import-ownertrust
+          GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | head -n 1 | cut -d: -f10)
+          echo "$GPG_FINGERPRINT:6" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
           echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
           echo "use-agent" >> ~/.gnupg/gpg.conf
@@ -42,8 +42,7 @@ jobs:
       - name: Build with Maven
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-        run: |
-          mvn clean install -Dgpg.passphrase="${GPG_PASSPHRASE}"
+        run: mvn clean install -Dgpg.passphrase="${GPG_PASSPHRASE}"
 
       - name: Get Maven Artifact ID
         env:
