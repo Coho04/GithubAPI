@@ -19,7 +19,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Import GPG keys
       - name: Import GPG key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -28,7 +27,6 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
           echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
-          # Fetch the key fingerprint
           GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | head -n 1 | cut -d: -f10)
           echo "$GPG_FINGERPRINT:6" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
@@ -39,7 +37,6 @@ jobs:
           gpgconf --launch gpg-agent
           gpg --list-secret-keys --keyid-format LONG
 
-      # Build with Maven
       - name: Build with Maven
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
@@ -51,6 +48,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Java version
         uses: actions/setup-java@v3
         with:
@@ -66,7 +64,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # Import GPG keys
       - name: Import GPG key
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -75,7 +72,6 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
           echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
-          # Fetch the key fingerprint
           GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | head -n 1 | cut -d: -f10)
           echo "$GPG_FINGERPRINT:6" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
