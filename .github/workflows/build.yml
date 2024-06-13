@@ -28,6 +28,7 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --import --batch --yes
           echo "$GPG_PUBLIC_KEY" | gpg --import --batch --yes
+          # Fetch the key fingerprint
           GPG_FINGERPRINT=$(gpg --list-secret-keys --with-colons | grep fpr | head -n 1 | cut -d: -f10)
           echo "$GPG_FINGERPRINT:6" | gpg --import-ownertrust
           mkdir -p ~/.gnupg
@@ -42,6 +43,12 @@ jobs:
         env:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: mvn clean install -Dgpg.passphrase="${GPG_PASSPHRASE}"
+
+      - name: Get Maven Artifact ID
+        env:
+          VERSION: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec 2>/dev/null)
+          ARTIFACT: $(mvn -q -Dexec.executable=echo -Dexec.args='${project.artifactId}' --non-recursive exec:exec 2>/dev/null)
+        run: echo '${{ github.repository }}'
 
   test:
     runs-on: ubuntu-latest
