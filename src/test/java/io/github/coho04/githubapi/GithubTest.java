@@ -101,7 +101,7 @@ class GithubTest {
             List<GHGitignoreTemplate> templates = github.listGitignoreTemplates();
             assertNotNull(templates);
             assertEquals(2, templates.size());
-            assertEquals("template1", templates.get(0).getName());
+            assertEquals("template1", templates.getFirst().getName());
             assertEquals("template2", templates.get(1).getName());
         }
     }

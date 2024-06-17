@@ -57,7 +57,7 @@ class GHBaseTest {
             List<GHUser> users = ghBase.fetchArrayData("/users", jsonObject -> new GHUser(github, jsonObject), "token", "items");
 
             assertEquals(2, users.size());
-            assertEquals("user1", users.get(0).getLogin());
+            assertEquals("user1", users.getFirst().getLogin());
             assertEquals("user2", users.get(1).getLogin());
         }
     }

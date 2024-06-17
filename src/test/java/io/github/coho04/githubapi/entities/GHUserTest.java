@@ -107,7 +107,7 @@ class GHUserTest {
             List<GHUser> followers = user.getFollowers();
             assertNotNull(followers);
             assertEquals(1, followers.size());
-            assertEquals("follower1", followers.get(0).getLogin());
+            assertEquals("follower1", followers.getFirst().getLogin());
         }
     }
 
@@ -122,7 +122,7 @@ class GHUserTest {
             List<GHUser> following = user.getFollowing();
             assertNotNull(following);
             assertEquals(1, following.size());
-            assertEquals("following1", following.get(0).getLogin());
+            assertEquals("following1", following.getFirst().getLogin());
         }
     }
 
@@ -137,7 +137,7 @@ class GHUserTest {
             List<GHPublicKey> publicKeys = user.getPublicKeys();
             assertNotNull(publicKeys);
             assertEquals(1, publicKeys.size());
-            assertEquals("key1", publicKeys.get(0).getKeyId());
+            assertEquals("key1", publicKeys.getFirst().getKeyId());
         }
     }
 
@@ -156,7 +156,7 @@ class GHUserTest {
 
             assertNotNull(repos);
             assertEquals(1, repos.size());
-            assertEquals("repo1", repos.get(0).getName());
+            assertEquals("repo1", repos.getFirst().getName());
         }
     }
 

@@ -83,12 +83,12 @@ class GHIssueTest extends TestBase {
 
     @Test
     void shouldReturnCorrectLabels() {
-        assertEquals("TestLabel", getIssue(jsonObject).getLabels().get(0).getName());
+        assertEquals("TestLabel", getIssue(jsonObject).getLabels().getFirst().getName());
     }
 
     @Test
     void shouldReturnCorrectAssignees() {
-        assertEquals("TestAssignee", getIssue(jsonObject).getAssignees().get(0).getLogin());
+        assertEquals("TestAssignee", getIssue(jsonObject).getAssignees().getFirst().getLogin());
     }
 
     /**

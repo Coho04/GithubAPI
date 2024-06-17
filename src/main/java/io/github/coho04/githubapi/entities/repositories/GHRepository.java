@@ -100,7 +100,7 @@ public class GHRepository extends ClassBase {
     private final String assigneesUrl;
     private final int openIssues;
     private final int watchersCount;
-    private final String homepage;
+    private String homepage;
     private final int forksCount;
     private GHPermission permissions;
 
@@ -359,7 +359,31 @@ public class GHRepository extends ClassBase {
         if (response != null) {
             JSONArray jsonArray = new JSONArray(response);
             for (int i = 0; i < jsonArray.length(); i++) {
-                files.add(new GHFile(jsonArray.getJSONObject(i)));
+                files.add(new GHFile(github, jsonArray.getJSONObject(i), this));
+            }
+        }
+        return files;
+    }
+
+    /**
+     * Fetches the content of the directory at the given path in this repository, including the content of each file.
+     *
+     * @param path the path of the directory
+     * @return a List of GHFile instances representing the content of the directory
+     */
+    public List<GHFile> getDirectoryContentWithFileContent(String path) {
+        List<GHFile> files = new ArrayList<>();
+        String response = sendGetRequest(getUrl() + "/contents/" + path, github.getToken());
+        if (response != null) {
+            JSONArray jsonArray = new JSONArray(response);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.getString("type").equals("file")) {
+                    String fileContent = sendGetRequest(jsonObject.getString("url"), github.getToken());
+                    files.add(new GHFile(github, new JSONObject(fileContent), this));
+                } else {
+                    files.add(new GHFile(github, jsonArray.getJSONObject(i), this));
+                }
             }
         }
         return files;
@@ -1067,17 +1091,19 @@ public class GHRepository extends ClassBase {
      */
     public void updateTopics(List<String> topics) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("names", topics);
-        //TODO: Implement
-//        sendPatchRequest(this.url + "/topics", jsonObject.toString(), github.getToken());
+        jsonObject.put("names", new JSONArray(topics));
+        sendPutRequest(getUrl() + "/topics", github.getToken(), jsonObject);
         this.topics = List.copyOf(topics);
     }
 
     /**
      * Updates the homepage of this repository.
      */
-    public void updateHomePage() {
-        //TODO: Implement
+    public void updateHomePage(String homepageUrl) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("homepage", homepageUrl);
+        sendPatchRequest(getUrl(), github.getToken(), jsonObject);
+        this.homepage = homepageUrl;
     }
 
     /**

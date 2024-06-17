@@ -115,7 +115,7 @@ class GHPullRequestTest extends TestBase {
     void testGetLabels() {
         assertNotNull(pullRequest.getLabels());
         assertFalse(pullRequest.getLabels().isEmpty());
-        assertEquals("bug", pullRequest.getLabels().get(0).getName());
+        assertEquals("bug", pullRequest.getLabels().getFirst().getName());
     }
 
     @Test
@@ -132,21 +132,21 @@ class GHPullRequestTest extends TestBase {
     void testGetAssignees() {
         assertNotNull(pullRequest.getAssignees());
         assertFalse(pullRequest.getAssignees().isEmpty());
-        assertEquals("octocat", pullRequest.getAssignees().get(0).getLogin());
+        assertEquals("octocat", pullRequest.getAssignees().getFirst().getLogin());
     }
 
     @Test
     void testGetRequestedTeams() {
         assertNotNull(pullRequest.getRequestedTeams());
         assertFalse(pullRequest.getRequestedTeams().isEmpty());
-        assertEquals("octocat", pullRequest.getRequestedTeams().get(0).getLogin());
+        assertEquals("octocat", pullRequest.getRequestedTeams().getFirst().getLogin());
     }
 
     @Test
     void testGetRequestedReviewers() {
         assertNotNull(pullRequest.getRequestedReviewers());
         assertFalse(pullRequest.getRequestedReviewers().isEmpty());
-        assertEquals("octocat", pullRequest.getRequestedReviewers().get(0).getLogin());
+        assertEquals("octocat", pullRequest.getRequestedReviewers().getFirst().getLogin());
     }
 
     @Test

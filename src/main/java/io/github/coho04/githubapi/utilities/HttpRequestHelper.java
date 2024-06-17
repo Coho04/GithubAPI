@@ -241,7 +241,6 @@ public class HttpRequestHelper {
         try {
             HttpURLConnection con = connectionFactory.createHttpURLConnection(url);
 
-            // Using reflection to enable PATCH method
             con.setRequestMethod("POST");
             con.setRequestProperty("X-HTTP-Method-Override", "PATCH");
 

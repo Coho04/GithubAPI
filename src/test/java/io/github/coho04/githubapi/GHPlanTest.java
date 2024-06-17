@@ -29,9 +29,7 @@ class GHPlanTest {
     void shouldReturnCorrectPrivateRepos() {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("private_repos", 10);
-
         GHPlan ghPlan = new GHPlan(jsonObject);
-
         assertEquals(10, ghPlan.getPrivateRepos());
     }
 

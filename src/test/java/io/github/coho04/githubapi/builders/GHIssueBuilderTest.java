@@ -120,18 +120,6 @@ class GHIssueBuilderTest extends TestBase {
         }
     }
 
-    private boolean jsonSimilar(JSONObject actual, JSONObject expected) {
-        if (actual == null || expected == null) return false;
-        if (actual.length() != expected.length()) return false;
-        for (String key : expected.keySet()) {
-            if (!actual.has(key)) return false;
-            if (actual.isNull(key) && expected.isNull(key)) continue;
-            if (actual.isNull(key) || expected.isNull(key)) return false;
-            if (!actual.get(key).toString().equals(expected.get(key).toString())) return false;
-        }
-        return true;
-    }
-
     @Test
     void testToJSONObject() {
         issueBuilder.assignee("test_user")

@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 
-class SelfUserTest {
+class SelfUserTest extends TestBase {
 
     @Test
     void testGetSelfUser() {
@@ -40,7 +40,7 @@ class SelfUserTest {
             List<GHIssue> issues = new SelfUser(new Github("test_token"), new JSONObject()).getIssues();
             assertNotNull(issues);
             assertEquals(1, issues.size());
-            assertEquals("issue1", issues.get(0).getTitle());
+            assertEquals("issue1", issues.getFirst().getTitle());
         }
     }
 
@@ -60,7 +60,7 @@ class SelfUserTest {
             List<GHUser> blockedUsers = selfUser.getBlockedUsers();
             assertNotNull(blockedUsers);
             assertEquals(1, blockedUsers.size());
-            assertEquals("blockedUser", blockedUsers.get(0).getLogin());
+            assertEquals("blockedUser", blockedUsers.getFirst().getLogin());
         }
     }
 
@@ -158,7 +158,7 @@ class SelfUserTest {
             List<GHRepository> repos = selfUser.listCreatedRepositories();
             assertNotNull(repos);
             assertEquals(1, repos.size());
-            assertEquals("repo1", repos.get(0).getName());
+            assertEquals("repo1", repos.getFirst().getName());
         }
     }
 
@@ -171,7 +171,7 @@ class SelfUserTest {
             List<GHRepository> repos = new SelfUser(new Github("test_token"), new JSONObject()).listRepositoriesWithAccess();
             assertNotNull(repos);
             assertEquals(1, repos.size());
-            assertEquals("repo1", repos.get(0).getName());
+            assertEquals("repo1", repos.getFirst().getName());
         }
     }
 

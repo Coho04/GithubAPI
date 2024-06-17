@@ -1,7 +1,7 @@
 package io.github.coho04.githubapi.builders;
 
-import io.github.coho04.githubapi.Github;
 import io.github.coho04.githubapi.SelfUser;
+import io.github.coho04.githubapi.TestBase;
 import io.github.coho04.githubapi.bases.GHBase;
 import io.github.coho04.githubapi.entities.repositories.GHBranch;
 import io.github.coho04.githubapi.entities.repositories.GHRepository;
@@ -21,20 +21,18 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class GHFileBuilderTest {
+class GHFileBuilderTest extends TestBase {
 
-    private Github github;
     private GHRepository repository;
     private GHFileBuilder fileBuilder;
 
     @BeforeEach
     void setUp() {
-        github = mock(Github.class);
         repository = mock(GHRepository.class);
-        when(github.getToken()).thenReturn("test_token");
+        when(getMockedGithub().getToken()).thenReturn("test_token");
         when(repository.getUrl()).thenReturn("https://api.github.com/repos/test/repo");
 
-        fileBuilder = new GHFileBuilder(repository, github);
+        fileBuilder = new GHFileBuilder(repository, getMockedGithub());
     }
 
     @Test
@@ -46,18 +44,18 @@ class GHFileBuilderTest {
 
     @Test
     void testConstructorWithRepositoryAndGithub() {
-        GHFileBuilder fileBuilder = new GHFileBuilder(repository, github);
+        GHFileBuilder fileBuilder = new GHFileBuilder(repository, getMockedGithub());
         assertEquals(repository, fileBuilder.getRepository());
-        assertEquals(github, fileBuilder.getGithub());
+        assertEquals(getMockedGithub(), fileBuilder.getGithub());
     }
 
     @Test
     void testConstructorWithRepositoryBranchAndGithub() {
         GHBranch branch = mock(GHBranch.class);
-        GHFileBuilder fileBuilder = new GHFileBuilder(repository, branch, github);
+        GHFileBuilder fileBuilder = new GHFileBuilder(repository, branch, getMockedGithub());
         assertEquals(repository, fileBuilder.getRepository());
         assertEquals(branch, fileBuilder.getBranch());
-        assertEquals(github, fileBuilder.getGithub());
+        assertEquals(getMockedGithub(), fileBuilder.getGithub());
     }
 
     @Test
@@ -66,13 +64,13 @@ class GHFileBuilderTest {
         String path = "path/to/file.txt";
         String content = "Test content";
         String message = "Test commit message";
-        GHFileBuilder fileBuilder = new GHFileBuilder(repository, branch, path, content, message, github);
+        GHFileBuilder fileBuilder = new GHFileBuilder(repository, branch, path, content, message, getMockedGithub());
         assertEquals(repository, fileBuilder.getRepository());
         assertEquals(branch, fileBuilder.getBranch());
         assertEquals(path, fileBuilder.getPath());
         assertEquals(content, fileBuilder.getContent());
         assertEquals(message, fileBuilder.getMessage());
-        assertEquals(github, fileBuilder.getGithub());
+        assertEquals(getMockedGithub(), fileBuilder.getGithub());
     }
 
 
@@ -128,7 +126,7 @@ class GHFileBuilderTest {
 
     @Test
     void testGetGithub() {
-        assertEquals(github, fileBuilder.getGithub());
+        assertEquals(getMockedGithub(), fileBuilder.getGithub());
     }
 
     @Test
@@ -175,8 +173,8 @@ class GHFileBuilderTest {
             String message = "Test commit message";
             String url = "https://api.github.com/repos/test/repo/contents/" + path;
 
-            when(github.getSelfUser()).thenReturn(mock(SelfUser.class));
-            when(github.getSelfUser().getLogin()).thenReturn(login);
+            when(getMockedGithub().getSelfUser()).thenReturn(mock(SelfUser.class));
+            when(getMockedGithub().getSelfUser().getLogin()).thenReturn(login);
 
             JSONObject emailJson = new JSONObject().put("email", email);
             mockedStatic.when(() -> HttpRequestHelper.sendGetRequest(anyString(), anyString()))
@@ -219,8 +217,8 @@ class GHFileBuilderTest {
             String message = "Test commit message";
             String url = "https://api.github.com/repos/test/repo/contents/" + path;
 
-            when(github.getSelfUser()).thenReturn(mock(SelfUser.class));
-            when(github.getSelfUser().getLogin()).thenReturn(name);
+            when(getMockedGithub().getSelfUser()).thenReturn(mock(SelfUser.class));
+            when(getMockedGithub().getSelfUser().getLogin()).thenReturn(name);
 
             fileBuilder.setContent(content);
             fileBuilder.setPath(path);
@@ -244,16 +242,70 @@ class GHFileBuilderTest {
         }
     }
 
-    // Helper method to compare JSON objects
-    private boolean jsonSimilar(JSONObject actual, JSONObject expected) {
-        if (actual == null || expected == null) return false;
-        if (actual.length() != expected.length()) return false;
-        for (String key : expected.keySet()) {
-            if (!actual.has(key)) return false;
-            if (actual.isNull(key) && expected.isNull(key)) continue;
-            if (actual.isNull(key) || expected.isNull(key)) return false;
-            if (!actual.get(key).toString().equals(expected.get(key).toString())) return false;
+    @Test
+    void testCommitWithSha() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            String name = "testuser";
+            String content = "Test content";
+            String encodedContent = Base64.getEncoder().encodeToString(content.getBytes());
+            String path = "path/to/file.txt";
+            String message = "Test commit message";
+            String url = "https://api.github.com/repos/test/repo/contents/" + path;
+
+            // Mock the behavior of getMockedGithub().getSelfUser()
+            SelfUser mockSelfUser = mock(SelfUser.class);
+            when(getMockedGithub().getSelfUser()).thenReturn(mockSelfUser);
+            when(mockSelfUser.getLogin()).thenReturn(name);
+
+            GHFileBuilder fileBuilder = new GHFileBuilder(repository, getMockedGithub(), "testSha");
+            fileBuilder.setContent(content);
+            fileBuilder.setPath(path);
+            fileBuilder.setMessage(message);
+
+            JSONObject expectedJson = new JSONObject()
+                    .put("message", message)
+                    .put("committer", new JSONObject().put("name", name).put("email", "example@example.com"))
+                    .put("content", encodedContent)
+                    .put("sha", "testSha");
+
+            // Mock the static method HttpRequestHelper.sendPutRequest
+            mockedStatic.when(() -> HttpRequestHelper.sendPutRequest(anyString(), anyString(), any(JSONObject.class)))
+                    .thenAnswer(invocation -> null);
+
+            // Call the method under test
+            fileBuilder.commit();
+
+            // Verify the static method invocation with correct arguments
+            mockedStatic.verify(() -> HttpRequestHelper.sendPutRequest(
+                    eq(url),
+                    eq("test_token"),
+                    argThat(json -> jsonSimilar(new JSONObject(json.toString()), expectedJson))
+            ));
         }
-        return true;
+    }
+
+    @Test
+    void constructorWithRepositoryGithubAndSha_setsPropertiesCorrectly() {
+        String sha = "testSha";
+        GHFileBuilder fileBuilder = new GHFileBuilder(repository, getMockedGithub(), sha);
+        assertEquals(repository, fileBuilder.getRepository());
+        assertEquals(getMockedGithub(), fileBuilder.getGithub());
+        assertEquals(sha, fileBuilder.getSha());
+    }
+
+    @Test
+    void constructorWithRepositoryGithubAndSha_setsShaToNullWhenProvidedShaIsNull() {
+        GHFileBuilder fileBuilder = new GHFileBuilder(repository, getMockedGithub(), null);
+        assertNull(fileBuilder.getSha());
+    }
+
+    @Test
+    void constructorWithRepositoryGithubAndSha_throwsExceptionWhenRepositoryIsNull() {
+        assertThrows(AssertionError.class, () -> new GHFileBuilder(null, getMockedGithub(), "testSha"));
+    }
+
+    @Test
+    void constructorWithRepositoryGithubAndSha_throwsExceptionWhenGithubIsNull() {
+        assertThrows(AssertionError.class, () -> new GHFileBuilder(repository, null, "testSha"));
     }
 }

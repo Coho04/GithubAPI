@@ -82,7 +82,7 @@ class GHWorkflowJobTest {
     void testGetSteps() {
         assertNotNull(workflowJob.getSteps());
         assertEquals(1, workflowJob.getSteps().size());
-        assertEquals("Step 1", workflowJob.getSteps().get(0).getName());
+        assertEquals("Step 1", workflowJob.getSteps().getFirst().getName());
     }
 
     @Test

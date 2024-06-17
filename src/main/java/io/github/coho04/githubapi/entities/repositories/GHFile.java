@@ -1,7 +1,12 @@
 package io.github.coho04.githubapi.entities.repositories;
 
+import io.github.coho04.githubapi.Github;
 import io.github.coho04.githubapi.bases.GHBase;
+import io.github.coho04.githubapi.builders.GHFileBuilder;
 import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * This class represents a GitHub file.
@@ -9,6 +14,8 @@ import org.json.JSONObject;
  */
 public class GHFile extends GHBase {
 
+    private final Github github;
+    private final GHRepository repository;
     private final String name;
     private final String path;
     private final String sha;
@@ -18,13 +25,16 @@ public class GHFile extends GHBase {
     private final String gitUrl;
     private final String downloadUrl;
     private final String type;
+    private String content;
 
     /**
      * Constructs a new GHFile instance with the provided JSON object.
      *
      * @param jsonObject the JSON object containing the file data
      */
-    public GHFile(JSONObject jsonObject) {
+    public GHFile(Github github, JSONObject jsonObject, GHRepository repository) {
+        this.github = github;
+        this.repository = repository;
         this.name = getStringOrNull(jsonObject, "name");
         this.path = getStringOrNull(jsonObject, "path");
         this.sha = getStringOrNull(jsonObject, "sha");
@@ -34,6 +44,24 @@ public class GHFile extends GHBase {
         this.gitUrl = getStringOrNull(jsonObject, "git_url");
         this.downloadUrl = getStringOrNull(jsonObject, "download_url");
         this.type = getStringOrNull(jsonObject, "type");
+        if (jsonObject.has("content")) {
+            String encodedContent = getStringOrNull(jsonObject, "content");
+            if (encodedContent != null) {
+                encodedContent = encodedContent.replaceAll("\\s+", "");
+                byte[] decodedBytes = Base64.getDecoder().decode(encodedContent);
+                this.content = new String(decodedBytes, StandardCharsets.UTF_8);
+            }
+        }
+    }
+
+    /**
+     * Creates a new GHFileBuilder instance for updating the file.
+     * The GHFileBuilder is initialized with the repository, GitHub instance, and SHA of the file.
+     *
+     * @return a new GHFileBuilder instance
+     */
+    public GHFileBuilder updateFile() {
+        return new GHFileBuilder(repository, github, this.sha);
     }
 
     /**
@@ -115,5 +143,36 @@ public class GHFile extends GHBase {
      */
     public String getType() {
         return type;
+    }
+
+
+    /**
+     * Returns the content of the file.
+     * The content is encoded in Base64 format.
+     *
+     * @return the content of the file
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * Returns the GitHub instance associated with this file.
+     * The GitHub instance is used to perform operations related to GitHub such as fetching and updating data.
+     *
+     * @return the GitHub instance associated with this file
+     */
+    public Github getGithub() {
+        return github;
+    }
+
+    /**
+     * Returns the GHRepository instance associated with this file.
+     * The GHRepository instance represents the repository that this file belongs to.
+     *
+     * @return the GHRepository instance associated with this file
+     */
+    public GHRepository getRepository() {
+        return repository;
     }
 }

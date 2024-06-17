@@ -489,7 +489,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(repositories);
             assertEquals(1, repositories.size());
-            assertEquals("repo1", repositories.get(0).getName());
+            assertEquals("repo1", repositories.getFirst().getName());
         }
     }
 
@@ -522,7 +522,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(variables);
             assertEquals(1, variables.size());
-            assertEquals("variable1", variables.get(0).getName());
+            assertEquals("variable1", variables.getFirst().getName());
         }
     }
 
@@ -557,7 +557,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(repositories);
             assertEquals(1, repositories.size());
-            assertEquals("repo1", repositories.get(0).getName());
+            assertEquals("repo1", repositories.getFirst().getName());
         }
     }
 
@@ -576,7 +576,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(packages);
             assertEquals(1, packages.size());
-            assertEquals("docker_conflict1", packages.get(0).getName());
+            assertEquals("docker_conflict1", packages.getFirst().getName());
         }
     }
 
@@ -594,7 +594,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(packages);
             assertEquals(1, packages.size());
-            assertEquals("package1", packages.get(0).getName());
+            assertEquals("package1", packages.getFirst().getName());
         }
     }
 
@@ -627,7 +627,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(alerts);
             assertEquals(1, alerts.size());
-            assertEquals(3, alerts.get(0).getNumber());
+            assertEquals(3, alerts.getFirst().getNumber());
         }
     }
 
@@ -676,9 +676,9 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(caches);
             assertEquals(1, caches.size());
-            assertEquals("repo1", caches.get(0).getFullName());
-            assertEquals(1024, caches.get(0).getActiveCachesSizeInBytes());
-            assertEquals(5, caches.get(0).getActiveCachesCount());
+            assertEquals("repo1", caches.getFirst().getFullName());
+            assertEquals(1024, caches.getFirst().getActiveCachesSizeInBytes());
+            assertEquals(5, caches.getFirst().getActiveCachesCount());
         }
     }
 
@@ -699,7 +699,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(secrets);
             assertEquals(1, secrets.size());
-            assertEquals("secret1", secrets.get(0).getName());
+            assertEquals("secret1", secrets.getFirst().getName());
         }
     }
 
@@ -734,7 +734,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(hooks);
             assertEquals(1, hooks.size());
-            assertEquals(1, hooks.get(0).getId());
+            assertEquals(1, hooks.getFirst().getId());
         }
     }
 
@@ -780,7 +780,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(reposWithOpenPRs);
             assertEquals(1, reposWithOpenPRs.size());
-            assertEquals(repository, reposWithOpenPRs.get(0));
+            assertEquals(repository, reposWithOpenPRs.getFirst());
         }
     }
 
@@ -799,7 +799,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(projects);
             assertEquals(1, projects.size());
-            assertEquals(1, projects.get(0).getId());
+            assertEquals(1, projects.getFirst().getId());
         }
     }
 
@@ -819,7 +819,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(publicMembers);
             assertEquals(1, publicMembers.size());
-            assertEquals("user1", publicMembers.get(0).getLogin());
+            assertEquals("user1", publicMembers.getFirst().getLogin());
         }
     }
 
@@ -838,7 +838,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(collaborators);
             assertEquals(1, collaborators.size());
-            assertEquals("collab1", collaborators.get(0).getLogin());
+            assertEquals("collab1", collaborators.getFirst().getLogin());
         }
     }
 
@@ -873,7 +873,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(teams);
             assertEquals(1, teams.size());
-            assertEquals("team_slug", teams.get(0).getSlug());
+            assertEquals("team_slug", teams.getFirst().getSlug());
         }
     }
 
@@ -941,25 +941,6 @@ class GHOrganisationTest extends TestBase {
         assertTrue(jsonSimilar(jsonObject, result));
     }
 
-    private boolean jsonSimilar(JSONObject actual, JSONObject expected) {
-        if (actual == null || expected == null) return false;
-        if (actual.length() != expected.length()) return false;
-        for (String key : expected.keySet()) {
-            if (!actual.has(key)) {
-                System.out.println("Key not found: " + key);
-                return false;
-            }
-            if (actual.isNull(key) && expected.isNull(key)) continue;
-            if (actual.isNull(key) || expected.isNull(key)) return false;
-            if (!actual.get(key).toString().equals(expected.get(key).toString())) {
-                System.out.println("Value not equal: " + key + " " + actual.get(key).toString() + " " + expected.get(key).toString());
-                return false;
-            }
-        }
-        return true;
-    }
-
-
     @Test
     void testGetHookByIntId() {
         try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
@@ -997,7 +978,7 @@ class GHOrganisationTest extends TestBase {
 
             assertNotNull(reposWithOpenPRs);
             assertEquals(1, reposWithOpenPRs.size());
-            assertEquals(repositoryWithOpenPRs, reposWithOpenPRs.get(0));
+            assertEquals(repositoryWithOpenPRs, reposWithOpenPRs.getFirst());
         }
     }
 

@@ -25,6 +25,7 @@ public class GHFileBuilder extends GHBase {
     private String message;
     private final GHRepository repository;
     private final Github github;
+    private String sha;
 
     /**
      * Constructs a new GHFileBuilder object for a given repository.
@@ -46,6 +47,22 @@ public class GHFileBuilder extends GHBase {
         this.branch = branch;
         this.github = github;
         this.repository = repository;
+    }
+
+    /**
+     * Constructs a new GHFileBuilder object for a given repository, GitHub instance, and SHA.
+     * This constructor is typically used when updating a file, as the SHA of the file is required.
+     *
+     * @param repository a GHRepository object representing the repository to which the file will be committed.
+     * @param github a GitHub object representing the authenticated user's GitHub instance.
+     * @param sha a String representing the SHA of the file to be updated.
+     */
+    public GHFileBuilder(GHRepository repository, Github github, String sha) {
+        assert repository != null;
+        this.repository = repository;
+        assert github != null;
+        this.github = github;
+        this.sha = sha;
     }
 
     /**
@@ -189,6 +206,9 @@ public class GHFileBuilder extends GHBase {
         jsonObject.put("committer", committer);
         String encodedString = Base64.getEncoder().encodeToString(content.getBytes());
         jsonObject.put("content", encodedString);
+        if (sha != null) {
+            jsonObject.put("sha", sha);
+        }
         sendPutRequest(url,github.getToken(), jsonObject);
     }
 
@@ -204,5 +224,15 @@ public class GHFileBuilder extends GHBase {
         }
         JSONObject jsonObject = new JSONObject(response);
         commit(jsonObject.getString("email"), github.getSelfUser().getLogin());
+    }
+
+    /**
+     * Returns the SHA of the file to be committed.
+     * The SHA is used when updating a file, as it is required to identify the file in the repository.
+     *
+     * @return the SHA of the file
+     */
+    public String getSha() {
+        return sha;
     }
 }

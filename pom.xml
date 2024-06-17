@@ -3,7 +3,7 @@
 
     <groupId>io.github.coho04</groupId>
     <artifactId>githubapi</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <description>A powerful and user-friendly Java toolkit for the GitHub API, simplifying access and interaction with GitHub data for developers.</description>
     <url>https://coho04.github.io/GithubAPI/</url>
 
@@ -57,33 +57,33 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <files>
-                        <file>target/githubapi-${project.version}.jar</file>
-                        <file>target/githubapi-${project.version}.pom</file>
-                        <file>target/githubapi-${project.version}-sources.jar</file>
-                        <file>target/githubapi-${project.version}-javadoc.jar</file>
-                    </files>
-                    <gpgArguments>
-                        <arg>--batch</arg>
-                        <arg>--pinentry-mode</arg>
-                        <arg>loopback</arg>
-                    </gpgArguments>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-gpg-plugin</artifactId>-->
+<!--                <version>3.2.4</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>sign-artifacts</id>-->
+<!--                        <phase>verify</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>sign</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <files>-->
+<!--                        <file>target/githubapi-${project.version}.jar</file>-->
+<!--                        <file>target/githubapi-${project.version}.pom</file>-->
+<!--                        <file>target/githubapi-${project.version}-sources.jar</file>-->
+<!--                        <file>target/githubapi-${project.version}-javadoc.jar</file>-->
+<!--                    </files>-->
+<!--                    <gpgArguments>-->
+<!--                        <arg>&#45;&#45;batch</arg>-->
+<!--                        <arg>&#45;&#45;pinentry-mode</arg>-->
+<!--                        <arg>loopback</arg>-->
+<!--                    </gpgArguments>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -143,6 +143,21 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <excludes>
+                                    <!-- Exclude annotations jar if not needed in the shaded jar -->
+                                    <exclude>org.jetbrains:annotations</exclude>
+                                </excludes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/versions/9/module-info</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>

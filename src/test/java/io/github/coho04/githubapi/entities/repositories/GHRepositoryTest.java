@@ -255,7 +255,7 @@ class GHRepositoryTest extends TestBase {
             List<GHUser> contributors = repository.getContributors();
             assertNotNull(contributors);
             assertFalse(contributors.isEmpty());
-            assertEquals("contributor1", contributors.get(0).getLogin());
+            assertEquals("contributor1", contributors.getFirst().getLogin());
         }
     }
 
@@ -269,7 +269,7 @@ class GHRepositoryTest extends TestBase {
             List<GHIssue> issues = repository.getIssues();
             assertNotNull(issues);
             assertFalse(issues.isEmpty());
-            assertEquals("Issue 1", issues.get(0).getTitle());
+            assertEquals("Issue 1", issues.getFirst().getTitle());
         }
     }
 
@@ -311,7 +311,7 @@ class GHRepositoryTest extends TestBase {
             List<String> filenames = repository.getAllFilenames();
             assertNotNull(filenames);
             assertFalse(filenames.isEmpty());
-            assertEquals("file1.txt", filenames.get(0));
+            assertEquals("file1.txt", filenames.getFirst());
         }
     }
 
@@ -382,15 +382,88 @@ class GHRepositoryTest extends TestBase {
     }
 
     @Test
-    void testUpdateTopics() {
-        List<String> topics = List.of("java", "github");
-        repository.updateTopics(topics);
-        assertEquals(topics, repository.getTopics());
+    void updateTopicsIsValid() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            List<String> topics = List.of("java", "github");
+            String expectedUrl = "https://api.github.com/repos/test/repo/topics"; // Adjust to your actual URL
+            String token = "test_token"; // The token being used in your code
+            JSONObject expectedRequestBody = new JSONObject();
+            expectedRequestBody.put("names", new JSONArray(topics));
+
+            mockedStatic.when(() -> HttpRequestHelper.sendPutRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            )).thenAnswer(invocation -> null);
+
+            // Call the method under test
+            repository.updateTopics(topics);
+
+            // Verify the static method invocation with the correct arguments
+            mockedStatic.verify(() -> HttpRequestHelper.sendPutRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            ));
+        }
+    }
+
+
+
+    @Test
+    void updateHomePage_updatesHomePageWhenUrlIsValid() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            String homepageUrl = "https://new-homepage.com";
+            String expectedUrl = "https://api.github.com/repos/test/repo"; // Adjust to your actual URL
+            String token = "test_token"; // The token being used in your code
+            JSONObject expectedRequestBody = new JSONObject();
+            expectedRequestBody.put("homepage", homepageUrl);
+
+            // Mock the static method
+            mockedStatic.when(() -> HttpRequestHelper.sendPatchRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            )).thenAnswer(invocation -> null);
+
+            // Call the method under test
+            repository.updateHomePage(homepageUrl);
+
+            // Verify the static method invocation with the correct arguments
+            mockedStatic.verify(() -> HttpRequestHelper.sendPatchRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            ));
+        }
     }
 
     @Test
-    void testUpdateHomePage() {
-        assertDoesNotThrow(() -> repository.updateHomePage());
+    void updateHomePage_doesNotUpdateHomePageWhenUrlIsNull() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            String homepageUrl = null;
+            String expectedUrl = "https://api.github.com/repos/test/repo"; // Adjust to your actual URL
+            String token = "test_token"; // The token being used in your code
+            JSONObject expectedRequestBody = new JSONObject();
+            expectedRequestBody.put("homepage", homepageUrl);
+
+            // Mock the static method
+            mockedStatic.when(() -> HttpRequestHelper.sendPatchRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            )).thenAnswer(invocation -> null);
+
+            // Call the method under test
+            repository.updateHomePage(homepageUrl);
+
+            // Verify the static method invocation with the correct arguments
+            mockedStatic.verify(() -> HttpRequestHelper.sendPatchRequest(
+                    eq(expectedUrl),
+                    eq(token),
+                    argThat(arg -> arg.similar(expectedRequestBody)) // Use argThat for JSON comparison
+            ));
+        }
     }
 
     @Test
@@ -1180,4 +1253,50 @@ class GHRepositoryTest extends TestBase {
         }
     }
 
+    @Test
+    void getDirectoryContentWithFileContent_returnsFilesWithContentWhenDirectoryExists() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            String directoryResponse = "[{\"name\": \"file1.txt\", \"type\": \"file\", \"url\": \"https://api.github.com/repos/test/repo/contents/file1.txt\"}]";
+            String fileContentResponse = "{\"name\": \"file1.txt\", \"content\": \"SGVsbG8gd29ybGQ=\"}"; // "Hello world" in Base64
+
+            mockedStatic.when(() -> HttpRequestHelper.sendGetRequest(anyString(), anyString()))
+                    .thenReturn(directoryResponse)
+                    .thenReturn(fileContentResponse);
+
+            List<GHFile> files = repository.getDirectoryContentWithFileContent("path/to/dir");
+
+            assertNotNull(files);
+            assertEquals(1, files.size());
+            assertEquals("file1.txt", files.getFirst().getName());
+            assertEquals("Hello world", files.getFirst().getContent());
+        }
+    }
+
+    @Test
+    void getDirectoryContentWithFileContent_returnsEmptyListWhenDirectoryDoesNotExist() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            mockedStatic.when(() -> HttpRequestHelper.sendGetRequest(anyString(), anyString())).thenReturn(null);
+
+            List<GHFile> files = repository.getDirectoryContentWithFileContent("path/to/nonexistent/dir");
+
+            assertNotNull(files);
+            assertTrue(files.isEmpty());
+        }
+    }
+
+    @Test
+    void getDirectoryContentWithFileContent_returnsFilesWithoutContentWhenTypeIsNotFile() {
+        try (MockedStatic<HttpRequestHelper> mockedStatic = Mockito.mockStatic(HttpRequestHelper.class)) {
+            String directoryResponse = "[{\"name\": \"dir1\", \"type\": \"dir\", \"url\": \"https://api.github.com/repos/test/repo/contents/dir1\"}]";
+
+            mockedStatic.when(() -> HttpRequestHelper.sendGetRequest(anyString(), anyString())).thenReturn(directoryResponse);
+
+            List<GHFile> files = repository.getDirectoryContentWithFileContent("path/to/dir");
+
+            assertNotNull(files);
+            assertEquals(1, files.size());
+            assertEquals("dir1", files.getFirst().getName());
+            assertNull(files.getFirst().getContent());
+        }
+    }
 }
