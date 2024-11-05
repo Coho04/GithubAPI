@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPages.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHPages.java</span></div><h1>GHPages.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.bases.GHBase;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
+
+/**
+ * Represents the GitHub Pages configuration for a repository.
+ * This class provides methods and properties to access information about the GitHub Pages configuration.
+ */
+public class GHPages extends GHBase {
+
+    private final String url;
+    private final String status;
+    private final String cname;
+    private final boolean custom404;
+    private final String htmlUrl;
+    private final JSONObject source;
+    private final boolean isPublic;
+    private final OffsetDateTime pendingDomainUnverifiedAt;
+    private final String protectedDomainState;
+    private final HttpsCertificate httpsCertificate;
+    private final boolean httpsEnforced;
+
+    /**
+     * Constructs a new GHPages instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the GitHub Pages data
+     */
+<span class="fc" id="L31">    public GHPages(JSONObject jsonObject) {</span>
+<span class="fc" id="L32">        this.url = getStringOrNull(jsonObject, &quot;url&quot;);</span>
+<span class="fc" id="L33">        this.status = getStringOrNull(jsonObject, &quot;status&quot;);</span>
+<span class="fc" id="L34">        this.cname = getStringOrNull(jsonObject, &quot;cname&quot;);</span>
+<span class="fc" id="L35">        this.custom404 = getBooleanOrNull(jsonObject, &quot;custom_404&quot;);</span>
+<span class="fc" id="L36">        this.htmlUrl = getStringOrNull(jsonObject, &quot;html_url&quot;);</span>
+<span class="fc" id="L37">        this.source = getJSONObjectOrNull(jsonObject, &quot;source&quot;);</span>
+<span class="fc" id="L38">        this.isPublic = getBooleanOrNull(jsonObject, &quot;is_public&quot;);</span>
+<span class="fc" id="L39">        this.pendingDomainUnverifiedAt = getLocalDateOrNull(jsonObject, &quot;pending_domain_unverified_at&quot;);</span>
+<span class="fc" id="L40">        this.protectedDomainState = getStringOrNull(jsonObject, &quot;protected_domain_state&quot;);</span>
+<span class="fc" id="L41">        this.httpsCertificate = new HttpsCertificate(jsonObject.getJSONObject(&quot;https_certificate&quot;));</span>
+<span class="fc" id="L42">        this.httpsEnforced = getBooleanOrNull(jsonObject, &quot;https_enforced&quot;);</span>
+<span class="fc" id="L43">    }</span>
+
+    /**
+     * Returns the URL of the GitHub Pages site.
+     *
+     * @return the URL of the GitHub Pages site
+     */
+    public String getUrl() {
+<span class="fc" id="L51">        return url;</span>
+    }
+
+    /**
+     * Returns the HTTPS certificate information for the GitHub Pages site.
+     *
+     * @return the HTTPS certificate information
+     */
+    public HttpsCertificate getHttpsCertificate() {
+<span class="fc" id="L60">        return httpsCertificate;</span>
+    }
+
+    /**
+     * Returns the source configuration for the GitHub Pages site.
+     *
+     * @return the source configuration as a JSONObject
+     */
+    public JSONObject getSource() {
+<span class="fc" id="L69">        return source;</span>
+    }
+
+    /**
+     * Returns the date and time when the domain was pending verification.
+     *
+     * @return the date and time when the domain was pending verification
+     */
+    public OffsetDateTime getPendingDomainUnverifiedAt() {
+<span class="fc" id="L78">        return pendingDomainUnverifiedAt;</span>
+    }
+
+    /**
+     * Returns the CNAME for the GitHub Pages site.
+     *
+     * @return the CNAME for the GitHub Pages site
+     */
+    public String getCname() {
+<span class="fc" id="L87">        return cname;</span>
+    }
+
+    /**
+     * Returns the HTML URL of the GitHub Pages site.
+     *
+     * @return the HTML URL of the GitHub Pages site
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L96">        return htmlUrl;</span>
+    }
+
+    /**
+     * Returns the protected domain state of the GitHub Pages site.
+     *
+     * @return the protected domain state
+     */
+    public String getProtectedDomainState() {
+<span class="fc" id="L105">        return protectedDomainState;</span>
+    }
+
+    /**
+     * Returns the status of the GitHub Pages site.
+     *
+     * @return the status of the GitHub Pages site
+     */
+    public String getStatus() {
+<span class="fc" id="L114">        return status;</span>
+    }
+
+    /**
+     * Returns whether a custom 404 page is used for the GitHub Pages site.
+     *
+     * @return true if a custom 404 page is used, false otherwise
+     */
+    public boolean isCustom404() {
+<span class="fc" id="L123">        return custom404;</span>
+    }
+
+    /**
+     * Returns whether HTTPS is enforced for the GitHub Pages site.
+     *
+     * @return true if HTTPS is enforced, false otherwise
+     */
+    public boolean isHttpsEnforced() {
+<span class="fc" id="L132">        return httpsEnforced;</span>
+    }
+
+    /**
+     * Returns whether the GitHub Pages site is public.
+     *
+     * @return true if the site is public, false otherwise
+     */
+    public boolean isPublic() {
+<span class="fc" id="L141">        return isPublic;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

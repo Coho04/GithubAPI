@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HttpRequestHelper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.utilities</a> &gt; <span class="el_source">HttpRequestHelper.java</span></div><h1>HttpRequestHelper.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.utilities;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.factories.HttpURLConnectionFactory;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.stream.Collectors;
+
+/**
+ * This class provides helper methods for sending HTTP requests.
+ */
+<span class="nc" id="L17">public class HttpRequestHelper {</span>
+
+<span class="fc" id="L19">    private static final HttpURLConnectionFactory connectionFactory = new HttpURLConnectionFactory();</span>
+
+    /**
+     * Sends a POST request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject  the JSON object to send
+     */
+    public static String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
+        try {
+<span class="fc" id="L30">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L31">            con.setRequestMethod(&quot;POST&quot;);</span>
+<span class="fc" id="L32">            con.setRequestProperty(&quot;Accept&quot;, &quot;application/vnd.github+json&quot;);</span>
+<span class="fc" id="L33">            con.addRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L34">            con.setDoOutput(true);</span>
+<span class="fc" id="L35">            con.getOutputStream().write(jsonObject.toString().getBytes());</span>
+<span class="fc" id="L36">            int responseCode = con.getResponseCode();</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">            if (responseCode != HttpURLConnection.HTTP_CREATED) {</span>
+<span class="fc" id="L38">                throw new UnsupportedOperationException(&quot;Not supported yet. Response Code&quot; + responseCode);</span>
+            } else {
+<span class="fc" id="L40">                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {</span>
+<span class="fc" id="L41">                    return in.lines().collect(Collectors.joining());</span>
+                }
+            }
+<span class="fc" id="L44">        } catch (IOException exception) {</span>
+<span class="fc" id="L45">            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+        }
+<span class="fc" id="L47">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+    }
+
+
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @return the response body as a string
+     */
+    public static String sendGetRequest(String url, String githubToken) {
+        try {
+<span class="fc" id="L60">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L61">            con.setRequestMethod(&quot;GET&quot;);</span>
+<span class="fc" id="L62">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L63">            int responseCode = con.getResponseCode();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (responseCode == HttpURLConnection.HTTP_OK) {</span>
+<span class="fc" id="L65">                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {</span>
+<span class="fc" id="L66">                    return in.lines().collect(Collectors.joining());</span>
+                }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            } else if (responseCode != HttpURLConnection.HTTP_NOT_FOUND) {</span>
+<span class="fc" id="L69">                Github.getLogger().warning(&quot;Failed to send GET request to: &quot; + url);</span>
+<span class="fc" id="L70">                Github.getLogger().warning(&quot;Response Message: &quot; + con.getResponseMessage());</span>
+<span class="fc" id="L71">                Github.getLogger().warning(&quot;Response Code: &quot; + responseCode);</span>
+<span class="fc" id="L72">                return null;</span>
+            }
+<span class="fc" id="L74">        } catch (IOException exception) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (!exception.getMessage().contains(&quot;404&quot;)) {</span>
+<span class="fc" id="L76">                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+            }
+<span class="nc" id="L78">        }</span>
+<span class="fc" id="L79">        return null;</span>
+    }
+
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token and returns the response body and the Link header.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @return an array containing the response body and the Link header
+     */
+    public static String[] sendGetRequestWithLinkHeader(String url, String githubToken) {
+        try {
+<span class="fc" id="L91">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L92">            con.setRequestMethod(&quot;GET&quot;);</span>
+<span class="fc" id="L93">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L94">            int responseCode = con.getResponseCode();</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">            if (responseCode == HttpURLConnection.HTTP_OK) {</span>
+                String responseBody;
+<span class="fc" id="L97">                try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {</span>
+<span class="fc" id="L98">                    responseBody = in.lines().collect(Collectors.joining());</span>
+                }
+<span class="fc" id="L100">                return new String[]{responseBody, con.getHeaderField(&quot;Link&quot;)};</span>
+            } else {
+<span class="fc" id="L102">                Github.getLogger().warning(&quot;Failed to send GET request to: &quot; + url);</span>
+<span class="fc" id="L103">                Github.getLogger().warning(&quot;Response Message: &quot; + con.getResponseMessage());</span>
+<span class="fc" id="L104">                Github.getLogger().warning(&quot;Response Code: &quot; + responseCode);</span>
+<span class="fc" id="L105">                return new String[]{null, null};</span>
+            }
+<span class="fc" id="L107">        } catch (IOException exception) {</span>
+<span class="fc" id="L108">            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+<span class="fc" id="L109">            return new String[]{null, null};</span>
+        }
+    }
+
+    /**
+     * Extracts the URL of the next page from the Link header.
+     *
+     * @param linkHeader the Link header
+     * @return the URL of the next page
+     */
+    public static String extractNextPageUrl(String linkHeader) {
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (linkHeader == null) {</span>
+<span class="fc" id="L121">            return null;</span>
+        }
+<span class="fc" id="L123">        String[] links = linkHeader.split(&quot;, &quot;);</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for (String link : links) {</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (link.contains(&quot;rel=\&quot;next\&quot;&quot;)) {</span>
+<span class="fc" id="L126">                int start = link.indexOf('&lt;') + 1;</span>
+<span class="fc" id="L127">                int end = link.indexOf('&gt;');</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                if (end != -1) {</span>
+<span class="fc" id="L129">                    return link.substring(start, end);</span>
+                }
+            }
+        }
+<span class="fc" id="L133">        return null;</span>
+    }
+
+    /**
+     * Sends a DELETE request to the specified URL with the provided GitHub token.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     */
+    public static void sendDeleteRequest(String url, String githubToken) {
+        try {
+<span class="fc" id="L144">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L145">            con.setRequestMethod(&quot;DELETE&quot;);</span>
+<span class="fc" id="L146">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L147">            int responseCode = con.getResponseCode();</span>
+<span class="pc bpc" id="L148" title="1 of 4 branches missed.">            if (responseCode &gt;= 300 || responseCode &lt; 200) {</span>
+<span class="fc" id="L149">                Github.getLogger().warning(&quot;Failed to send DELETE request to: &quot; + url);</span>
+<span class="fc" id="L150">                Github.getLogger().warning(&quot;Response Message: &quot; + con.getResponseMessage());</span>
+<span class="fc" id="L151">                Github.getLogger().warning(&quot;Response Code: &quot; + responseCode);</span>
+            }
+<span class="fc" id="L153">        } catch (IOException exception) {</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">            if (!exception.getMessage().contains(&quot;404&quot;)) {</span>
+<span class="fc" id="L155">                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+            }
+<span class="fc" id="L157">        }</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Sends a DELETE request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
+     *
+     * @param url          the URL to send the request to
+     * @param githubToken  the GitHub token
+     * @param responseCode the expected response code
+     * @return true if the response code matches the expected response code, false otherwise
+     */
+    public static boolean sendDeleteRequestWithResponseCode(String url, String githubToken, int responseCode) {
+        try {
+<span class="fc" id="L170">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L171">            con.setRequestMethod(&quot;DELETE&quot;);</span>
+<span class="fc" id="L172">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            return responseCode == con.getResponseCode();</span>
+<span class="fc" id="L174">        } catch (IOException exception) {</span>
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">            if (!exception.getMessage().contains(&quot;404&quot;)) {</span>
+<span class="fc" id="L176">                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+            }
+        }
+<span class="fc" id="L179">        return false;</span>
+    }
+
+    /**
+     * Sends a GET request to the specified URL with the provided GitHub token and checks if the response code matches the expected response code.
+     *
+     * @param url          the URL to send the request to
+     * @param githubToken  the GitHub token
+     * @param responseCode the expected response code
+     * @return true if the response code matches the expected response code, false otherwise
+     */
+    public static boolean sendGetRequestWithResponseCode(String url, String githubToken, int responseCode) {
+        try {
+<span class="fc" id="L192">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L193">            con.setRequestMethod(&quot;GET&quot;);</span>
+<span class="fc" id="L194">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">            return con.getResponseCode() == responseCode;</span>
+<span class="fc" id="L196">        } catch (IOException exception) {</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            if (!exception.getMessage().contains(&quot;404&quot;)) {</span>
+<span class="fc" id="L198">                Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+            }
+        }
+<span class="fc" id="L201">        return false;</span>
+    }
+
+    /**
+     * Sends a PUT request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject  the JSON object to send
+     */
+    public static void sendPutRequest(String url, String githubToken, JSONObject jsonObject) {
+        try {
+<span class="fc" id="L213">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+<span class="fc" id="L214">            con.setRequestMethod(&quot;PUT&quot;);</span>
+<span class="fc" id="L215">            con.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="fc" id="L216">            con.addRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L217">            con.setDoOutput(true);</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">            if (jsonObject != null) {</span>
+<span class="fc" id="L219">                con.getOutputStream().write(jsonObject.toString().getBytes());</span>
+            }
+<span class="fc" id="L221">            int responseCode = con.getResponseCode();</span>
+<span class="pc bpc" id="L222" title="1 of 4 branches missed.">            if (responseCode &gt;= 300 || responseCode &lt; 200) {</span>
+<span class="fc" id="L223">                Github.getLogger().warning(&quot;Failed to send PUT request to: &quot; + url);</span>
+<span class="fc" id="L224">                Github.getLogger().warning(&quot;Response Message: &quot; + con.getResponseMessage());</span>
+<span class="fc" id="L225">                Github.getLogger().warning(&quot;Response Code: &quot; + responseCode);</span>
+<span class="fc" id="L226">                throw new IOException(&quot;Failed to send PUT request to: &quot; + url);</span>
+            }
+<span class="fc" id="L228">        } catch (IOException exception) {</span>
+<span class="fc" id="L229">            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+<span class="fc" id="L230">        }</span>
+<span class="fc" id="L231">    }</span>
+
+    /**
+     * Sends a PATCH request to the specified URL with the provided GitHub token and JSON object.
+     *
+     * @param url         the URL to send the request to
+     * @param githubToken the GitHub token
+     * @param jsonObject  the JSON object to send
+     */
+    public static void sendPatchRequest(String url, String githubToken, JSONObject jsonObject) {
+        try {
+<span class="fc" id="L242">            HttpURLConnection con = connectionFactory.createHttpURLConnection(url);</span>
+
+<span class="fc" id="L244">            con.setRequestMethod(&quot;POST&quot;);</span>
+<span class="fc" id="L245">            con.setRequestProperty(&quot;X-HTTP-Method-Override&quot;, &quot;PATCH&quot;);</span>
+
+<span class="fc" id="L247">            con.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="fc" id="L248">            con.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + githubToken);</span>
+<span class="fc" id="L249">            con.setDoOutput(true);</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">            if (jsonObject != null) {</span>
+<span class="fc" id="L251">                con.getOutputStream().write(jsonObject.toString().getBytes());</span>
+            }
+<span class="fc" id="L253">            int responseCode = con.getResponseCode();</span>
+<span class="pc bpc" id="L254" title="1 of 4 branches missed.">            if (responseCode &gt;= 300 || responseCode &lt; 200) {</span>
+<span class="fc" id="L255">                throw new IOException(&quot;Failed to send PATCH request to: &quot; + url);</span>
+            }
+<span class="fc" id="L257">        } catch (IOException exception) {</span>
+<span class="fc" id="L258">            Github.getLogger().log(Level.SEVERE, exception.getMessage(), exception);</span>
+<span class="fc" id="L259">        }</span>
+<span class="fc" id="L260">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

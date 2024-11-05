@@ -1,0 +1,1370 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities.repositories</a> &gt; <span class="el_source">GHRepository.java</span></div><h1>GHRepository.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities.repositories;
+
+import io.github.coho04.githubapi.builders.GHProjectBuilder;
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.ClassBase;
+import io.github.coho04.githubapi.builders.GHFileBuilder;
+import io.github.coho04.githubapi.builders.GHIssueBuilder;
+import io.github.coho04.githubapi.entities.GHPermission;
+import io.github.coho04.githubapi.enums.GHState;
+import io.github.coho04.githubapi.utilities.HttpRequestHelper;
+import io.github.coho04.githubapi.entities.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * This class represents a GitHub repository.
+ * It provides methods for fetching and manipulating data about the repository such as its size, forks, license, name, owner, watchers, and more.
+ */
+<span class="fc" id="L27">public class GHRepository extends ClassBase {</span>
+
+    private final int size;
+    private final int forks;
+
+    private GHLicense license;
+    private final String name;
+    private final boolean fork;
+    private final int watchers;
+    private GHUser owner;
+    private final String sshUrl;
+    private final String svnUrl;
+    private final Github github;
+    private final String keysUrl;
+    private final String tagsUrl;
+    private final String cloneUrl;
+    private final OffsetDateTime pushedAt;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final String language;
+    private final String fullName;
+    private final String forksUrl;
+    private final String treesUrl;
+    private final String pullsUrl;
+    private final String hooksUrl;
+    private final String labelsUrl;
+    private final boolean archived;
+    private final boolean isPrivate;
+    private final String gitRefsUrl;
+    private final String visibility;
+    private final String archiveUrl;
+    private final String statusesUrl;
+    private final boolean isTemplate;
+    private final String description;
+    private final String branchesUrl;
+    private final String releasesUrl;
+    private List&lt;String&gt; topics;
+    private final String languagesUrl;
+    private final int stargazersCount;
+    private final int openIssuesCount;
+    private final String defaultBranch;
+    private final boolean hasDownloads;
+    private final boolean allowForking;
+    private final String subscribersUrl;
+    private final String subscriptionUrl;
+    private final String issueCommentUrl;
+    private final boolean hasDiscussions;
+    private final String contributorsUrl;
+    private final String collaboratorsUrl;
+    private final boolean hasProjects;
+    private final String deploymentsUrl;
+    private final boolean hasWiki;
+    private final String commentsUrl;
+    private final String stargazersUrl;
+    private final boolean disabled;
+    private final String gitUrl;
+    private final boolean hasPages;
+    private final String commitsUrl;
+    private final String compareUrl;
+    private final String gitCommitsUrl;
+    private final String blobsUrl;
+    private final String gitTagsUrl;
+    private final String mergesUrl;
+    private final String downloadsUrl;
+    private final boolean hasIssues;
+    private final String notificationsUrl;
+    private final String contentsUrl;
+    private final String mirrorUrl;
+    private final String milestonesUrl;
+    private final String teamsUrl;
+    private final String issuesUrl;
+
+    private final String issueEventsUrl;
+    private final String assigneesUrl;
+    private final int openIssues;
+    private final int watchersCount;
+    private String homepage;
+    private final int forksCount;
+    private GHPermission permissions;
+
+    private final boolean webCommitSignoffRequired;
+
+    /**
+     * Constructs a new GHRepository instance with the provided JSON object and GitHub instance.
+     *
+     * @param jsonObject the JSON object containing the repository data
+     * @param github     the GitHub instance associated with this repository
+     */
+    public GHRepository(JSONObject jsonObject, Github github) {
+<span class="fc" id="L116">        super(jsonObject);</span>
+<span class="fc" id="L117">        this.github = github;</span>
+<span class="fc" id="L118">        this.allowForking = getBooleanOrNull(jsonObject, &quot;allow_forking&quot;);</span>
+<span class="fc" id="L119">        this.stargazersCount = getIntOrNull(jsonObject, &quot;stargazers_count&quot;);</span>
+<span class="fc" id="L120">        this.isTemplate = getBooleanOrNull(jsonObject, &quot;is_template&quot;);</span>
+<span class="fc" id="L121">        this.pushedAt = getLocalDateOrNull(jsonObject, &quot;pushed_at&quot;);</span>
+<span class="fc" id="L122">        this.subscriptionUrl = getStringOrNull(jsonObject, &quot;subscription_url&quot;);</span>
+<span class="fc" id="L123">        this.language = getStringOrNull(jsonObject, &quot;language&quot;);</span>
+<span class="fc" id="L124">        this.branchesUrl = getStringOrNull(jsonObject, &quot;branches_url&quot;);</span>
+<span class="fc" id="L125">        this.issueCommentUrl = getStringOrNull(jsonObject, &quot;issue_comment_url&quot;);</span>
+<span class="fc" id="L126">        this.labelsUrl = getStringOrNull(jsonObject, &quot;labels_url&quot;);</span>
+<span class="fc" id="L127">        this.subscribersUrl = getStringOrNull(jsonObject, &quot;subscribers_url&quot;);</span>
+<span class="fc" id="L128">        this.releasesUrl = getStringOrNull(jsonObject, &quot;releases_url&quot;);</span>
+<span class="fc" id="L129">        this.svnUrl = getStringOrNull(jsonObject, &quot;svn_url&quot;);</span>
+<span class="fc" id="L130">        this.hasDiscussions = getBooleanOrNull(jsonObject, &quot;has_discussions&quot;);</span>
+<span class="fc" id="L131">        this.forks = getIntOrNull(jsonObject, &quot;forks&quot;);</span>
+<span class="fc" id="L132">        this.archiveUrl = getStringOrNull(jsonObject, &quot;archive_url&quot;);</span>
+<span class="fc" id="L133">        this.gitRefsUrl = getStringOrNull(jsonObject, &quot;git_refs_url&quot;);</span>
+<span class="fc" id="L134">        this.forksUrl = getStringOrNull(jsonObject, &quot;forks_url&quot;);</span>
+<span class="fc" id="L135">        this.visibility = getStringOrNull(jsonObject, &quot;visibility&quot;);</span>
+<span class="fc" id="L136">        this.statusesUrl = getStringOrNull(jsonObject, &quot;statuses_url&quot;);</span>
+<span class="fc" id="L137">        this.sshUrl = getStringOrNull(jsonObject, &quot;ssh_url&quot;);</span>
+<span class="fc" id="L138">        this.fullName = getStringOrNull(jsonObject, &quot;full_name&quot;);</span>
+<span class="fc" id="L139">        this.size = getIntOrNull(jsonObject, &quot;size&quot;);</span>
+<span class="fc" id="L140">        this.languagesUrl = getStringOrNull(jsonObject, &quot;languages_url&quot;);</span>
+<span class="fc" id="L141">        this.collaboratorsUrl = getStringOrNull(jsonObject, &quot;collaborators_url&quot;);</span>
+<span class="fc" id="L142">        this.cloneUrl = getStringOrNull(jsonObject, &quot;clone_url&quot;);</span>
+<span class="fc" id="L143">        this.name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L144">        this.pullsUrl = getStringOrNull(jsonObject, &quot;pulls_url&quot;);</span>
+<span class="fc" id="L145">        this.defaultBranch = getStringOrNull(jsonObject, &quot;default_branch&quot;);</span>
+<span class="fc" id="L146">        this.hooksUrl = getStringOrNull(jsonObject, &quot;hooks_url&quot;);</span>
+<span class="fc" id="L147">        this.treesUrl = getStringOrNull(jsonObject, &quot;trees_url&quot;);</span>
+<span class="fc" id="L148">        this.tagsUrl = getStringOrNull(jsonObject, &quot;tags_url&quot;);</span>
+<span class="fc" id="L149">        this.gitUrl = getStringOrNull(jsonObject, &quot;git_url&quot;);</span>
+<span class="fc" id="L150">        this.isPrivate = getBooleanOrNull(jsonObject, &quot;private&quot;);</span>
+<span class="fc" id="L151">        this.contributorsUrl = getStringOrNull(jsonObject, &quot;contributors_url&quot;);</span>
+<span class="fc" id="L152">        this.hasDownloads = getBooleanOrNull(jsonObject, &quot;has_downloads&quot;);</span>
+<span class="fc" id="L153">        this.notificationsUrl = getStringOrNull(jsonObject, &quot;notifications_url&quot;);</span>
+<span class="fc" id="L154">        this.openIssuesCount = getIntOrNull(jsonObject, &quot;open_issues_count&quot;);</span>
+<span class="fc" id="L155">        this.description = getStringOrNull(jsonObject, &quot;description&quot;);</span>
+<span class="fc" id="L156">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L157">        this.watchers = getIntOrNull(jsonObject, &quot;watchers&quot;);</span>
+<span class="fc" id="L158">        this.keysUrl = getStringOrNull(jsonObject, &quot;keys_url&quot;);</span>
+<span class="fc" id="L159">        this.deploymentsUrl = getStringOrNull(jsonObject, &quot;deployments_url&quot;);</span>
+<span class="fc" id="L160">        this.hasProjects = getBooleanOrNull(jsonObject, &quot;has_projects&quot;);</span>
+<span class="fc" id="L161">        this.archived = getBooleanOrNull(jsonObject, &quot;archived&quot;);</span>
+<span class="fc" id="L162">        this.hasWiki = getBooleanOrNull(jsonObject, &quot;has_wiki&quot;);</span>
+<span class="fc" id="L163">        this.updatedAt = getLocalDateOrNull(jsonObject, &quot;updated_at&quot;);</span>
+<span class="fc" id="L164">        this.commentsUrl = getStringOrNull(jsonObject, &quot;comments_url&quot;);</span>
+<span class="fc" id="L165">        this.disabled = getBooleanOrNull(jsonObject, &quot;disabled&quot;);</span>
+<span class="fc" id="L166">        this.hasPages = getBooleanOrNull(jsonObject, &quot;has_pages&quot;);</span>
+<span class="fc" id="L167">        this.stargazersUrl = getStringOrNull(jsonObject, &quot;stargazers_url&quot;);</span>
+<span class="fc" id="L168">        this.commitsUrl = getStringOrNull(jsonObject, &quot;commits_url&quot;);</span>
+<span class="fc" id="L169">        this.compareUrl = getStringOrNull(jsonObject, &quot;compare_url&quot;);</span>
+<span class="fc" id="L170">        this.gitCommitsUrl = getStringOrNull(jsonObject, &quot;git_commits_url&quot;);</span>
+<span class="fc" id="L171">        this.blobsUrl = getStringOrNull(jsonObject, &quot;blobs_url&quot;);</span>
+<span class="fc" id="L172">        this.gitTagsUrl = getStringOrNull(jsonObject, &quot;git_tags_url&quot;);</span>
+<span class="fc" id="L173">        this.mergesUrl = getStringOrNull(jsonObject, &quot;merges_url&quot;);</span>
+<span class="fc" id="L174">        this.downloadsUrl = getStringOrNull(jsonObject, &quot;downloads_url&quot;);</span>
+<span class="fc" id="L175">        this.hasIssues = getBooleanOrNull(jsonObject, &quot;has_issues&quot;);</span>
+<span class="fc" id="L176">        this.webCommitSignoffRequired = getBooleanOrNull(jsonObject, &quot;web_commit_signoff_required&quot;);</span>
+<span class="fc" id="L177">        this.contentsUrl = getStringOrNull(jsonObject, &quot;contents_url&quot;);</span>
+<span class="fc" id="L178">        this.mirrorUrl = getStringOrNull(jsonObject, &quot;mirror_url&quot;);</span>
+<span class="fc" id="L179">        this.milestonesUrl = getStringOrNull(jsonObject, &quot;milestones_url&quot;);</span>
+<span class="fc" id="L180">        this.teamsUrl = getStringOrNull(jsonObject, &quot;teams_url&quot;);</span>
+<span class="fc" id="L181">        this.fork = getBooleanOrNull(jsonObject, &quot;fork&quot;);</span>
+<span class="fc" id="L182">        this.issuesUrl = getStringOrNull(jsonObject, &quot;issues_url&quot;);</span>
+<span class="fc" id="L183">        this.issueEventsUrl = getStringOrNull(jsonObject, &quot;issue_events_url&quot;);</span>
+<span class="fc" id="L184">        this.assigneesUrl = getStringOrNull(jsonObject, &quot;assignees_url&quot;);</span>
+<span class="fc" id="L185">        this.openIssues = getIntOrNull(jsonObject, &quot;open_issues&quot;);</span>
+<span class="fc" id="L186">        this.watchersCount = getIntOrNull(jsonObject, &quot;watchers_count&quot;);</span>
+<span class="fc" id="L187">        this.homepage = getStringOrNull(jsonObject, &quot;homepage&quot;);</span>
+<span class="fc" id="L188">        this.forksCount = getIntOrNull(jsonObject, &quot;forks_count&quot;);</span>
+<span class="pc bpc" id="L189" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;owner&quot;) &amp;&amp; !jsonObject.isNull(&quot;owner&quot;)) {</span>
+<span class="fc" id="L190">            this.owner = new GHUser(github, getJSONObjectOrNull(jsonObject, &quot;owner&quot;));</span>
+        }
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;license&quot;) &amp;&amp; !jsonObject.isNull(&quot;license&quot;)) {</span>
+<span class="fc" id="L193">            this.license = new GHLicense(getJSONObjectOrNull(jsonObject, &quot;license&quot;));</span>
+        }
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (jsonObject.has(&quot;permissions&quot;)) {</span>
+<span class="fc" id="L196">            this.permissions = new GHPermission(getJSONObjectOrNull(jsonObject, &quot;permissions&quot;));</span>
+        }
+<span class="pc bpc" id="L198" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;topics&quot;) &amp;&amp; !jsonObject.isNull(&quot;topics&quot;)) {</span>
+<span class="fc" id="L199">            this.topics = jsonObject.getJSONArray(&quot;topics&quot;).toList().stream().map(Object::toString).collect(Collectors.toList());</span>
+        }
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Fetches and returns a GitHub repository based on the provided owner and name.
+     *
+     * @param github the GitHub instance associated with this repository
+     * @param owner  the username of the owner of the repository
+     * @param name   the name of the repository
+     * @return a GHRepository instance representing the fetched repository
+     */
+    public static GHRepository getRepository(Github github, String owner, String name) {
+<span class="fc" id="L212">        String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + &quot;/repos/&quot; + owner + &quot;/&quot; + name, github.getToken());</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L214">        return new GHRepository(new JSONObject(response), github);</span>
+    }
+
+    /**
+     * Creates a new issue in this repository with the given title.
+     *
+     * @param title the title of the new issue
+     * @return a GHIssueBuilder instance for building the new issue
+     */
+    public GHIssueBuilder createIssue(String title) {
+<span class="fc" id="L224">        return new GHIssueBuilder(github, getUrl(), title);</span>
+    }
+
+    /**
+     * Fetches the branches of this repository.
+     *
+     * @return a HashMap mapping branch names to GHBranch instances
+     */
+    public Map&lt;String, GHBranch&gt; getBranches() {
+<span class="fc" id="L233">        Map&lt;String, GHBranch&gt; branches = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L234">        String response = sendGetRequest(getUrl() + &quot;/branches&quot;, github.getToken());</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (response != null) {</span>
+<span class="fc" id="L236">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+<span class="fc" id="L238">                JSONObject jsonObject = jsonArray.getJSONObject(i);</span>
+<span class="fc" id="L239">                String name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L240">                branches.put(name, new GHBranch(jsonObject));</span>
+            }
+        }
+<span class="fc" id="L243">        return branches;</span>
+    }
+
+
+    /**
+     * Fetches the contributors of this repository.
+     *
+     * @return a List of GHUser instances representing the contributors of this repository
+     */
+    public List&lt;GHUser&gt; getContributors() {
+<span class="fc" id="L253">        String response = sendGetRequest(getUrl() + &quot;/contributors&quot;, github.getToken());</span>
+<span class="fc" id="L254">        List&lt;GHUser&gt; contributors = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (response != null) {</span>
+<span class="fc" id="L256">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+<span class="fc" id="L258">                contributors.add(new GHUser(github, jsonArray.getJSONObject(i)));</span>
+            }
+        }
+<span class="fc" id="L261">        return contributors;</span>
+    }
+
+    /**
+     * Fetches the issues of this repository with the given state.
+     *
+     * @return a List of GHIssue instances representing the issues of this repository with the given state
+     */
+    public List&lt;GHIssue&gt; getIssues() {
+<span class="fc" id="L270">        String response = sendGetRequest(getUrl() + &quot;/issues&quot;, github.getToken());</span>
+<span class="fc" id="L271">        List&lt;GHIssue&gt; issues = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (response != null) {</span>
+<span class="fc" id="L273">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">            for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+<span class="fc" id="L275">                issues.add(new GHIssue(github, jsonArray.getJSONObject(i)));</span>
+            }
+        }
+<span class="fc" id="L278">        return issues;</span>
+    }
+
+    /**
+     * Fetches the issue with the given ID in this repository.
+     *
+     * @param id the ID of the issue to fetch
+     * @return a GHIssue instance representing the fetched issue
+     */
+    public GHIssue getIssueById(int id) {
+<span class="fc" id="L288">        String response = sendGetRequest(getUrl() + &quot;/issues/&quot; + id, github.getToken());</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (response != null) {</span>
+<span class="fc" id="L290">            return new GHIssue(github, new JSONObject(response));</span>
+        }
+<span class="fc" id="L292">        return null;</span>
+    }
+
+    /**
+     * Starts the process of adding a new file to this repository.
+     *
+     * @return a GHFileBuilder instance for building the new file
+     */
+    public GHFileBuilder addFile() {
+<span class="fc" id="L301">        return new GHFileBuilder(this, github);</span>
+    }
+
+    /**
+     * Starts the process of adding a new file to the given branch of this repository.
+     *
+     * @param branch the branch to add the new file to
+     * @return a GHFileBuilder instance for building the new file
+     */
+    public GHFileBuilder addFile(GHBranch branch) {
+<span class="fc" id="L311">        return new GHFileBuilder(this, branch, github);</span>
+    }
+
+    /**
+     * Starts the process of adding a new file with the given path, content, and commit message to the given branch of this repository.
+     *
+     * @param branch  the branch to add the new file to
+     * @param path    the path of the new file
+     * @param content the content of the new file
+     * @param message the commit message for the new file
+     * @return a GHFileBuilder instance for building the new file
+     */
+    public GHFileBuilder addFile(GHBranch branch, String path, String content, String message) {
+<span class="fc" id="L324">        return new GHFileBuilder(this, branch, path, content, message, github);</span>
+    }
+
+    /**
+     * Fetches all filenames in this repository.
+     *
+     * @return a List of Strings representing all filenames in this repository
+     */
+    public List&lt;String&gt; getAllFilenames() {
+<span class="fc" id="L333">        List&lt;String&gt; filenames = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L334">        String url = getBaseUrl() + &quot;/repos/&quot; + this.owner.getLogin() + &quot;/&quot; + this.name + &quot;/contents/?per_page=100&quot;;</span>
+<span class="fc bfc" id="L335" title="All 2 branches covered.">        while (url != null) {</span>
+<span class="fc" id="L336">            String[] responseAndLink = sendGetRequestWithLinkHeader(url, github.getToken());</span>
+<span class="fc" id="L337">            String response = responseAndLink[0];</span>
+<span class="fc" id="L338">            JSONArray json = new JSONArray(response);</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">            for (int i = 0; i &lt; json.length(); i++) {</span>
+<span class="fc" id="L340">                JSONObject fileJson = json.getJSONObject(i);</span>
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                if (&quot;file&quot;.equals(fileJson.getString(&quot;type&quot;))) {</span>
+<span class="fc" id="L342">                    filenames.add(fileJson.getString(&quot;name&quot;));</span>
+                }
+            }
+<span class="fc" id="L345">            url = extractNextPageUrl(responseAndLink[1]);</span>
+<span class="fc" id="L346">        }</span>
+<span class="fc" id="L347">        return filenames;</span>
+    }
+
+    /**
+     * Fetches the content of the directory at the given path in this repository.
+     *
+     * @param path the path of the directory
+     * @return a List of GHFile instances representing the content of the directory
+     */
+    public List&lt;GHFile&gt; getDirectoryContent(String path) {
+<span class="fc" id="L357">        List&lt;GHFile&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L358">        String response = sendGetRequest(getUrl() + &quot;/contents/&quot; + path, github.getToken());</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        if (response != null) {</span>
+<span class="fc" id="L360">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="fc bfc" id="L361" title="All 2 branches covered.">            for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+<span class="fc" id="L362">                files.add(new GHFile(github, jsonArray.getJSONObject(i), this));</span>
+            }
+        }
+<span class="fc" id="L365">        return files;</span>
+    }
+
+    /**
+     * Fetches the content of the directory at the given path in this repository, including the content of each file.
+     *
+     * @param path the path of the directory
+     * @return a List of GHFile instances representing the content of the directory
+     */
+    public List&lt;GHFile&gt; getDirectoryContentWithFileContent(String path) {
+<span class="fc" id="L375">        List&lt;GHFile&gt; files = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L376">        String response = sendGetRequest(getUrl() + &quot;/contents/&quot; + path, github.getToken());</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        if (response != null) {</span>
+<span class="fc" id="L378">            JSONArray jsonArray = new JSONArray(response);</span>
+<span class="fc bfc" id="L379" title="All 2 branches covered.">            for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+<span class="fc" id="L380">                JSONObject jsonObject = jsonArray.getJSONObject(i);</span>
+<span class="fc bfc" id="L381" title="All 2 branches covered.">                if (jsonObject.getString(&quot;type&quot;).equals(&quot;file&quot;)) {</span>
+<span class="fc" id="L382">                    String fileContent = sendGetRequest(jsonObject.getString(&quot;url&quot;), github.getToken());</span>
+<span class="fc" id="L383">                    files.add(new GHFile(github, new JSONObject(fileContent), this));</span>
+<span class="fc" id="L384">                } else {</span>
+<span class="fc" id="L385">                    files.add(new GHFile(github, jsonArray.getJSONObject(i), this));</span>
+                }
+            }
+        }
+<span class="fc" id="L389">        return files;</span>
+    }
+
+    /**
+     * Returns the number of forks of this repository.
+     *
+     * @return the number of forks
+     */
+    public int getForks() {
+<span class="fc" id="L398">        return forks;</span>
+    }
+
+    /**
+     * Returns the number of open issues in this repository.
+     *
+     * @return the number of open issues
+     */
+    public int getOpenIssuesCount() {
+<span class="fc" id="L407">        return openIssuesCount;</span>
+    }
+
+    /**
+     * Returns the size of this repository.
+     *
+     * @return the size of the repository
+     */
+    public int getSize() {
+<span class="fc" id="L416">        return size;</span>
+    }
+
+    /**
+     * Returns the number of stargazers for this repository.
+     *
+     * @return the number of stargazers
+     */
+    public int getStargazersCount() {
+<span class="fc" id="L425">        return stargazersCount;</span>
+    }
+
+    /**
+     * Returns the permissions associated with this repository.
+     *
+     * @return the permissions
+     */
+    public Object getPermissions() {
+<span class="fc" id="L434">        return permissions;</span>
+    }
+
+    /**
+     * Returns the date and time when this repository was last pushed to.
+     *
+     * @return the date and time of the last push
+     */
+    public OffsetDateTime getPushedAt() {
+<span class="fc" id="L443">        return pushedAt;</span>
+    }
+
+    /**
+     * Returns the URL for fetching the branches of this repository.
+     *
+     * @return the branches URL
+     */
+    public String getBranchesUrl() {
+<span class="fc" id="L452">        return branchesUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching issue comments in this repository.
+     *
+     * @return the issue comment URL
+     */
+    public String getIssueCommentUrl() {
+<span class="fc" id="L461">        return issueCommentUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching the archive of this repository.
+     *
+     * @return the archive URL
+     */
+    public String getArchiveUrl() {
+<span class="fc" id="L470">        return archiveUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching labels in this repository.
+     *
+     * @return the labels URL
+     */
+    public String getLabelsUrl() {
+<span class="fc" id="L479">        return labelsUrl;</span>
+    }
+
+    /**
+     * Returns the primary programming language used in this repository.
+     *
+     * @return the programming language
+     */
+    public String getLanguage() {
+<span class="fc" id="L488">        return language;</span>
+    }
+
+    /**
+     * Returns the URL for fetching releases in this repository.
+     *
+     * @return the releases URL
+     */
+    public String getReleasesUrl() {
+<span class="fc" id="L497">        return releasesUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching subscribers of this repository.
+     *
+     * @return the subscribers URL
+     */
+    public String getSubscribersUrl() {
+<span class="fc" id="L506">        return subscribersUrl;</span>
+    }
+
+    /**
+     * Returns the URL for subscribing to this repository.
+     *
+     * @return the subscription URL
+     */
+    public String getSubscriptionUrl() {
+<span class="fc" id="L515">        return subscriptionUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching forks of this repository.
+     *
+     * @return the forks URL
+     */
+    public String getForksUrl() {
+<span class="fc" id="L524">        return forksUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching git references in this repository.
+     *
+     * @return the git references URL
+     */
+    public String getGitRefsUrl() {
+<span class="fc" id="L533">        return gitRefsUrl;</span>
+    }
+
+    /**
+     * Returns the number of watchers of this repository.
+     *
+     * @return the number of watchers
+     */
+    public int getWatchers() {
+<span class="fc" id="L542">        return watchers;</span>
+    }
+
+    /**
+     * Returns the SVN URL of this repository.
+     *
+     * @return the SVN URL
+     */
+    public String getSvnUrl() {
+<span class="fc" id="L551">        return svnUrl;</span>
+    }
+
+    /**
+     * Returns the date and time when this repository was created.
+     *
+     * @return the creation date and time
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L560">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the date and time when this repository was last updated.
+     *
+     * @return the update date and time
+     */
+    public OffsetDateTime getUpdatedAt() {
+<span class="fc" id="L569">        return updatedAt;</span>
+    }
+
+    /**
+     * Returns the URL for fetching blobs in this repository.
+     *
+     * @return the blobs URL
+     */
+    public String getBlobsUrl() {
+<span class="fc" id="L578">        return blobsUrl;</span>
+    }
+
+    /**
+     * Returns the clone URL of this repository.
+     *
+     * @return the clone URL
+     */
+    public String getCloneUrl() {
+<span class="fc" id="L587">        return cloneUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching collaborators of this repository.
+     *
+     * @return the collaborators URL
+     */
+    public String getCollaboratorsUrl() {
+<span class="fc" id="L596">        return collaboratorsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching comments in this repository.
+     *
+     * @return the comments URL
+     */
+    public String getCommentsUrl() {
+<span class="fc" id="L605">        return commentsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching commits in this repository.
+     *
+     * @return the commits URL
+     */
+    public String getCommitsUrl() {
+<span class="fc" id="L614">        return commitsUrl;</span>
+    }
+
+    /**
+     * Returns the visibility of this repository.
+     *
+     * @return the visibility
+     */
+    public String getVisibility() {
+<span class="fc" id="L623">        return visibility;</span>
+    }
+
+    /**
+     * Returns the URL for comparing commits in this repository.
+     *
+     * @return the compare URL
+     */
+    public String getCompareUrl() {
+<span class="fc" id="L632">        return compareUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching contents of this repository.
+     *
+     * @return the contents URL
+     */
+    public String getContentsUrl() {
+<span class="fc" id="L641">        return contentsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching contributors to this repository.
+     *
+     * @return the contributors URL
+     */
+    public String getContributorsUrl() {
+<span class="fc" id="L650">        return contributorsUrl;</span>
+    }
+
+    /**
+     * Returns the default branch of this repository.
+     *
+     * @return the default branch
+     */
+    public String getDefaultBranch() {
+<span class="fc" id="L659">        return defaultBranch;</span>
+    }
+
+    /**
+     * Returns the URL for fetching deployments in this repository.
+     *
+     * @return the deployments URL
+     */
+    public String getDeploymentsUrl() {
+<span class="fc" id="L668">        return deploymentsUrl;</span>
+    }
+
+    /**
+     * Returns the description of this repository.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+<span class="fc" id="L677">        return description;</span>
+    }
+
+    /**
+     * Returns the URL for fetching downloads in this repository.
+     *
+     * @return the downloads URL
+     */
+    public String getDownloadsUrl() {
+<span class="fc" id="L686">        return downloadsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching statuses in this repository.
+     *
+     * @return the statuses URL
+     */
+    public String getStatusesUrl() {
+<span class="fc" id="L695">        return statusesUrl;</span>
+    }
+
+    /**
+     * Returns the full name of this repository.
+     *
+     * @return the full name
+     */
+    public String getFullName() {
+<span class="fc" id="L704">        return fullName;</span>
+    }
+
+    /**
+     * Returns the URL for fetching git commits in this repository.
+     *
+     * @return the git commits URL
+     */
+    public String getGitCommitsUrl() {
+<span class="fc" id="L713">        return gitCommitsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching languages used in this repository.
+     *
+     * @return the languages URL
+     */
+    public String getLanguagesUrl() {
+<span class="fc" id="L722">        return languagesUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching git tags in this repository.
+     *
+     * @return the git tags URL
+     */
+    public String getGitTagsUrl() {
+<span class="fc" id="L731">        return gitTagsUrl;</span>
+    }
+
+    /**
+     * Returns the git URL of this repository.
+     *
+     * @return the git URL
+     */
+    public String getGitUrl() {
+<span class="fc" id="L740">        return gitUrl;</span>
+    }
+
+    /**
+     * Returns the SSH URL of this repository.
+     *
+     * @return the SSH URL
+     */
+    public String getSshUrl() {
+<span class="fc" id="L749">        return sshUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching assignees in this repository.
+     *
+     * @return the assignees URL
+     */
+    public String getAssigneesUrl() {
+<span class="fc" id="L758">        return assigneesUrl;</span>
+    }
+
+    /**
+     * Returns the number of open issues in this repository.
+     *
+     * @return the number of open issues
+     */
+    public int getOpenIssues() {
+<span class="fc" id="L767">        return openIssues;</span>
+    }
+
+    /**
+     * Returns the number of watchers in this repository.
+     *
+     * @return the watchers count
+     */
+    public int getWatchersCount() {
+<span class="fc" id="L776">        return watchersCount;</span>
+    }
+
+    /**
+     * Returns the URL for fetching hooks in this repository.
+     *
+     * @return the hooks URL
+     */
+    public String getHooksUrl() {
+<span class="fc" id="L785">        return hooksUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching issue events in this repository.
+     *
+     * @return the issue events URL
+     */
+    public String getIssueEventsUrl() {
+<span class="fc" id="L794">        return issueEventsUrl;</span>
+    }
+
+    /**
+     * Returns the homepage URL of this repository.
+     *
+     * @return the homepage URL
+     */
+    public String getHomepage() {
+<span class="fc" id="L803">        return homepage;</span>
+    }
+
+    /**
+     * Returns the URL for fetching issues in this repository.
+     *
+     * @return the issues URL
+     */
+    public String getIssuesUrl() {
+<span class="fc" id="L812">        return issuesUrl;</span>
+    }
+
+    /**
+     * Returns the number of forks of this repository.
+     *
+     * @return the forks count
+     */
+    public int getForksCount() {
+<span class="fc" id="L821">        return forksCount;</span>
+    }
+
+    /**
+     * Returns the URL for fetching keys in this repository.
+     *
+     * @return the keys URL
+     */
+    public String getKeysUrl() {
+<span class="fc" id="L830">        return keysUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching merges in this repository.
+     *
+     * @return the merges URL
+     */
+    public String getMergesUrl() {
+<span class="fc" id="L839">        return mergesUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching milestones in this repository.
+     *
+     * @return the milestones URL
+     */
+    public String getMilestonesUrl() {
+<span class="fc" id="L848">        return milestonesUrl;</span>
+    }
+
+    /**
+     * Returns the mirror URL of this repository.
+     *
+     * @return the mirror URL
+     */
+    public String getMirrorUrl() {
+<span class="fc" id="L857">        return mirrorUrl;</span>
+    }
+
+    /**
+     * Returns the name of this repository.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L866">        return name;</span>
+    }
+
+    /**
+     * Returns the URL for fetching notifications in this repository.
+     *
+     * @return the notifications URL
+     */
+    public String getNotificationsUrl() {
+<span class="fc" id="L875">        return notificationsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching pull requests in this repository.
+     *
+     * @return the pulls URL
+     */
+    public String getPullsUrl() {
+<span class="fc" id="L884">        return pullsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching stargazers of this repository.
+     *
+     * @return the stargazers URL
+     */
+    public String getStargazersUrl() {
+<span class="fc" id="L893">        return stargazersUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching tags in this repository.
+     *
+     * @return the tags URL
+     */
+    public String getTagsUrl() {
+<span class="fc" id="L902">        return tagsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching teams associated with this repository.
+     *
+     * @return the teams URL
+     */
+    public String getTeamsUrl() {
+<span class="fc" id="L911">        return teamsUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching trees in this repository.
+     *
+     * @return the trees URL
+     */
+    public String getTreesUrl() {
+<span class="fc" id="L920">        return treesUrl;</span>
+    }
+
+    /**
+     * Returns whether web commit signoff is required for this repository.
+     *
+     * @return true if web commit signoff is required, false otherwise
+     */
+    public boolean isWebCommitSignoffRequired() {
+<span class="fc" id="L929">        return webCommitSignoffRequired;</span>
+    }
+
+    /**
+     * Returns whether this repository has discussions enabled.
+     *
+     * @return true if discussions are enabled, false otherwise
+     */
+    public boolean isHasDiscussions() {
+<span class="fc" id="L938">        return hasDiscussions;</span>
+    }
+
+    /**
+     * Returns whether forking is allowed for this repository.
+     *
+     * @return true if forking is allowed, false otherwise
+     */
+    public boolean isAllowForking() {
+<span class="fc" id="L947">        return allowForking;</span>
+    }
+
+    /**
+     * Returns whether this repository is a template repository.
+     *
+     * @return true if this is a template repository, false otherwise
+     */
+    public boolean isTemplate() {
+<span class="fc" id="L956">        return isTemplate;</span>
+    }
+
+    /**
+     * Returns whether this repository is archived.
+     *
+     * @return true if this repository is archived, false otherwise
+     */
+    public boolean isArchived() {
+<span class="fc" id="L965">        return archived;</span>
+    }
+
+    /**
+     * Returns whether this repository is disabled.
+     *
+     * @return true if this repository is disabled, false otherwise
+     */
+    public boolean isDisabled() {
+<span class="fc" id="L974">        return disabled;</span>
+    }
+
+    /**
+     * Returns whether this repository is a fork.
+     *
+     * @return true if this repository is a fork, false otherwise
+     */
+    public boolean isFork() {
+<span class="fc" id="L983">        return fork;</span>
+    }
+
+    /**
+     * Returns whether this repository has GitHub Pages enabled.
+     *
+     * @return true if GitHub Pages is enabled, false otherwise
+     */
+    public boolean isHasPages() {
+<span class="fc" id="L992">        return hasPages;</span>
+    }
+
+    /**
+     * Returns whether this repository has downloads enabled.
+     *
+     * @return true if downloads are enabled, false otherwise
+     */
+    public boolean isHasDownloads() {
+<span class="fc" id="L1001">        return hasDownloads;</span>
+    }
+
+    /**
+     * Returns whether this repository has projects enabled.
+     *
+     * @return true if projects are enabled, false otherwise
+     */
+    public boolean isHasProjects() {
+<span class="fc" id="L1010">        return hasProjects;</span>
+    }
+
+    /**
+     * Returns whether this repository has a wiki enabled.
+     *
+     * @return true if the wiki is enabled, false otherwise
+     */
+    public boolean isHasWiki() {
+<span class="fc" id="L1019">        return hasWiki;</span>
+    }
+
+    /**
+     * Returns whether this repository is private.
+     *
+     * @return true if this repository is private, false otherwise
+     */
+    public boolean isPrivate() {
+<span class="fc" id="L1028">        return isPrivate;</span>
+    }
+
+    /**
+     * Returns whether this repository has issues enabled.
+     *
+     * @return true if issues are enabled, false otherwise
+     */
+    public boolean isHasIssues() {
+<span class="fc" id="L1037">        return hasIssues;</span>
+    }
+
+    /**
+     * Returns the list of topics associated with this repository.
+     *
+     * @return the list of topics
+     */
+    public List&lt;String&gt; getTopics() {
+<span class="fc" id="L1046">        return topics;</span>
+    }
+
+    /**
+     * Returns the license associated with this repository.
+     *
+     * @return the license
+     */
+    public GHLicense getLicense() {
+<span class="fc" id="L1055">        return license;</span>
+    }
+
+    /**
+     * Returns the owner of this repository.
+     *
+     * @return the owner
+     */
+    public GHUser getOwner() {
+<span class="fc" id="L1064">        return owner;</span>
+    }
+
+    /**
+     * Fetches the list of pull requests in this repository.
+     *
+     * @return a List of GHPullRequest instances representing the pull requests in this repository
+     */
+    public List&lt;GHPullRequest&gt; listPullRequests() {
+<span class="fc" id="L1073">        String url = &quot;/repos/&quot; + this.getOwner().getLogin() + &quot;/&quot; + this.getName() + &quot;/pulls&quot;;</span>
+<span class="fc" id="L1074">        return fetchPaginatedData(url, json -&gt; new GHPullRequest(github, json), github.getToken(), &quot;&amp;state=all&quot;);</span>
+    }
+
+    /**
+     * Checks if this repository has any pull requests with the given state.
+     *
+     * @param state the state of the pull requests to check for
+     * @return true if this repository has any pull requests with the given state, false otherwise
+     */
+    public boolean hasPullRequestsWithState(GHState state) {
+<span class="fc" id="L1084">        return listPullRequests().stream().anyMatch(pr -&gt; pr.getState().equals(state));</span>
+    }
+
+    /**
+     * Updates the topics of this repository.
+     *
+     * @param topics the new topics
+     */
+    public void updateTopics(List&lt;String&gt; topics) {
+<span class="fc" id="L1093">        JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L1094">        jsonObject.put(&quot;names&quot;, new JSONArray(topics));</span>
+<span class="fc" id="L1095">        sendPutRequest(getUrl() + &quot;/topics&quot;, github.getToken(), jsonObject);</span>
+<span class="fc" id="L1096">        this.topics = List.copyOf(topics);</span>
+<span class="fc" id="L1097">    }</span>
+
+    /**
+     * Updates the homepage of this repository.
+     */
+    public void updateHomePage(String homepageUrl) {
+<span class="fc" id="L1103">        JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L1104">        jsonObject.put(&quot;homepage&quot;, homepageUrl);</span>
+<span class="fc" id="L1105">        sendPatchRequest(getUrl(), github.getToken(), jsonObject);</span>
+<span class="fc" id="L1106">        this.homepage = homepageUrl;</span>
+<span class="fc" id="L1107">    }</span>
+
+    /**
+     * Fetches the list of events in this repository.
+     *
+     * @return a List of GHEvent instances representing the events in this repository
+     */
+    public List&lt;GHEvent&gt; listEvents() {
+<span class="fc" id="L1115">        return fetchPaginatedData(getUrl(), &quot;/events&quot;, GHEvent::new, github.getToken());</span>
+    }
+
+    /**
+     * Fetches the list of artifacts in this repository.
+     *
+     * @return a List of GHArtifact instances representing the artifacts in this repository
+     */
+    public List&lt;GHArtifact&gt; listArtifacts() {
+<span class="fc" id="L1124">        return fetchPaginatedData(getUrl(), &quot;/actions/artifacts&quot;, GHArtifact::new, github.getToken());</span>
+    }
+
+    /**
+     * Fetches the artifact with the given ID in this repository.
+     *
+     * @param id the ID of the artifact
+     * @return a GHArtifact instance representing the artifact with the given ID
+     */
+    public GHArtifact getArtifact(int id) {
+<span class="fc" id="L1134">        String response = sendGetRequest(getUrl() + &quot;/actions/artifacts/&quot; + id, github.getToken());</span>
+<span class="fc" id="L1135">        return new GHArtifact(new JSONObject(response));</span>
+    }
+
+    /**
+     * Deletes the artifact with the given ID in this repository.
+     *
+     * @param id the ID of the artifact
+     * @return true if the artifact was successfully deleted, false otherwise
+     */
+    public Boolean deleteArtifact(int id) {
+<span class="fc" id="L1145">        return sendDeleteRequestWithResponseCode(getUrl() + &quot;/actions/artifacts/&quot; + id, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+    /**
+     * Fetches the cache of this repository.
+     *
+     * @return a GHRepositoryCache instance representing the cache of this repository
+     */
+    public GHRepositoryCache getCache() {
+<span class="fc" id="L1154">        String response = sendGetRequest(getUrl() + &quot;/actions/cache/usage&quot;, github.getToken());</span>
+<span class="pc bpc" id="L1155" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L1156">        return new GHRepositoryCache(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the list of actions caches in this repository.
+     *
+     * @return a List of GHActionsCache instances representing the actions caches in this repository
+     */
+    public List&lt;GHActionsCache&gt; listActionsCaches() {
+<span class="fc" id="L1165">        return fetchPaginatedData(getUrl(), &quot;/actions/artifacts&quot;, GHActionsCache::new, github.getToken());</span>
+    }
+
+    /**
+     * Deletes the actions cache with the given key in this repository.
+     *
+     * @param key the key of the actions cache
+     */
+    public void deleteActionsCache(String key) {
+<span class="fc" id="L1174">        sendDeleteRequest(getUrl() + &quot;/actions/caches?key=&quot; + key, github.getToken());</span>
+<span class="fc" id="L1175">    }</span>
+
+    /**
+     * Deletes the actions cache with the given ID in this repository.
+     *
+     * @param id the ID of the actions cache
+     * @return true if the actions cache was successfully deleted, false otherwise
+     */
+    public boolean deleteActionsCache(int id) {
+<span class="fc" id="L1184">        return sendDeleteRequestWithResponseCode(getUrl() + &quot;/actions/caches/&quot; + id, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+    /**
+     * Fetches the list of organisation secrets in this repository.
+     *
+     * @return a List of GHSecret instances representing the organisation secrets in this repository
+     */
+    public List&lt;GHSecret&gt; listOrganisationSecrets() {
+<span class="fc" id="L1193">        return fetchArrayData(getUrl(), &quot;/actions/organization-secrets&quot;, GHSecret::new, github.getToken(), &quot;secrets&quot;);</span>
+    }
+
+    /**
+     * Fetches the list of repository secrets in this repository.
+     *
+     * @return a List of GHSecret instances representing the repository secrets in this repository
+     */
+    public List&lt;GHSecret&gt; listRepositorySecrets() {
+<span class="fc" id="L1202">        return fetchArrayData(getUrl(), &quot;/actions/secrets&quot;, GHSecret::new, github.getToken(), &quot;secrets&quot;);</span>
+    }
+
+    /**
+     * Fetches the public key of this repository.
+     *
+     * @return a GHPublicKey instance representing the public key of this repository
+     */
+    public GHPublicKey getPublicKey() {
+<span class="fc" id="L1211">        String response = sendGetRequest(getUrl() + &quot;/actions/secrets/public-key&quot;, github.getToken());</span>
+<span class="fc" id="L1212">        return new GHPublicKey(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the secret with the given name in this repository.
+     *
+     * @param name the name of the secret
+     * @return a GHSecret instance representing the secret with the given name
+     */
+    public GHSecret getSecret(String name) {
+<span class="fc" id="L1222">        String response = sendGetRequest(getUrl() + &quot;/actions/secrets/&quot; + name, github.getToken());</span>
+<span class="fc" id="L1223">        return new GHSecret(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the list of environment secrets in this repository.
+     *
+     * @param environment the name of the environment
+     * @return a List of GHSecret instances representing the environment secrets in this repository
+     */
+    public List&lt;GHSecret&gt; listEnvironmentSecrets(String environment) {
+<span class="fc" id="L1233">        return fetchArrayData(getUrl(), &quot;/actions/environments/&quot; + environment + &quot;/secrets&quot;, GHSecret::new, github.getToken(), &quot;secrets&quot;);</span>
+    }
+
+    /**
+     * Fetches the public key of the given environment in this repository.
+     *
+     * @param environment the name of the environment
+     * @return a GHPublicKey instance representing the public key of the environment
+     */
+    public GHPublicKey getEnvironmentPublicKey(String environment) {
+<span class="fc" id="L1243">        String response = sendGetRequest(getUrl() + &quot;/actions/environments/&quot; + environment + &quot;/secrets/public-key&quot;, github.getToken());</span>
+<span class="fc" id="L1244">        return new GHPublicKey(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the secret with the given name in the specified environment.
+     *
+     * @param environment the name of the environment
+     * @param name        the name of the secret
+     * @return a GHSecret instance representing the secret with the given name
+     */
+    public GHSecret getEnvironmentSecret(String environment, String name) {
+<span class="fc" id="L1255">        String response = sendGetRequest(getUrl() + &quot;/actions/environments/&quot; + environment + &quot;/secrets/&quot; + name, github.getToken());</span>
+<span class="fc" id="L1256">        return new GHSecret(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the list of organisation variables in this repository.
+     *
+     * @return a List of GHVariable instances representing the organisation variables in this repository
+     */
+    public List&lt;GHVariable&gt; listOrganisationVariables() {
+<span class="fc" id="L1265">        return fetchArrayData(getUrl(), &quot;/actions/organization-variables&quot;, GHVariable::new, github.getToken(), &quot;secrets&quot;);</span>
+    }
+
+    /**
+     * Fetches the list of repository variables in this repository.
+     *
+     * @return a List of GHVariable instances representing the repository variables in this repository
+     */
+    public List&lt;GHVariable&gt; listRepositoryVariables() {
+<span class="fc" id="L1274">        return fetchArrayData(getUrl(), &quot;/actions/variables&quot;, GHVariable::new, github.getToken(), &quot;variables&quot;);</span>
+    }
+
+    /**
+     * Fetches the variable with the given name in this repository.
+     *
+     * @param name the name of the variable
+     * @return a GHVariable instance representing the variable with the given name
+     */
+    public GHVariable getVariable(String name) {
+<span class="fc" id="L1284">        String response = sendGetRequest(getUrl() + &quot;/actions/variables/&quot; + name, github.getToken());</span>
+<span class="fc" id="L1285">        return new GHVariable(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the list of environment variables in the specified environment.
+     *
+     * @param environment the name of the environment
+     * @return a List of GHVariable instances representing the environment variables
+     */
+    public List&lt;GHVariable&gt; listEnvironmentVariables(String environment) {
+<span class="fc" id="L1295">        return fetchArrayData(getUrl(), &quot;/environments/&quot; + environment + &quot;/variables&quot;, GHVariable::new, github.getToken(), &quot;variables&quot;);</span>
+    }
+
+    /**
+     * Fetches the variable with the given name in the specified environment.
+     *
+     * @param environment the name of the environment
+     * @param name        the name of the variable
+     * @return a GHVariable instance representing the variable with the given name
+     */
+    public GHVariable getEnvironmentVariable(String environment, String name) {
+<span class="fc" id="L1306">        String response = sendGetRequest(getUrl() + &quot;/environments/&quot; + environment + &quot;/variables/&quot; + name, github.getToken());</span>
+<span class="fc" id="L1307">        return new GHVariable(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the workflow job with the given ID in this repository.
+     *
+     * @param id the ID of the workflow job
+     * @return a GHWorkflowJob instance representing the workflow job with the given ID
+     */
+    public GHWorkflowJob getJobFromWorkflowRun(int id) {
+<span class="fc" id="L1317">        String response = sendGetRequest(getUrl() + &quot;/actions/jobs/&quot; + id, github.getToken());</span>
+<span class="fc" id="L1318">        return new GHWorkflowJob(new JSONObject(response));</span>
+    }
+
+    /**
+     * Fetches the list of jobs in the specified workflow run.
+     *
+     * @param id the ID of the workflow run
+     * @return a List of GHWorkflowJob instances representing the jobs in the workflow run
+     */
+    public List&lt;GHWorkflowJob&gt; listJobsFromWorkflowRun(int id) {
+<span class="fc" id="L1328">        return fetchArrayData(getUrl(), &quot;/actions/runs/&quot; + id + &quot;/jobs&quot;, GHWorkflowJob::new, github.getToken(), &quot;jobs&quot;);</span>
+    }
+
+    /**
+     * Fetches the list of jobs for the specified workflow attempt.
+     *
+     * @param id      the ID of the workflow run
+     * @param attempt the attempt number
+     * @return a List of GHWorkflowJob instances representing the jobs for the workflow attempt
+     */
+    public List&lt;GHWorkflowJob&gt; listJobsForWorkflowAttempt(int id, int attempt) {
+<span class="fc" id="L1339">        return fetchArrayData(getUrl(), &quot;/actions/runs/&quot; + id + &quot;/attempts/&quot; + attempt + &quot;/jobs&quot;, GHWorkflowJob::new, github.getToken(), &quot;jobs&quot;);</span>
+    }
+
+    /**
+     * Fetches the workflow run with the given ID in this repository.
+     *
+     * @param id the ID of the workflow run
+     * @return a GHWorkflowRun instance representing the workflow run with the given ID
+     */
+    public GHWorkflowRun getWorkflowRun(int id) {
+<span class="fc" id="L1349">        String response = sendGetRequest(getUrl() + &quot;/actions/runs/&quot; + id, github.getToken());</span>
+<span class="fc" id="L1350">        return new GHWorkflowRun(new JSONObject(response));</span>
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProjectBuilder createProject() {
+<span class="fc" id="L1357">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;);</span>
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProject createProject(String name, String body) {
+<span class="fc" id="L1364">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;)</span>
+<span class="fc" id="L1365">                .setName(name)</span>
+<span class="fc" id="L1366">                .setBody(body)</span>
+<span class="fc" id="L1367">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

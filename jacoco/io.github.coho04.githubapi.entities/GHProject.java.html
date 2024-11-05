@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHProject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHProject.java</span></div><h1>GHProject.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.ClassBase;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
+
+/**
+ * GHProject is a class that extends ClassBase. It represents a GitHub project.
+ * It contains several properties such as ownerUrl, columnsUrl, name, body, number, state, creator, createdAt, updatedAt, organizationPermission, and isPrivate.
+ * These properties are initialized through a JSONObject.
+ *
+ * @author Coho04
+ * @version 1.0
+ * @since 2024-1.2
+ */
+public class GHProject extends ClassBase {
+
+    private final String ownerUrl;
+    private final String columnsUrl;
+    private final String name;
+    private final String body;
+    private final int number;
+    private final String state;
+<span class="fc" id="L26">    private GHUser creator = null;</span>
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final String organizationPermission;
+    private final boolean isPrivate;
+
+    /**
+     * Constructs a new GHProject object.
+     *
+     * @param jsonObject a JSONObject containing the data for initializing the GHProject object.
+     */
+    public GHProject(Github github, JSONObject jsonObject) {
+<span class="fc" id="L38">        super(jsonObject);</span>
+<span class="fc" id="L39">        this.ownerUrl = getStringOrNull(jsonObject, &quot;owner_url&quot;);</span>
+<span class="fc" id="L40">        this.columnsUrl = getStringOrNull(jsonObject, &quot;columns_url&quot;);</span>
+<span class="fc" id="L41">        this.name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L42">        this.body = getStringOrNull(jsonObject, &quot;body&quot;);</span>
+<span class="fc" id="L43">        this.number = getIntOrNull(jsonObject, &quot;number&quot;);</span>
+<span class="fc" id="L44">        this.state = getStringOrNull(jsonObject, &quot;state&quot;);</span>
+<span class="pc bpc" id="L45" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;creator&quot;) &amp;&amp; !jsonObject.isNull(&quot;creator&quot;)) {</span>
+<span class="fc" id="L46">            this.creator = new GHUser(github, jsonObject.getJSONObject(&quot;creator&quot;));</span>
+        }
+<span class="fc" id="L48">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L49">        this.updatedAt = getLocalDateOrNull(jsonObject, &quot;updated_at&quot;);</span>
+<span class="fc" id="L50">        this.organizationPermission = getStringOrNull(jsonObject, &quot;organization_permission&quot;);</span>
+<span class="fc" id="L51">        this.isPrivate = getBooleanOrNull(jsonObject, &quot;private&quot;);</span>
+<span class="fc" id="L52">    }</span>
+
+    /**
+     * Returns the name of this GHProject object.
+     *
+     * @return the name of this GHProject object.
+     */
+    public String getName() {
+<span class="fc" id="L60">        return name;</span>
+    }
+
+    /**
+     * Returns the creator of this GHProject object.
+     *
+     * @return the creator of this GHProject object.
+     */
+    public GHUser getCreator() {
+<span class="fc" id="L69">        return creator;</span>
+    }
+
+    /**
+     * Returns the number of this GHProject object.
+     *
+     * @return the number of this GHProject object.
+     */
+    public int getNumber() {
+<span class="fc" id="L78">        return number;</span>
+    }
+
+    /**
+     * Returns the body of this GHProject object.
+     *
+     * @return the body of this GHProject object.
+     */
+    public String getBody() {
+<span class="fc" id="L87">        return body;</span>
+    }
+
+    /**
+     * Returns the columnsUrl of this GHProject object.
+     *
+     * @return the columnsUrl of this GHProject object.
+     */
+    public String getColumnsUrl() {
+<span class="fc" id="L96">        return columnsUrl;</span>
+    }
+
+    /**
+     * Returns the createdAt time of this GHProject object.
+     *
+     * @return the createdAt time of this GHProject object.
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L105">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the organizationPermission of this GHProject object.
+     *
+     * @return the organizationPermission of this GHProject object.
+     */
+    public String getOrganizationPermission() {
+<span class="fc" id="L114">        return organizationPermission;</span>
+    }
+
+    /**
+     * Returns the ownerUrl of this GHProject object.
+     *
+     * @return the ownerUrl of this GHProject object.
+     */
+    public String getOwnerUrl() {
+<span class="fc" id="L123">        return ownerUrl;</span>
+    }
+
+    /**
+     * Returns the state of this GHProject object.
+     *
+     * @return the state of this GHProject object.
+     */
+    public String getState() {
+<span class="fc" id="L132">        return state;</span>
+    }
+
+    /**
+     * Returns the updatedAt time of this GHProject object.
+     *
+     * @return the updatedAt time of this GHProject object.
+     */
+    public OffsetDateTime getUpdatedAt() {
+<span class="fc" id="L141">        return updatedAt;</span>
+    }
+
+    /**
+     * Returns the isPrivate of this GHProject object.
+     *
+     * @return the isPrivate of this GHProject object.
+     */
+    public boolean isPrivate() {
+<span class="fc" id="L150">        return isPrivate;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

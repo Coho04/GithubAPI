@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClassBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.bases</a> &gt; <span class="el_source">ClassBase.java</span></div><h1>ClassBase.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.bases;
+
+import org.json.JSONObject;
+
+/**
+ * ClassBase is a class that extends GHBase. It represents a base class for GitHub objects.
+ * It contains several properties such as id, nodeId, htmlUrl, url, and eventsUrl.
+ * These properties are initialized through a JSONObject.
+ *
+ * @author Coho04
+ * @version 1.0
+ * @since 2024-1.2
+ */
+public class ClassBase extends GHBase {
+
+    private final int id;
+    private final String nodeId;
+    private final String htmlUrl;
+    private final String url;
+    private final String eventsUrl;
+
+    /**
+     * Constructs a new ClassBase object.
+     *
+     * @param jsonObject a JSONObject containing the data for initializing the ClassBase object.
+     */
+<span class="fc" id="L27">    public ClassBase(JSONObject jsonObject) {</span>
+<span class="fc" id="L28">        this.id = getIntOrNull(jsonObject, &quot;id&quot;);</span>
+<span class="fc" id="L29">        this.nodeId = getStringOrNull(jsonObject, &quot;node_id&quot;);</span>
+<span class="fc" id="L30">        this.htmlUrl = getStringOrNull(jsonObject, &quot;html_url&quot;);</span>
+<span class="fc" id="L31">        this.url = getStringOrNull(jsonObject, &quot;url&quot;);</span>
+<span class="fc" id="L32">        this.eventsUrl = getStringOrNull(jsonObject, &quot;events_url&quot;);</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Converts this ClassBase object to a JSONObject.
+     *
+     * @return a JSONObject representation of this ClassBase object.
+     */
+    public JSONObject toJSONObject() {
+<span class="fc" id="L41">        return super.toJSONObject()</span>
+<span class="fc" id="L42">                .put(&quot;id&quot;, id)</span>
+<span class="fc" id="L43">                .put(&quot;node_id&quot;, nodeId)</span>
+<span class="fc" id="L44">                .put(&quot;html_url&quot;, htmlUrl)</span>
+<span class="fc" id="L45">                .put(&quot;url&quot;, url)</span>
+<span class="fc" id="L46">                .put(&quot;events_url&quot;, eventsUrl);</span>
+    }
+
+    /**
+     * Returns the nodeId of this ClassBase object.
+     *
+     * @return the nodeId of this ClassBase object.
+     */
+    public String getNodeId() {
+<span class="fc" id="L55">        return nodeId;</span>
+    }
+
+    /**
+     * Returns the htmlUrl of this ClassBase object.
+     *
+     * @return the htmlUrl of this ClassBase object.
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L64">        return htmlUrl;</span>
+    }
+
+    /**
+     * Returns the url of this ClassBase object.
+     *
+     * @return the url of this ClassBase object.
+     */
+    public String getUrl() {
+<span class="fc" id="L73">        return url;</span>
+    }
+
+    /**
+     * Returns the eventsUrl of this ClassBase object.
+     *
+     * @return the eventsUrl of this ClassBase object.
+     */
+    public String getEventsUrl() {
+<span class="fc" id="L82">        return eventsUrl;</span>
+    }
+
+    /**
+     * Returns the id of this ClassBase object.
+     *
+     * @return the id of this ClassBase object.
+     */
+    public int getId() {
+<span class="fc" id="L91">        return id;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

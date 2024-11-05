@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHActionsCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHActionsCache.java</span></div><h1>GHActionsCache.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.bases.GHBase;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
+
+/**
+ * This class represents a GitHub Actions Cache.
+ * It provides methods for fetching data about the actions cache such as its id, ref, key, version, last accessed date, creation date, and size in bytes.
+ */
+public class GHActionsCache extends GHBase {
+
+    private final int id;
+    private final String ref;
+    private final String key;
+    private final String version;
+    private final OffsetDateTime lastAccessedAt;
+    private final OffsetDateTime createdAt;
+    private final int sizeInBytes;
+
+    /**
+     * Constructs a new GHActionsCache instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the actions cache data
+     */
+<span class="fc" id="L27">    public GHActionsCache(JSONObject jsonObject) {</span>
+<span class="fc" id="L28">        this.id = getIntOrNull(jsonObject, &quot;id&quot;);</span>
+<span class="fc" id="L29">        this.ref = getStringOrNull(jsonObject, &quot;ref&quot;);</span>
+<span class="fc" id="L30">        this.key = getStringOrNull(jsonObject, &quot;key&quot;);</span>
+<span class="fc" id="L31">        this.version = getStringOrNull(jsonObject, &quot;version&quot;);</span>
+<span class="fc" id="L32">        this.lastAccessedAt = getLocalDateOrNull(jsonObject, &quot;last_accessed_at&quot;);</span>
+<span class="fc" id="L33">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L34">        this.sizeInBytes = getIntOrNull(jsonObject, &quot;size_in_bytes&quot;);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Returns the id of the actions cache.
+     *
+     * @return the id of the actions cache
+     */
+    public int getId() {
+<span class="fc" id="L43">        return id;</span>
+    }
+
+    /**
+     * Returns the creation date of the actions cache.
+     *
+     * @return the creation date of the actions cache
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L52">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the size in bytes of the actions cache.
+     *
+     * @return the size in bytes of the actions cache
+     */
+    public int getSizeInBytes() {
+<span class="fc" id="L61">        return sizeInBytes;</span>
+    }
+
+    /**
+     * Returns the last accessed date of the actions cache.
+     *
+     * @return the last accessed date of the actions cache
+     */
+    public OffsetDateTime getLastAccessedAt() {
+<span class="fc" id="L70">        return lastAccessedAt;</span>
+    }
+
+    /**
+     * Returns the key of the actions cache.
+     *
+     * @return the key of the actions cache
+     */
+    public String getKey() {
+<span class="fc" id="L79">        return key;</span>
+    }
+
+    /**
+     * Returns the ref of the actions cache.
+     *
+     * @return the ref of the actions cache
+     */
+    public String getRef() {
+<span class="fc" id="L88">        return ref;</span>
+    }
+
+    /**
+     * Returns the version of the actions cache.
+     *
+     * @return the version of the actions cache
+     */
+    public String getVersion() {
+<span class="fc" id="L97">        return version;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Github.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi</a> &gt; <span class="el_source">Github.java</span></div><h1>Github.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi;
+
+import io.github.coho04.githubapi.bases.GHBase;
+import io.github.coho04.githubapi.entities.GHAdvisory;
+import io.github.coho04.githubapi.entities.GHGitignoreTemplate;
+import io.github.coho04.githubapi.utilities.LogFormatter;
+import io.github.coho04.githubapi.entities.GHOrganisation;
+import io.github.coho04.githubapi.entities.GHUser;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
+
+/**
+ * This class represents the main entry point for interacting with the GitHub API.
+ * It provides methods for fetching data about users, organizations, advisories, and gitignore templates.
+ */
+<span class="fc" id="L21">public class Github extends GHBase {</span>
+
+    private final String token;
+    private static Logger logger;
+
+    /**
+     * Constructs a new GitHub instance with the provided username and token.
+     *
+     * @param token the GitHub token
+     */
+<span class="fc" id="L31">    public Github(String token) {</span>
+<span class="fc" id="L32">        this.token = token;</span>
+<span class="fc" id="L33">        logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);</span>
+<span class="fc" id="L34">        logger.setUseParentHandlers(false);</span>
+
+<span class="fc" id="L36">        ConsoleHandler handler = new ConsoleHandler();</span>
+<span class="fc" id="L37">        handler.setFormatter(new LogFormatter());</span>
+<span class="fc" id="L38">        logger.addHandler(handler);</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Finds an organization by its name.
+     *
+     * @param name the name of the organization
+     * @return the organization
+     */
+    public GHOrganisation findOrganisationByName(String name) {
+<span class="fc" id="L48">        return GHOrganisation.getOrganisation(this, name);</span>
+    }
+
+    /**
+     * Finds a user by their username.
+     *
+     * @param name the username of the user
+     * @return the user
+     */
+    public GHUser findUserByName(String name) {
+<span class="fc" id="L58">        return GHUser.getUser(this, name);</span>
+    }
+
+
+    /**
+     * Returns the GitHub token.
+     *
+     * @return the GitHub token
+     */
+    public String getToken() {
+<span class="fc" id="L68">        return token;</span>
+    }
+
+
+    /**
+     * Lists all global advisories.
+     *
+     * @return a list of all global advisories
+     */
+    public List&lt;GHAdvisory&gt; listGlobalAdvisories() {
+<span class="fc" id="L78">        return fetchPaginatedData(&quot;/advisories&quot;, json -&gt; new GHAdvisory(this, json), getToken());</span>
+    }
+
+    /**
+     * Gets a global advisory by its ID.
+     *
+     * @param id the ID of the advisory
+     * @return the advisory
+     */
+    public GHAdvisory getGlobalAdvisories(String id) {
+<span class="fc" id="L88">        String response = sendGetRequest(&quot;/advisories/&quot; + id, getToken());</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L90">        return new GHAdvisory(this, new JSONObject(response));</span>
+    }
+
+    /**
+     * Lists all gitignore templates.
+     *
+     * @return a list of all gitignore templates
+     */
+    public List&lt;GHGitignoreTemplate&gt; listGitignoreTemplates() {
+<span class="fc" id="L99">        String response = sendGetRequest(getBaseUrl() + &quot;/gitignore/templates&quot;, getToken());</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L101">        List&lt;GHGitignoreTemplate&gt; templates = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L102">        JSONArray array = new JSONArray(response);</span>
+<span class="fc" id="L103">        array.toList().forEach(o -&gt; {</span>
+<span class="fc" id="L104">            JSONObject json = new JSONObject(&quot;{\&quot;name\&quot;:\&quot;&quot; + o + &quot;\&quot;}&quot;);</span>
+<span class="fc" id="L105">            templates.add(new GHGitignoreTemplate(json));</span>
+<span class="fc" id="L106">        });</span>
+<span class="fc" id="L107">        return templates;</span>
+    }
+
+    /**
+     * Gets a gitignore template by its name.
+     *
+     * @param name the name of the template
+     * @return the gitignore template
+     */
+    public GHGitignoreTemplate getGitignoreTemplate(String name) {
+<span class="fc" id="L117">        String response = sendGetRequest(getBaseUrl() + &quot;/gitignore/templates/&quot; + name, getToken());</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L119">        return new GHGitignoreTemplate(new JSONObject(response));</span>
+    }
+
+    /**
+     * Lists all user advisories.
+     *
+     * @return a list of all user advisories
+     */
+    public SelfUser getSelfUser() {
+<span class="fc" id="L128">        return SelfUser.getSelfUser(this);</span>
+    }
+
+    public static Logger getLogger() {
+<span class="fc" id="L132">        return logger;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

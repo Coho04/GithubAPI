@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHRepositoryCache.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHRepositoryCache.java</span></div><h1>GHRepositoryCache.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.bases.GHBase;
+import org.json.JSONObject;
+
+/**
+ * This class represents a GitHub Repository Cache.
+ * It provides methods for fetching data about the repository cache such as its full name, active caches size in bytes, and active caches count.
+ */
+public class GHRepositoryCache extends GHBase {
+
+    private final String fullName;
+    private final int activeCachesSizeInBytes;
+    private final int activeCachesCount;
+
+    /**
+     * Constructs a new GHRepositoryCache instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the repository cache data
+     */
+<span class="fc" id="L21">    public GHRepositoryCache(JSONObject jsonObject) {</span>
+<span class="fc" id="L22">        this.fullName = getStringOrNull(jsonObject, &quot;full_name&quot;);</span>
+<span class="fc" id="L23">        this.activeCachesSizeInBytes = getIntOrNull(jsonObject, &quot;active_caches_size_in_bytes&quot;);</span>
+<span class="fc" id="L24">        this.activeCachesCount = getIntOrNull(jsonObject, &quot;active_caches_count&quot;);</span>
+<span class="fc" id="L25">    }</span>
+
+    /**
+     * Returns the active caches count of the repository cache.
+     *
+     * @return the active caches count of the repository cache
+     */
+    public int getActiveCachesCount() {
+<span class="fc" id="L33">        return activeCachesCount;</span>
+    }
+
+    /**
+     * Returns the active caches size in bytes of the repository cache.
+     *
+     * @return the active caches size in bytes of the repository cache
+     */
+    public int getActiveCachesSizeInBytes() {
+<span class="fc" id="L42">        return activeCachesSizeInBytes;</span>
+    }
+
+    /**
+     * Returns the full name of the repository cache.
+     *
+     * @return the full name of the repository cache
+     */
+    public String getFullName() {
+<span class="fc" id="L51">        return fullName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

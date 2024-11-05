@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityBase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.bases</a> &gt; <span class="el_source">EntityBase.java</span></div><h1>EntityBase.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.bases;
+
+import org.json.JSONObject;
+
+/**
+ * EntityBase is a class that extends ClassBase. It represents a base entity for GitHub objects.
+ * It contains several properties such as type, login, reposUrl, and avatarUrl.
+ * These properties are initialized through a JSONObject.
+ *
+ * @author Coho04
+ * @version 1.0
+ * @since 2024-1.2
+ */
+public class EntityBase extends ClassBase {
+
+    private final String type;
+    private final String login;
+    private final String reposUrl;
+    private final String avatarUrl;
+
+    /**
+     * Constructs a new EntityBase object.
+     *
+     * @param jsonObject a JSONObject containing the data for initializing the EntityBase object.
+     */
+    public EntityBase(JSONObject jsonObject) {
+<span class="fc" id="L27">        super(jsonObject);</span>
+<span class="fc" id="L28">        this.type = getStringOrNull(jsonObject, &quot;type&quot;);</span>
+<span class="fc" id="L29">        this.login = getStringOrNull(jsonObject, &quot;login&quot;);</span>
+<span class="fc" id="L30">        this.reposUrl = getStringOrNull(jsonObject, &quot;repos_url&quot;);</span>
+<span class="fc" id="L31">        this.avatarUrl = getStringOrNull(jsonObject, &quot;avatar_url&quot;);</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Converts this EntityBase object to a JSONObject.
+     *
+     * @return a JSONObject representation of this EntityBase object.
+     */
+    @Override
+    public JSONObject toJSONObject() {
+<span class="fc" id="L41">        return super.toJSONObject()</span>
+<span class="fc" id="L42">                .put(&quot;type&quot;, type)</span>
+<span class="fc" id="L43">                .put(&quot;login&quot;, login)</span>
+<span class="fc" id="L44">                .put(&quot;repos_url&quot;, reposUrl)</span>
+<span class="fc" id="L45">                .put(&quot;avatar_url&quot;, avatarUrl);</span>
+    }
+
+    /**
+     * Returns the reposUrl of this EntityBase object.
+     *
+     * @return the reposUrl of this EntityBase object.
+     */
+    public String getReposUrl() {
+<span class="fc" id="L54">        return reposUrl;</span>
+    }
+
+    /**
+     * Returns the login of this EntityBase object.
+     *
+     * @return the login of this EntityBase object.
+     */
+    public String getLogin() {
+<span class="fc" id="L63">        return login;</span>
+    }
+
+    /**
+     * Returns the login of this EntityBase object.
+     *
+     * @return the login of this EntityBase object.
+     */
+    public String getUsername() {
+<span class="fc" id="L72">        return login;</span>
+    }
+
+    /**
+     * Returns the avatarUrl of this EntityBase object.
+     *
+     * @return the avatarUrl of this EntityBase object.
+     */
+    public String getAvatarUrl() {
+<span class="fc" id="L81">        return avatarUrl;</span>
+    }
+
+    /**
+     * Returns the type of this EntityBase object.
+     *
+     * @return the type of this EntityBase object.
+     */
+    public String getType() {
+<span class="fc" id="L90">        return type;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

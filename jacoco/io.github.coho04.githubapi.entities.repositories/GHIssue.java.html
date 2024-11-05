@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHIssue.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities.repositories</a> &gt; <span class="el_source">GHIssue.java</span></div><h1>GHIssue.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities.repositories;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.ClassBase;
+import io.github.coho04.githubapi.entities.GHUser;
+import io.github.coho04.githubapi.enums.GHState;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+
+/**
+ * Represents a GitHub issue.
+ * This class is a part of the GitHub API library.
+ */
+public class GHIssue extends ClassBase {
+
+    private final Github github;
+    private final int number;
+    private final String body;
+    private final String title;
+    private final GHState state;
+    private final int comments;
+    private final boolean draft;
+    private final boolean locked;
+    private final String labelsUrl;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime closedAt;
+    private final String commentsUrl;
+    private final String timelineUrl;
+    private final String repositoryUrl;
+    private final String activeLockReason;
+    private final String authorAssociation;
+    private final String performedViaGithubApp;
+    private final String stateReason;
+    private GHMilestone milestone;
+    private final List&lt;GHLabel&gt; labels;
+    private final List&lt;GHUser&gt; assignees;
+    private GHUser user;
+    private GHUser assignee;
+
+    /**
+     * Constructs a GHIssue object from a JSONObject.
+     *
+     * @param jsonObject JSONObject representing a GitHub issue.
+     */
+    public GHIssue(Github github, JSONObject jsonObject) {
+<span class="fc" id="L49">        super(jsonObject);</span>
+<span class="fc" id="L50">        this.github = github;</span>
+<span class="fc" id="L51">        this.number = getIntOrNull(jsonObject, &quot;number&quot;);</span>
+<span class="fc" id="L52">        this.body = getStringOrNull(jsonObject, &quot;body&quot;);</span>
+<span class="fc" id="L53">        this.title = getStringOrNull(jsonObject, &quot;title&quot;);</span>
+<span class="fc" id="L54">        this.state = GHState.fromString(getStringOrNull(jsonObject, &quot;state&quot;));</span>
+<span class="fc" id="L55">        this.draft = getBooleanOrNull(jsonObject, &quot;draft&quot;);</span>
+<span class="fc" id="L56">        this.locked = getBooleanOrNull(jsonObject, &quot;locked&quot;);</span>
+<span class="fc" id="L57">        this.labelsUrl = getStringOrNull(jsonObject, &quot;labels_url&quot;);</span>
+<span class="fc" id="L58">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L59">        this.updatedAt = getLocalDateOrNull(jsonObject, &quot;updated_at&quot;);</span>
+<span class="fc" id="L60">        this.authorAssociation = getStringOrNull(jsonObject, &quot;author_association&quot;);</span>
+<span class="fc" id="L61">        this.commentsUrl = getStringOrNull(jsonObject, &quot;comments_url&quot;);</span>
+<span class="fc" id="L62">        this.activeLockReason = getStringOrNull(jsonObject, &quot;active_lock_reason&quot;);</span>
+<span class="fc" id="L63">        this.repositoryUrl = getStringOrNull(jsonObject, &quot;repository_url&quot;);</span>
+<span class="fc" id="L64">        this.timelineUrl = getStringOrNull(jsonObject, &quot;timeline_url&quot;);</span>
+<span class="fc" id="L65">        this.performedViaGithubApp = getStringOrNull(jsonObject, &quot;performed_via_github_app&quot;);</span>
+<span class="fc" id="L66">        this.stateReason = getStringOrNull(jsonObject, &quot;state_reason&quot;);</span>
+<span class="fc" id="L67">        this.comments = getIntOrNull(jsonObject, &quot;comments&quot;);</span>
+<span class="fc" id="L68">        this.closedAt = getLocalDateOrNull(jsonObject, &quot;closed_at&quot;);</span>
+<span class="pc bpc" id="L69" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;milestone&quot;) &amp;&amp; !jsonObject.isNull(&quot;milestone&quot;)) {</span>
+<span class="fc" id="L70">            this.milestone = new GHMilestone(github, getJSONObjectOrNull(jsonObject, &quot;milestone&quot;));</span>
+        }
+<span class="fc" id="L72">        this.labels = getArrayOrNull(jsonObject, &quot;labels&quot;, GHLabel::new);</span>
+<span class="fc" id="L73">        this.assignees = getArrayOrNull(jsonObject, &quot;assignees&quot;, jsonObject1 -&gt; new GHUser(github, jsonObject1));</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (jsonObject.has(&quot;user&quot;)) {</span>
+<span class="fc" id="L75">            this.user = new GHUser(github, getJSONObjectOrNull(jsonObject, &quot;user&quot;));</span>
+        }
+<span class="fc" id="L77">        JSONObject assigneeJSONObject = getJSONObjectOrNull(jsonObject, &quot;assignee&quot;);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (assigneeJSONObject != null) {</span>
+<span class="fc" id="L79">            this.assignee = new GHUser(github, assigneeJSONObject);</span>
+        }
+<span class="fc" id="L81">    }</span>
+
+    public JSONObject toJSONObject() {
+<span class="fc" id="L84">        JSONObject jsonObject =  super.toJSONObject()</span>
+<span class="fc" id="L85">                .put(&quot;number&quot;, number)</span>
+<span class="fc" id="L86">                .put(&quot;body&quot;, body)</span>
+<span class="fc" id="L87">                .put(&quot;title&quot;, title)</span>
+<span class="fc" id="L88">                .put(&quot;state&quot;, state.toString())</span>
+<span class="fc" id="L89">                .put(&quot;draft&quot;, draft)</span>
+<span class="fc" id="L90">                .put(&quot;locked&quot;, locked)</span>
+<span class="fc" id="L91">                .put(&quot;labels_url&quot;, labelsUrl)</span>
+<span class="fc" id="L92">                .put(&quot;created_at&quot;, createdAt.toString())</span>
+<span class="fc" id="L93">                .put(&quot;updated_at&quot;, updatedAt.toString())</span>
+<span class="fc" id="L94">                .put(&quot;author_association&quot;, authorAssociation)</span>
+<span class="fc" id="L95">                .put(&quot;comments_url&quot;, commentsUrl)</span>
+<span class="fc" id="L96">                .put(&quot;active_lock_reason&quot;, activeLockReason)</span>
+<span class="fc" id="L97">                .put(&quot;repository_url&quot;, repositoryUrl)</span>
+<span class="fc" id="L98">                .put(&quot;timeline_url&quot;, timelineUrl)</span>
+<span class="fc" id="L99">                .put(&quot;performed_via_github_app&quot;, performedViaGithubApp)</span>
+<span class="fc" id="L100">                .put(&quot;state_reason&quot;, stateReason)</span>
+<span class="fc" id="L101">                .put(&quot;comments&quot;, comments)</span>
+<span class="fc" id="L102">                .put(&quot;labels&quot;, labels)</span>
+<span class="fc" id="L103">                .put(&quot;assignees&quot;, assignees)</span>
+<span class="fc" id="L104">                .put(&quot;user&quot;, user.toJSONObject())</span>
+<span class="fc" id="L105">                .put(&quot;assignee&quot;, assignee.toJSONObject());</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (closedAt != null) {</span>
+<span class="fc" id="L107">               jsonObject.put(&quot;closed_at&quot;, closedAt.toString());</span>
+        }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if (milestone != null) {</span>
+<span class="fc" id="L110">            jsonObject.put(&quot;milestone&quot;, milestone.toJSONObject());</span>
+        }
+<span class="fc" id="L112">        return jsonObject;</span>
+    }
+
+    /**
+     * Closes the issue.
+     */
+    public void close() {
+<span class="fc" id="L119">        JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L120">        jsonObject.put(&quot;state&quot;, GHState.CLOSED.toString());</span>
+<span class="fc" id="L121">        sendPatchRequest(getUrl(), github.getToken(), jsonObject);</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Returns the issue number.
+     *
+     * @return the issue number
+     */
+    public int getNumber() {
+<span class="fc" id="L130">        return number;</span>
+    }
+
+    /**
+     * Returns the number of comments on the issue.
+     *
+     * @return the number of comments
+     */
+    public int getComments() {
+<span class="fc" id="L139">        return comments;</span>
+    }
+
+    /**
+     * Returns the reason for the issue being locked.
+     *
+     * @return the reason for the issue being locked
+     */
+    public String getActiveLockReason() {
+<span class="fc" id="L148">        return activeLockReason;</span>
+    }
+
+    /**
+     * Returns the author association of the issue.
+     *
+     * @return the author association
+     */
+    public String getAuthorAssociation() {
+<span class="fc" id="L157">        return authorAssociation;</span>
+    }
+
+    /**
+     * Returns the body of the issue.
+     *
+     * @return the body of the issue
+     */
+    public String getBody() {
+<span class="fc" id="L166">        return body;</span>
+    }
+
+    /**
+     * Returns the date and time when the issue was closed.
+     *
+     * @return the date and time when the issue was closed
+     */
+    public OffsetDateTime getClosedAt() {
+<span class="fc" id="L175">        return closedAt;</span>
+    }
+
+    /**
+     * Returns the URL of the issue comments.
+     *
+     * @return the URL of the issue comments
+     */
+    public String getCommentsUrl() {
+<span class="fc" id="L184">        return commentsUrl;</span>
+    }
+
+    /**
+     * Returns the date and time when the issue was created.
+     *
+     * @return the date and time when the issue was created
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L193">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the URL of the issue labels.
+     *
+     * @return the URL of the issue labels
+     */
+    public String getLabelsUrl() {
+<span class="fc" id="L202">        return labelsUrl;</span>
+    }
+
+    /**
+     * Returns the milestone of the issue.
+     *
+     * @return the milestone of the issue
+     */
+    public GHMilestone getMilestone() {
+<span class="fc" id="L211">        return milestone;</span>
+    }
+
+    /**
+     * Returns the app via which the issue was performed.
+     *
+     * @return the app via which the issue was performed
+     */
+    public String getPerformedViaGithubApp() {
+<span class="fc" id="L220">        return performedViaGithubApp;</span>
+    }
+
+    /**
+     * Returns the URL of the repository where the issue is located.
+     *
+     * @return the URL of the repository where the issue is located
+     */
+    public String getRepositoryUrl() {
+<span class="fc" id="L229">        return repositoryUrl;</span>
+    }
+
+    /**
+     * Returns the state of the issue.
+     *
+     * @return the state of the issue
+     */
+    public GHState getState() {
+<span class="fc" id="L238">        return state;</span>
+    }
+
+    /**
+     * Returns the reason for the state of the issue.
+     *
+     * @return the reason for the state of the issue
+     */
+    public String getStateReason() {
+<span class="fc" id="L247">        return stateReason;</span>
+    }
+
+    /**
+     * Returns the URL of the issue timeline.
+     *
+     * @return the URL of the issue timeline
+     */
+    public String getTimelineUrl() {
+<span class="fc" id="L256">        return timelineUrl;</span>
+    }
+
+    /**
+     * Returns the title of the issue.
+     *
+     * @return the title of the issue
+     */
+    public String getTitle() {
+<span class="fc" id="L265">        return title;</span>
+    }
+
+    /**
+     * Returns the date and time when the issue was last updated.
+     *
+     * @return the date and time when the issue was last updated
+     */
+    public OffsetDateTime getUpdatedAt() {
+<span class="fc" id="L274">        return updatedAt;</span>
+    }
+
+    /**
+     * Returns whether the issue is a draft.
+     *
+     * @return true if the issue is a draft, false otherwise
+     */
+    public boolean isDraft() {
+<span class="fc" id="L283">        return draft;</span>
+    }
+
+    /**
+     * Returns whether the issue is locked.
+     *
+     * @return true if the issue is locked, false otherwise
+     */
+    public boolean isLocked() {
+<span class="fc" id="L292">        return locked;</span>
+    }
+
+    /**
+     * Returns the user who created the issue.
+     *
+     * @return the user who created the issue
+     */
+    public GHUser getUser() {
+<span class="fc" id="L301">        return user;</span>
+    }
+
+    /**
+     * Returns the user assigned to the issue.
+     *
+     * @return the user assigned to the issue
+     */
+    public GHUser getAssignee() {
+<span class="fc" id="L310">        return assignee;</span>
+    }
+
+    /**
+     * Returns the labels of the issue.
+     *
+     * @return the labels of the issue
+     */
+    public List&lt;GHLabel&gt; getLabels() {
+<span class="fc" id="L319">        return labels;</span>
+    }
+
+    /**
+     * Returns the users assigned to the issue.
+     *
+     * @return the users assigned to the issue
+     */
+    public List&lt;GHUser&gt; getAssignees() {
+<span class="fc" id="L328">        return assignees;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

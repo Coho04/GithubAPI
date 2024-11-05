@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHOrganisation.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHOrganisation.java</span></div><h1>GHOrganisation.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.bases.EntityBase;
+import io.github.coho04.githubapi.builders.GHHookBuilder;
+import io.github.coho04.githubapi.builders.GHProjectBuilder;
+import io.github.coho04.githubapi.builders.GHTeamBuilder;
+import io.github.coho04.githubapi.enums.GHPackageType;
+import io.github.coho04.githubapi.enums.GHRole;
+import io.github.coho04.githubapi.enums.GHState;
+import io.github.coho04.githubapi.entities.repositories.GHRepository;
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.utilities.HttpRequestHelper;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
+import java.time.OffsetDateTime;
+import java.util.List;
+
+/**
+ * Represents a GitHub organization.
+ * This class provides methods and properties to access information about an organization on GitHub.
+ */
+<span class="fc" id="L24">public class GHOrganisation extends EntityBase {</span>
+
+    private final Github github;
+    private GHPlan plan;
+    private final String name;
+    private final String hooksUrl;
+    private final String issuesUrl;
+    private final String membersUrl;
+    private final String description;
+    private final String givenName;
+    private final String company;
+    private final String blog;
+    private final String location;
+    private final String email;
+    private final String publicMembersUrl;
+    private final String twitterUsername;
+    private final boolean isVerified;
+    private final boolean hasOrganizationProjects;
+    private final boolean hasRepositoryProjects;
+    private final int publicRepos;
+    private final int publicGists;
+    private final int followers;
+    private final int following;
+    private final OffsetDateTime createdAt;
+    private final OffsetDateTime updatedAt;
+    private final OffsetDateTime archivedAt;
+    private final int totalPrivateRepos;
+    private final int ownedPrivateRepos;
+    private final int privateGists;
+    private final long diskUsage;
+    private final int collaborators;
+    private final String billingEmail;
+    private final String defaultRepositoryPermission;
+    private final boolean membersCanCreateRepositories;
+    private final boolean twoFactorRequirementEnabled;
+    private final String membersAllowedRepositoryCreationType;
+    private final boolean membersCanCreatePublicRepositories;
+    private final boolean membersCanCreatePrivateRepositories;
+    private final boolean membersCanCreateInternalRepositories;
+    private final boolean membersCanCreatePages;
+    private final boolean membersCanForkPrivateRepositories;
+    private final boolean webCommitSignoffRequired;
+    private final boolean membersCanCreatePublicPages;
+    private final boolean membersCanCreatePrivatePages;
+    private final boolean advancedSecurityEnabledForNewRepositories;
+    private final boolean dependabotAlertsEnabledForNewRepositories;
+    private final boolean dependabotSecurityUpdatesEnabledForNewRepositories;
+    private final boolean dependencyGraphEnabledForNewRepositories;
+    private final boolean secretScanningEnabledForNewRepositories;
+    private final boolean secretScanningPushProtectionEnabledForNewRepositories;
+    private final boolean secretScanningPushProtectionCustomLinkEnabled;
+    private final String secretScanningPushProtectionCustomLink;
+    private final boolean secretScanningValidityChecksEnabled;
+
+    /**
+     * Constructs a new GHOrganisation instance with the provided GitHub instance, JSON object, and name.
+     *
+     * @param github     the GitHub instance
+     * @param jsonObject the JSON object containing the organization data
+     * @param name       the name of the organization
+     */
+    public GHOrganisation(Github github, JSONObject jsonObject, String name) {
+<span class="fc" id="L86">        super(jsonObject);</span>
+<span class="fc" id="L87">        this.github = github;</span>
+<span class="fc" id="L88">        this.givenName = name;</span>
+<span class="fc" id="L89">        this.hooksUrl = getStringOrNull(jsonObject, &quot;hooks_url&quot;);</span>
+<span class="fc" id="L90">        this.issuesUrl = getStringOrNull(jsonObject, &quot;issues_url&quot;);</span>
+<span class="fc" id="L91">        this.membersUrl = getStringOrNull(jsonObject, &quot;members_url&quot;);</span>
+<span class="fc" id="L92">        this.publicMembersUrl = getStringOrNull(jsonObject, &quot;public_members_url&quot;);</span>
+<span class="fc" id="L93">        this.description = getStringOrNull(jsonObject, &quot;description&quot;);</span>
+<span class="fc" id="L94">        this.name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L95">        this.company = getStringOrNull(jsonObject, &quot;company&quot;);</span>
+<span class="fc" id="L96">        this.blog = getStringOrNull(jsonObject, &quot;blog&quot;);</span>
+<span class="fc" id="L97">        this.location = getStringOrNull(jsonObject, &quot;location&quot;);</span>
+<span class="fc" id="L98">        this.email = getStringOrNull(jsonObject, &quot;email&quot;);</span>
+<span class="fc" id="L99">        this.twitterUsername = getStringOrNull(jsonObject, &quot;twitter_username&quot;);</span>
+<span class="fc" id="L100">        this.isVerified = getBooleanOrNull(jsonObject, &quot;is_verified&quot;);</span>
+<span class="fc" id="L101">        this.hasOrganizationProjects = getBooleanOrNull(jsonObject, &quot;has_organization_projects&quot;);</span>
+<span class="fc" id="L102">        this.hasRepositoryProjects = getBooleanOrNull(jsonObject, &quot;has_repository_projects&quot;);</span>
+<span class="fc" id="L103">        this.publicRepos = getIntOrNull(jsonObject, &quot;public_repos&quot;);</span>
+<span class="fc" id="L104">        this.publicGists = getIntOrNull(jsonObject, &quot;public_gists&quot;);</span>
+<span class="fc" id="L105">        this.followers = getIntOrNull(jsonObject, &quot;followers&quot;);</span>
+<span class="fc" id="L106">        this.following = getIntOrNull(jsonObject, &quot;following&quot;);</span>
+<span class="fc" id="L107">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L108">        this.updatedAt = getLocalDateOrNull(jsonObject, &quot;updated_at&quot;);</span>
+<span class="fc" id="L109">        this.archivedAt = getLocalDateOrNull(jsonObject, &quot;archived_at&quot;);</span>
+<span class="fc" id="L110">        this.totalPrivateRepos = getIntOrNull(jsonObject, &quot;total_private_repos&quot;);</span>
+<span class="fc" id="L111">        this.ownedPrivateRepos = getIntOrNull(jsonObject, &quot;owned_private_repos&quot;);</span>
+<span class="fc" id="L112">        this.privateGists = getIntOrNull(jsonObject, &quot;private_gists&quot;);</span>
+<span class="fc" id="L113">        this.diskUsage = getIntOrNull(jsonObject, &quot;disk_usage&quot;);</span>
+<span class="fc" id="L114">        this.collaborators = getIntOrNull(jsonObject, &quot;collaborators&quot;);</span>
+<span class="fc" id="L115">        this.billingEmail = getStringOrNull(jsonObject, &quot;billing_email&quot;);</span>
+<span class="fc" id="L116">        this.defaultRepositoryPermission = getStringOrNull(jsonObject, &quot;default_repository_permission&quot;);</span>
+<span class="fc" id="L117">        this.membersCanCreateRepositories = getBooleanOrNull(jsonObject, &quot;members_can_create_repositories&quot;);</span>
+<span class="fc" id="L118">        this.twoFactorRequirementEnabled = getBooleanOrNull(jsonObject, &quot;two_factor_requirement_enabled&quot;);</span>
+<span class="fc" id="L119">        this.membersAllowedRepositoryCreationType = getStringOrNull(jsonObject, &quot;members_allowed_repository_creation_type&quot;);</span>
+<span class="fc" id="L120">        this.membersCanCreatePublicRepositories = getBooleanOrNull(jsonObject, &quot;members_can_create_public_repositories&quot;);</span>
+<span class="fc" id="L121">        this.membersCanCreatePrivateRepositories = getBooleanOrNull(jsonObject, &quot;members_can_create_private_repositories&quot;);</span>
+<span class="fc" id="L122">        this.membersCanCreateInternalRepositories = getBooleanOrNull(jsonObject, &quot;members_can_create_internal_repositories&quot;);</span>
+<span class="fc" id="L123">        this.membersCanCreatePages = getBooleanOrNull(jsonObject, &quot;members_can_create_pages&quot;);</span>
+<span class="fc" id="L124">        this.membersCanForkPrivateRepositories = getBooleanOrNull(jsonObject, &quot;members_can_fork_private_repositories&quot;);</span>
+<span class="fc" id="L125">        this.webCommitSignoffRequired = getBooleanOrNull(jsonObject, &quot;web_commit_signoff_required&quot;);</span>
+<span class="fc" id="L126">        this.membersCanCreatePublicPages = getBooleanOrNull(jsonObject, &quot;members_can_create_public_pages&quot;);</span>
+<span class="fc" id="L127">        this.membersCanCreatePrivatePages = getBooleanOrNull(jsonObject, &quot;members_can_create_private_pages&quot;);</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;plan&quot;) &amp;&amp; !jsonObject.isNull(&quot;plan&quot;)) {</span>
+<span class="fc" id="L129">            this.plan = new GHPlan(jsonObject.getJSONObject(&quot;plan&quot;));</span>
+        }
+<span class="fc" id="L131">        this.advancedSecurityEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;advanced_security_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L132">        this.dependabotAlertsEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;dependabot_alerts_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L133">        this.dependabotSecurityUpdatesEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;dependabot_security_updates_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L134">        this.dependencyGraphEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;dependency_graph_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L135">        this.secretScanningEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;secret_scanning_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L136">        this.secretScanningPushProtectionEnabledForNewRepositories = getBooleanOrNull(jsonObject, &quot;secret_scanning_push_protection_enabled_for_new_repositories&quot;);</span>
+<span class="fc" id="L137">        this.secretScanningPushProtectionCustomLinkEnabled = getBooleanOrNull(jsonObject, &quot;secret_scanning_push_protection_custom_link_enabled&quot;);</span>
+<span class="fc" id="L138">        this.secretScanningPushProtectionCustomLink = getStringOrNull(jsonObject, &quot;secret_scanning_push_protection_custom_link&quot;);</span>
+<span class="fc" id="L139">        this.secretScanningValidityChecksEnabled = getBooleanOrNull(jsonObject, &quot;secret_scanning_validity_checks_enabled&quot;);</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Fetches a GitHub organization by its name.
+     *
+     * @param github the GitHub instance
+     * @param name   the name of the organization to fetch
+     * @return a GHOrganisation instance representing the fetched organization
+     */
+    public static GHOrganisation getOrganisation(Github github, String name) {
+<span class="fc" id="L150">        String response = HttpRequestHelper.sendGetRequest(getBaseUrl() + &quot;/orgs/&quot; + name, github.getToken());</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L152">        return new GHOrganisation(github, new JSONObject(response), name);</span>
+    }
+
+    /**
+     * Finds a repository by its name within the organization.
+     *
+     * @param name the name of the repository to find
+     * @return a GHRepository instance representing the found repository
+     */
+    public GHRepository findRepositoryByName(String name) {
+<span class="fc" id="L162">        String url = getBaseUrl() + &quot;/repos/&quot; + this.givenName + &quot;/&quot; + name;</span>
+<span class="fc" id="L163">        return new GHRepository(new JSONObject(sendGetRequest(url, github.getToken())), github);</span>
+    }
+
+    /**
+     * Returns a list of repositories within the organization.
+     *
+     * @return a list of GHRepository instances
+     */
+    public List&lt;GHRepository&gt; getRepositories() {
+<span class="fc" id="L172">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/repos&quot;, json -&gt; new GHRepository(json, github), github.getToken());</span>
+    }
+
+    /**
+     * Returns the name of the organization.
+     *
+     * @return the name of the organization
+     */
+    public String getName() {
+<span class="fc" id="L181">        return name;</span>
+    }
+
+    /**
+     * Returns the description of the organization.
+     *
+     * @return the description of the organization
+     */
+    public String getDescription() {
+<span class="fc" id="L190">        return description;</span>
+    }
+
+    /**
+     * Returns the GitHub instance associated with this organization.
+     *
+     * @return the GitHub instance
+     */
+    public Github getGithub() {
+<span class="fc" id="L199">        return github;</span>
+    }
+
+    /**
+     * Returns the company associated with the organization.
+     *
+     * @return the company associated with the organization
+     */
+    public String getCompany() {
+<span class="fc" id="L208">        return company;</span>
+    }
+
+    /**
+     * Returns the URL for fetching hooks of the organization.
+     *
+     * @return the hooks URL
+     */
+    public String getHooksUrl() {
+<span class="fc" id="L217">        return hooksUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching issues of the organization.
+     *
+     * @return the issues URL
+     */
+    public String getIssuesUrl() {
+<span class="fc" id="L226">        return issuesUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching members of the organization.
+     *
+     * @return the members URL
+     */
+    public String getMembersUrl() {
+<span class="fc" id="L235">        return membersUrl;</span>
+    }
+
+    /**
+     * Returns the URL for fetching public members of the organization.
+     *
+     * @return the public members URL
+     */
+    public String getPublicMembersUrl() {
+<span class="fc" id="L244">        return publicMembersUrl;</span>
+    }
+
+    /**
+     * Returns the number of followers of the organization.
+     *
+     * @return the number of followers
+     */
+    public int getFollowers() {
+<span class="fc" id="L253">        return followers;</span>
+    }
+
+    /**
+     * Returns the blog URL of the organization.
+     *
+     * @return the blog URL
+     */
+    public String getBlog() {
+<span class="fc" id="L262">        return blog;</span>
+    }
+
+    /**
+     * Returns the number of following of the organization.
+     *
+     * @return the number of following
+     */
+    public int getFollowing() {
+<span class="fc" id="L271">        return following;</span>
+    }
+
+    /**
+     * Returns the number of public gists of the organization.
+     *
+     * @return the number of public gists
+     */
+    public int getPublicGists() {
+<span class="fc" id="L280">        return publicGists;</span>
+    }
+
+    /**
+     * Returns the number of public repositories of the organization.
+     *
+     * @return the number of public repositories
+     */
+    public int getPublicRepos() {
+<span class="fc" id="L289">        return publicRepos;</span>
+    }
+
+    /**
+     * Returns the email of the organization.
+     *
+     * @return the email of the organization
+     */
+    public String getEmail() {
+<span class="fc" id="L298">        return email;</span>
+    }
+
+    /**
+     * Returns the date and time when the organization was archived.
+     *
+     * @return the archived date and time
+     */
+    public OffsetDateTime getArchivedAt() {
+<span class="fc" id="L307">        return archivedAt;</span>
+    }
+
+    /**
+     * Returns the location of the organization.
+     *
+     * @return the location of the organization
+     */
+    public String getLocation() {
+<span class="fc" id="L316">        return location;</span>
+    }
+
+    /**
+     * Returns the creation date and time of the organization.
+     *
+     * @return the creation date and time
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L325">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the Twitter username of the organization.
+     *
+     * @return the Twitter username
+     */
+    public String getTwitterUsername() {
+<span class="fc" id="L334">        return twitterUsername;</span>
+    }
+
+    /**
+     * Returns the last updated date and time of the organization.
+     *
+     * @return the last updated date and time
+     */
+    public OffsetDateTime getUpdatedAt() {
+<span class="fc" id="L343">        return updatedAt;</span>
+    }
+
+    /**
+     * Returns whether the organization has organization projects enabled.
+     *
+     * @return true if organization projects are enabled, false otherwise
+     */
+    public boolean isHasOrganizationProjects() {
+<span class="fc" id="L352">        return hasOrganizationProjects;</span>
+    }
+
+    /**
+     * Returns whether the organization has repository projects enabled.
+     *
+     * @return true if repository projects are enabled, false otherwise
+     */
+    public boolean isHasRepositoryProjects() {
+<span class="fc" id="L361">        return hasRepositoryProjects;</span>
+    }
+
+    /**
+     * Returns whether the organization is verified.
+     *
+     * @return true if the organization is verified, false otherwise
+     */
+    public boolean isVerified() {
+<span class="fc" id="L370">        return isVerified;</span>
+    }
+
+    /**
+     * Returns the plan associated with the organization.
+     *
+     * @return the plan associated with the organization
+     */
+    public GHPlan getPlan() {
+<span class="fc" id="L379">        return plan;</span>
+    }
+
+    /**
+     * Returns the number of collaborators in the organization.
+     *
+     * @return the number of collaborators
+     */
+    public int getCollaborators() {
+<span class="fc" id="L388">        return collaborators;</span>
+    }
+
+    /**
+     * Returns the number of owned private repositories in the organization.
+     *
+     * @return the number of owned private repositories
+     */
+    public int getOwnedPrivateRepos() {
+<span class="fc" id="L397">        return ownedPrivateRepos;</span>
+    }
+
+    /**
+     * Returns the number of private gists in the organization.
+     *
+     * @return the number of private gists
+     */
+    public int getPrivateGists() {
+<span class="fc" id="L406">        return privateGists;</span>
+    }
+
+    /**
+     * Returns the total number of private repositories in the organization.
+     *
+     * @return the total number of private repositories
+     */
+    public int getTotalPrivateRepos() {
+<span class="fc" id="L415">        return totalPrivateRepos;</span>
+    }
+
+    /**
+     * Returns the disk usage of the organization.
+     *
+     * @return the disk usage
+     */
+    public long getDiskUsage() {
+<span class="fc" id="L424">        return diskUsage;</span>
+    }
+
+    /**
+     * Returns the billing email of the organization.
+     *
+     * @return the billing email
+     */
+    public String getBillingEmail() {
+<span class="fc" id="L433">        return billingEmail;</span>
+    }
+
+    /**
+     * Returns the default repository permission for the organization.
+     *
+     * @return the default repository permission
+     */
+    public String getDefaultRepositoryPermission() {
+<span class="fc" id="L442">        return defaultRepositoryPermission;</span>
+    }
+
+    /**
+     * Returns the allowed repository creation type for members of the organization.
+     *
+     * @return the allowed repository creation type for members
+     */
+    public String getMembersAllowedRepositoryCreationType() {
+<span class="fc" id="L451">        return membersAllowedRepositoryCreationType;</span>
+    }
+
+    /**
+     * Returns the custom link for secret scanning push protection.
+     *
+     * @return the custom link for secret scanning push protection
+     */
+    public String getSecretScanningPushProtectionCustomLink() {
+<span class="fc" id="L460">        return secretScanningPushProtectionCustomLink;</span>
+    }
+
+    /**
+     * Returns whether advanced security is enabled for new repositories in the organization.
+     *
+     * @return true if advanced security is enabled for new repositories, false otherwise
+     */
+    public boolean isAdvancedSecurityEnabledForNewRepositories() {
+<span class="fc" id="L469">        return advancedSecurityEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether Dependabot alerts are enabled for new repositories in the organization.
+     *
+     * @return true if Dependabot alerts are enabled for new repositories, false otherwise
+     */
+    public boolean isDependabotAlertsEnabledForNewRepositories() {
+<span class="fc" id="L478">        return dependabotAlertsEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether Dependabot security updates are enabled for new repositories in the organization.
+     *
+     * @return true if Dependabot security updates are enabled for new repositories, false otherwise
+     */
+    public boolean isDependabotSecurityUpdatesEnabledForNewRepositories() {
+<span class="fc" id="L487">        return dependabotSecurityUpdatesEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether the dependency graph is enabled for new repositories in the organization.
+     *
+     * @return true if the dependency graph is enabled for new repositories, false otherwise
+     */
+    public boolean isDependencyGraphEnabledForNewRepositories() {
+<span class="fc" id="L496">        return dependencyGraphEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether members can create internal repositories in the organization.
+     *
+     * @return true if members can create internal repositories, false otherwise
+     */
+    public boolean isMembersCanCreateInternalRepositories() {
+<span class="fc" id="L505">        return membersCanCreateInternalRepositories;</span>
+    }
+
+    /**
+     * Returns whether members can create pages in the organization.
+     *
+     * @return true if members can create pages, false otherwise
+     */
+    public boolean isMembersCanCreatePages() {
+<span class="fc" id="L514">        return membersCanCreatePages;</span>
+    }
+
+    /**
+     * Returns whether members can create private pages in the organization.
+     *
+     * @return true if members can create private pages, false otherwise
+     */
+    public boolean isMembersCanCreatePrivatePages() {
+<span class="fc" id="L523">        return membersCanCreatePrivatePages;</span>
+    }
+
+    /**
+     * Returns whether members can create private repositories in the organization.
+     *
+     * @return true if members can create private repositories, false otherwise
+     */
+    public boolean isMembersCanCreatePrivateRepositories() {
+<span class="fc" id="L532">        return membersCanCreatePrivateRepositories;</span>
+    }
+
+    /**
+     * Returns whether members can create public pages in the organization.
+     *
+     * @return true if members can create public pages, false otherwise
+     */
+    public boolean isMembersCanCreatePublicPages() {
+<span class="fc" id="L541">        return membersCanCreatePublicPages;</span>
+    }
+
+    /**
+     * Returns whether members can create public repositories in the organization.
+     *
+     * @return true if members can create public repositories, false otherwise
+     */
+    public boolean isMembersCanCreatePublicRepositories() {
+<span class="fc" id="L550">        return membersCanCreatePublicRepositories;</span>
+    }
+
+    /**
+     * Returns whether members can create repositories in the organization.
+     *
+     * @return true if members can create repositories, false otherwise
+     */
+    public boolean isMembersCanCreateRepositories() {
+<span class="fc" id="L559">        return membersCanCreateRepositories;</span>
+    }
+
+    /**
+     * Returns whether members can fork private repositories in the organization.
+     *
+     * @return true if members can fork private repositories, false otherwise
+     */
+    public boolean isMembersCanForkPrivateRepositories() {
+<span class="fc" id="L568">        return membersCanForkPrivateRepositories;</span>
+    }
+
+    /**
+     * Returns whether secret scanning is enabled for new repositories in the organization.
+     *
+     * @return true if secret scanning is enabled for new repositories, false otherwise
+     */
+    public boolean isSecretScanningEnabledForNewRepositories() {
+<span class="fc" id="L577">        return secretScanningEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether the custom link for secret scanning push protection is enabled.
+     *
+     * @return true if the custom link for secret scanning push protection is enabled, false otherwise
+     */
+    public boolean isSecretScanningPushProtectionCustomLinkEnabled() {
+<span class="fc" id="L586">        return secretScanningPushProtectionCustomLinkEnabled;</span>
+    }
+
+    /**
+     * Returns whether secret scanning push protection is enabled for new repositories in the organization.
+     *
+     * @return true if secret scanning push protection is enabled for new repositories, false otherwise
+     */
+    public boolean isSecretScanningPushProtectionEnabledForNewRepositories() {
+<span class="fc" id="L595">        return secretScanningPushProtectionEnabledForNewRepositories;</span>
+    }
+
+    /**
+     * Returns whether secret scanning validity checks are enabled.
+     *
+     * @return true if secret scanning validity checks are enabled, false otherwise
+     */
+    public boolean isSecretScanningValidityChecksEnabled() {
+<span class="fc" id="L604">        return secretScanningValidityChecksEnabled;</span>
+    }
+
+    /**
+     * Returns whether two-factor authentication is required for members of the organization.
+     *
+     * @return true if two-factor authentication is required, false otherwise
+     */
+    public boolean isTwoFactorRequirementEnabled() {
+<span class="fc" id="L613">        return twoFactorRequirementEnabled;</span>
+    }
+
+    /**
+     * Returns whether web commit signoff is required for the organization.
+     *
+     * @return true if web commit signoff is required, false otherwise
+     */
+    public boolean isWebCommitSignoffRequired() {
+<span class="fc" id="L622">        return webCommitSignoffRequired;</span>
+    }
+
+    /**
+     * Returns the given name of the organization.
+     *
+     * @return the given name of the organization
+     */
+    public String getGivenName() {
+<span class="fc" id="L631">        return givenName.replace(&quot; &quot;, &quot;-&quot;);</span>
+    }
+
+    /**
+     * Converts this organization instance to a JSONObject.
+     *
+     * @return a JSONObject representation of this organization
+     */
+    @Override
+    public JSONObject toJSONObject() {
+<span class="fc" id="L641">        return super.toJSONObject()</span>
+<span class="fc" id="L642">                .put(&quot;plan&quot;, plan.toJSONObject())</span>
+<span class="fc" id="L643">                .put(&quot;name&quot;, name)</span>
+<span class="fc" id="L644">                .put(&quot;description&quot;, description)</span>
+<span class="fc" id="L645">                .put(&quot;company&quot;, company)</span>
+<span class="fc" id="L646">                .put(&quot;blog&quot;, blog)</span>
+<span class="fc" id="L647">                .put(&quot;location&quot;, location)</span>
+<span class="fc" id="L648">                .put(&quot;email&quot;, email)</span>
+<span class="fc" id="L649">                .put(&quot;hooks_url&quot;, hooksUrl)</span>
+<span class="fc" id="L650">                .put(&quot;members_url&quot;, membersUrl)</span>
+<span class="fc" id="L651">                .put(&quot;issues_url&quot;, issuesUrl)</span>
+<span class="fc" id="L652">                .put(&quot;public_members_url&quot;, publicMembersUrl)</span>
+<span class="fc" id="L653">                .put(&quot;twitter_username&quot;, twitterUsername)</span>
+<span class="fc" id="L654">                .put(&quot;is_verified&quot;, isVerified)</span>
+<span class="fc" id="L655">                .put(&quot;has_organization_projects&quot;, hasOrganizationProjects)</span>
+<span class="fc" id="L656">                .put(&quot;has_repository_projects&quot;, hasRepositoryProjects)</span>
+<span class="fc" id="L657">                .put(&quot;public_repos&quot;, publicRepos)</span>
+<span class="fc" id="L658">                .put(&quot;public_gists&quot;, publicGists)</span>
+<span class="fc" id="L659">                .put(&quot;followers&quot;, followers)</span>
+<span class="fc" id="L660">                .put(&quot;following&quot;, following)</span>
+<span class="fc" id="L661">                .put(&quot;created_at&quot;, createdAt)</span>
+<span class="fc" id="L662">                .put(&quot;updated_at&quot;, updatedAt)</span>
+<span class="fc" id="L663">                .put(&quot;archived_at&quot;, archivedAt)</span>
+<span class="fc" id="L664">                .put(&quot;total_private_repos&quot;, totalPrivateRepos)</span>
+<span class="fc" id="L665">                .put(&quot;owned_private_repos&quot;, ownedPrivateRepos)</span>
+<span class="fc" id="L666">                .put(&quot;private_gists&quot;, privateGists)</span>
+<span class="fc" id="L667">                .put(&quot;disk_usage&quot;, diskUsage)</span>
+<span class="fc" id="L668">                .put(&quot;collaborators&quot;, collaborators)</span>
+<span class="fc" id="L669">                .put(&quot;billing_email&quot;, billingEmail)</span>
+<span class="fc" id="L670">                .put(&quot;default_repository_permission&quot;, defaultRepositoryPermission)</span>
+<span class="fc" id="L671">                .put(&quot;members_can_create_repositories&quot;, membersCanCreateRepositories)</span>
+<span class="fc" id="L672">                .put(&quot;two_factor_requirement_enabled&quot;, twoFactorRequirementEnabled)</span>
+<span class="fc" id="L673">                .put(&quot;members_allowed_repository_creation_type&quot;, membersAllowedRepositoryCreationType)</span>
+<span class="fc" id="L674">                .put(&quot;members_can_create_public_repositories&quot;, membersCanCreatePublicRepositories)</span>
+<span class="fc" id="L675">                .put(&quot;members_can_create_private_repositories&quot;, membersCanCreatePrivateRepositories)</span>
+<span class="fc" id="L676">                .put(&quot;members_can_create_internal_repositories&quot;, membersCanCreateInternalRepositories)</span>
+<span class="fc" id="L677">                .put(&quot;members_can_create_pages&quot;, membersCanCreatePages)</span>
+<span class="fc" id="L678">                .put(&quot;members_can_fork_private_repositories&quot;, membersCanForkPrivateRepositories)</span>
+<span class="fc" id="L679">                .put(&quot;web_commit_signoff_required&quot;, webCommitSignoffRequired)</span>
+<span class="fc" id="L680">                .put(&quot;members_can_create_public_pages&quot;, membersCanCreatePublicPages)</span>
+<span class="fc" id="L681">                .put(&quot;members_can_create_private_pages&quot;, membersCanCreatePrivatePages)</span>
+<span class="fc" id="L682">                .put(&quot;advanced_security_enabled_for_new_repositories&quot;, advancedSecurityEnabledForNewRepositories)</span>
+<span class="fc" id="L683">                .put(&quot;dependabot_alerts_enabled_for_new_repositories&quot;, dependabotAlertsEnabledForNewRepositories)</span>
+<span class="fc" id="L684">                .put(&quot;dependabot_security_updates_enabled_for_new_repositories&quot;, dependabotSecurityUpdatesEnabledForNewRepositories)</span>
+<span class="fc" id="L685">                .put(&quot;dependency_graph_enabled_for_new_repositories&quot;, dependencyGraphEnabledForNewRepositories)</span>
+<span class="fc" id="L686">                .put(&quot;secret_scanning_enabled_for_new_repositories&quot;, secretScanningEnabledForNewRepositories)</span>
+<span class="fc" id="L687">                .put(&quot;secret_scanning_push_protection_enabled_for_new_repositories&quot;, secretScanningPushProtectionEnabledForNewRepositories)</span>
+<span class="fc" id="L688">                .put(&quot;secret_scanning_push_protection_custom_link_enabled&quot;, secretScanningPushProtectionCustomLinkEnabled)</span>
+<span class="fc" id="L689">                .put(&quot;secret_scanning_push_protection_custom_link&quot;, secretScanningPushProtectionCustomLink)</span>
+<span class="fc" id="L690">                .put(&quot;secret_scanning_validity_checks_enabled&quot;, secretScanningValidityChecksEnabled);</span>
+    }
+
+    /**
+     * Returns a list of teams within the organization.
+     *
+     * @return a list of GHTeam instances
+     */
+    public List&lt;GHTeam&gt; getTeams() {
+<span class="fc" id="L699">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/teams&quot;, GHTeam::new, github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of teams within the organization.
+     *
+     * @return a list of GHTeam instances
+     */
+    public List&lt;GHTeam&gt; listTeams() {
+<span class="fc" id="L708">        return getTeams();</span>
+    }
+
+    /**
+     * Finds a team by its name within the organization.
+     *
+     * @param name the name of the team to find
+     * @return a GHTeam instance representing the found team
+     */
+    public GHTeam findTeamByName(String name) {
+<span class="fc" id="L718">        return GHTeam.getTeamByName(this.github, name, this);</span>
+    }
+
+    /**
+     * Finds a team by its slug within the organization.
+     *
+     * @param slug the slug of the team to find
+     * @return a GHTeam instance representing the found team
+     */
+    public GHTeam findTeamBySlug(String slug) {
+<span class="fc" id="L728">        return GHTeam.getTeamByName(this.github, slug, this);</span>
+    }
+
+    /**
+     * Checks if a user is a member of the organization.
+     *
+     * @param user the user to check
+     * @return true if the user is a member, false otherwise
+     */
+    public Boolean hasMember(@NotNull GHUser user) {
+<span class="fc" id="L738">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/members/&quot; + user.getLogin();</span>
+<span class="fc" id="L739">        return sendGetRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+
+    /**
+     * Adds a member to the organization.
+     * This method sends a POST request to the GitHub API to add a member to the organization.
+     * The member is identified by their email, and the role they should have in the organization is specified.
+     * The member is also added to specific teams within the organization, identified by their IDs.
+     *
+     * @param email the email of the member to add
+     * @param role the role the member should have in the organization
+     * @param teamIds the IDs of the teams the member should be added to
+     */
+    public void addMember(String email, @NotNull GHRole role, List&lt;Integer&gt; teamIds) {
+<span class="fc" id="L754">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/invitations&quot;;</span>
+<span class="fc" id="L755">        JSONObject jsonObject = new JSONObject();</span>
+<span class="fc" id="L756">        jsonObject.put(&quot;email&quot;, email);</span>
+<span class="fc" id="L757">        jsonObject.put(&quot;role&quot;, role.toString());</span>
+<span class="fc" id="L758">        jsonObject.put(&quot;team_ids&quot;, teamIds);</span>
+<span class="fc" id="L759">        HttpRequestHelper.sendPostRequest(url, github.getToken(), jsonObject);</span>
+<span class="fc" id="L760">    }</span>
+
+    /**
+     * Removes a member from the organization.
+     *
+     * @param user the user to remove
+     */
+    public void removeMember(@NotNull GHUser user) {
+<span class="fc" id="L768">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/members/&quot; + user.getLogin();</span>
+<span class="fc" id="L769">        HttpRequestHelper.sendDeleteRequest(url, github.getToken());</span>
+<span class="fc" id="L770">    }</span>
+
+    /**
+     * Checks if a user is a public member of the organization.
+     *
+     * @param user the user to check
+     * @return true if the user is a public member, false otherwise
+     */
+    public Boolean hasPublicMember(GHUser user) {
+<span class="fc" id="L779">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/public_members/&quot; + user.getLogin();</span>
+<span class="fc" id="L780">        return sendGetRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+    /**
+     * Returns a list of members of the organization.
+     *
+     * @return a list of GHUser instances
+     */
+    public List&lt;GHUser&gt; listMembers() {
+<span class="fc" id="L789">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/members&quot;, jsonObject -&gt; new GHUser(github, jsonObject), github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of public members of the organization.
+     *
+     * @return a list of GHUser instances
+     */
+    public List&lt;GHUser&gt; listPublicMembers() {
+<span class="fc" id="L798">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/public_members&quot;, jsonObject -&gt; new GHUser(github, jsonObject), github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of outside collaborators of the organization.
+     *
+     * @return a list of GHUser instances
+     */
+    public List&lt;GHUser&gt; listOutsideCollaborators() {
+<span class="fc" id="L807">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/outside_collaborators&quot;, jsonObject -&gt; new GHUser(github, jsonObject), github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of projects in the organization.
+     *
+     * @return a list of GHProject instances
+     */
+    public List&lt;GHProject&gt; listProjects() {
+<span class="fc" id="L816">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/projects&quot;, json -&gt; new GHProject(github, json), github.getToken());</span>
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProjectBuilder createProject() {
+<span class="fc" id="L823">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;);</span>
+    }
+
+    /**
+     * Creates a project in the organization.
+     */
+    public GHProject createProject(String name, String body) {
+<span class="fc" id="L830">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;)</span>
+<span class="fc" id="L831">                .setName(name)</span>
+<span class="fc" id="L832">                .setBody(body)</span>
+<span class="fc" id="L833">                .build();</span>
+    }
+
+    /**
+     * Creates a team in the organization.
+     *
+     * @param name the name of the team to create
+     */
+    public GHTeam createTeam(String name) {
+<span class="fc" id="L842">        return new GHTeamBuilder(this.github, getUrl() + &quot;/teams&quot;).setName(name).build();</span>
+    }
+
+    /**
+     * Creates a team in the organization.
+     *
+     * @return a TeamBuilder instance to build the team
+     */
+    public GHTeamBuilder createTeam() {
+<span class="fc" id="L851">        return new GHTeamBuilder(this.github, getUrl() + &quot;/teams&quot;);</span>
+    }
+
+    /**
+     * Returns a list of repositories with open pull requests in the organization.
+     *
+     * @return a list of GHRepository instances
+     */
+    public List&lt;GHRepository&gt; getRepositorysWithOpenPullRequests() {
+<span class="fc" id="L860">        return getRepositories().stream().filter(repo -&gt; repo.hasPullRequestsWithState(GHState.OPEN)).toList();</span>
+    }
+
+    /**
+     * Returns a list of pull requests in the organization.
+     *
+     * @return a list of GHRepository instances
+     */
+    public List&lt;GHRepository&gt; getPullRequests() {
+<span class="fc" id="L869">        return getRepositorysWithOpenPullRequests();</span>
+    }
+
+    /**
+     * Returns a list of events in the organization.
+     *
+     * @return a list of GHEvent instances
+     */
+    public List&lt;GHEvent&gt; listEvents() {
+<span class="fc" id="L878">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/events&quot;, GHEvent::new, github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of hooks in the organization.
+     *
+     * @return a list of GHHook instances
+     */
+    public List&lt;GHHook&gt; getHooks() {
+<span class="fc" id="L887">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/hooks&quot;, GHHook::new, github.getToken());</span>
+    }
+
+    /**
+     * Returns a specific hook in the organization by its ID.
+     *
+     * @param id the ID of the hook to fetch
+     * @return a GHHook instance representing the fetched hook
+     */
+    public GHHook getHook(Long id) {
+<span class="fc" id="L897">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/hooks/&quot; + id;</span>
+<span class="fc" id="L898">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L899" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L900">        return new GHHook(new JSONObject(response));</span>
+    }
+
+    /**
+     * Returns a specific hook in the organization by its ID.
+     *
+     * @param id the ID of the hook to fetch
+     * @return a GHHook instance representing the fetched hook
+     */
+    public GHHook getHook(int id) {
+<span class="fc" id="L910">        return getHook(Integer.toUnsignedLong(id));</span>
+    }
+
+    /**
+     * Creates a hook in the organization.
+     */
+    public GHHookBuilder createHook() {
+<span class="fc" id="L917">        return new GHHookBuilder(this.github, getUrl() + &quot;/hooks&quot;);</span>
+    }
+
+    /**
+     * Deletes a hook in the organization by its ID.
+     *
+     * @param id the ID of the hook to delete
+     */
+    public void deleteHook(Long id) {
+<span class="fc" id="L926">        sendDeleteRequest(getUrl() + &quot;/hooks/&quot; + id, github.getToken());</span>
+<span class="fc" id="L927">    }</span>
+
+    /**
+     * Returns a list of Docker conflict packages in the organization.
+     *
+     * @return a list of GHPackage instances
+     */
+    public List&lt;GHPackage&gt; listDockerConflictsPackages() {
+<span class="fc" id="L935">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/docker/conflicts&quot;, json -&gt; new GHPackage(github, json), github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of packages in the organization filtered by package type.
+     *
+     * @param packageType the type of packages to list
+     * @return a list of GHPackage instances
+     */
+    public List&lt;GHPackage&gt; listPackages(GHPackageType packageType) {
+<span class="fc" id="L945">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/packages?package_type=&quot; + packageType.toURL(), json -&gt; new GHPackage(github, json), github.getToken());</span>
+    }
+
+    /**
+     * Returns a specific package in the organization by its name and package type.
+     *
+     * @param name        the name of the package
+     * @param packageType the type of the package
+     * @return a GHPackage instance representing the fetched package
+     */
+    public GHPackage getPackage(String name, GHPackageType packageType) {
+<span class="fc" id="L956">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/packages/&quot; + packageType.toURL() + name;</span>
+<span class="fc" id="L957">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L958" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L959">        return new GHPackage(github, new JSONObject(response));</span>
+    }
+
+    /**
+     * Returns a list of secret scanning alerts in the organization.
+     *
+     * @return a list of GHAlert instances
+     */
+    public List&lt;GHAlert&gt; listSecretScanningAlerts() {
+<span class="fc" id="L968">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/secret-scanning/alerts&quot;, json -&gt; new GHAlert(json, github), github.getToken());</span>
+    }
+
+    /**
+     * Returns the total active cache usage count for the organization.
+     *
+     * @return the total active cache usage count
+     */
+    public int getCacheUsageActiveCount() {
+<span class="fc" id="L977">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/cache/usage&quot;;</span>
+<span class="fc" id="L978">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L979" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L980">        return new JSONObject(response).getInt(&quot;total_active_caches_count&quot;);</span>
+    }
+
+    /**
+     * Returns the total active cache usage size in bytes for the organization.
+     *
+     * @return the total active cache usage size in bytes
+     */
+    public int getCacheUsageSizeInBytes() {
+<span class="fc" id="L989">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/cache/usage&quot;;</span>
+<span class="fc" id="L990">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L991" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L992">        return new JSONObject(response).getInt(&quot;total_active_caches_size_in_bytes&quot;);</span>
+    }
+
+    /**
+     * Returns a list of repository caches in the organization.
+     *
+     * @return a list of GHRepositoryCache instances
+     */
+    public List&lt;GHRepositoryCache&gt; listRepositoryCaches() {
+<span class="fc" id="L1001">        return fetchPaginatedData(&quot;/orgs/&quot; + this.givenName + &quot;/actions/actions/cache/usage-by-repository&quot;, GHRepositoryCache::new, github.getToken());</span>
+    }
+
+    /**
+     * Returns a list of secrets in the organization.
+     *
+     * @return a list of GHSecret instances
+     */
+    public List&lt;GHSecret&gt; listSecrets() {
+<span class="fc" id="L1010">        return fetchArrayData(&quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets&quot;, GHSecret::new, github.getToken(), &quot;secrets&quot;);</span>
+    }
+
+    /**
+     * Returns the public key for secrets in the organization.
+     *
+     * @return a GHPublicKey instance representing the public key
+     */
+    public GHPublicKey getPublicKey() {
+<span class="fc" id="L1019">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets/public-key&quot;;</span>
+<span class="fc" id="L1020">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L1021" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L1022">        return new GHPublicKey(new JSONObject(response));</span>
+    }
+
+    /**
+     * Returns a specific secret in the organization by its name.
+     *
+     * @param name the name of the secret to fetch
+     * @return a GHSecret instance representing the fetched secret
+     */
+    public GHSecret getSecret(String name) {
+<span class="fc" id="L1032">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets/&quot; + name;</span>
+<span class="fc" id="L1033">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L1034" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L1035">        return new GHSecret(new JSONObject(response));</span>
+    }
+
+    /**
+     * Deletes a specific secret in the organization by its name.
+     *
+     * @param name the name of the secret to delete
+     * @return true if the secret was deleted successfully, false otherwise
+     */
+    public boolean deleteSecret(String name) {
+<span class="fc" id="L1045">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets/&quot; + name;</span>
+<span class="fc" id="L1046">        return sendDeleteRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+    /**
+     * Returns a list of repositories associated with a specific secret in the organization.
+     *
+     * @return a list of GHRepository instances
+     */
+    public List&lt;GHRepository&gt; listSecretRepositorys() {
+<span class="fc" id="L1055">        return fetchArrayData(&quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets&quot;, jsonObject -&gt; new GHRepository(jsonObject, github), github.getToken(), &quot;repositories&quot;);</span>
+    }
+
+    /**
+     * Deletes a repository from a specific secret in the organization by secret name and repository ID.
+     *
+     * @param secretName the name of the secret
+     * @param repoId     the ID of the repository
+     * @return true if the repository was deleted successfully, false otherwise
+     */
+    public boolean deleteRepositoryFromSecret(String secretName, String repoId) {
+<span class="fc" id="L1066">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/secrets/&quot; + secretName + &quot;/repositories/&quot; + repoId;</span>
+<span class="fc" id="L1067">        return sendDeleteRequestWithResponseCode(url, github.getToken(), HttpURLConnection.HTTP_NO_CONTENT);</span>
+    }
+
+    /**
+     * Returns a list of variables in the organization.
+     *
+     * @return a list of GHVariable instances
+     */
+    public List&lt;GHVariable&gt; listVariables() {
+<span class="fc" id="L1076">        return fetchArrayData(&quot;/orgs/&quot; + this.givenName + &quot;/actions/variables&quot;, GHVariable::new, github.getToken(), &quot;variables&quot;);</span>
+    }
+
+    /**
+     * Returns a specific variable in the organization by its name.
+     *
+     * @param name the name of the variable to fetch
+     * @return a GHVariable instance representing the fetched variable
+     */
+    public GHVariable getVariable(String name) {
+<span class="fc" id="L1086">        String url = getBaseUrl() + &quot;/orgs/&quot; + this.givenName + &quot;/actions/variables/&quot; + name;</span>
+<span class="fc" id="L1087">        String response = sendGetRequest(url, github.getToken());</span>
+<span class="pc bpc" id="L1088" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L1089">        return new GHVariable(new JSONObject(response));</span>
+    }
+
+    /**
+     * Returns a list of repositories associated with a specific variable in the organization.
+     *
+     * @param name the name of the variable
+     * @return a list of GHRepository instances
+     */
+    public List&lt;GHRepository&gt; listVariableRepositorys(String name) {
+<span class="fc" id="L1099">        return fetchArrayData(&quot;/orgs/&quot; + this.givenName + &quot;/actions/variables/&quot; + name, jsonObject -&gt; new GHRepository(jsonObject, github), github.getToken(), &quot;repositories&quot;);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SelfUser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi</a> &gt; <span class="el_source">SelfUser.java</span></div><h1>SelfUser.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi;
+
+import io.github.coho04.githubapi.builders.GHProjectBuilder;
+import io.github.coho04.githubapi.builders.GHPublicKeyBuilder;
+import io.github.coho04.githubapi.entities.GHProject;
+import io.github.coho04.githubapi.entities.GHPublicKey;
+import io.github.coho04.githubapi.entities.GHUser;
+import io.github.coho04.githubapi.entities.repositories.GHIssue;
+import io.github.coho04.githubapi.entities.repositories.GHRepository;
+import io.github.coho04.githubapi.utilities.HttpRequestHelper;
+import io.github.coho04.githubapi.bases.GHBase;
+import org.json.JSONObject;
+
+import java.util.List;
+
+/**
+ * This class represents a GitHub user.
+ * It provides methods for fetching data about the user such as their issues, blocked users, and public keys, and for following and unfollowing users.
+ */
+<span class="fc" id="L20">public class SelfUser extends GHUser {</span>
+
+    /**
+     * Constructs a new GHUser instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the user data
+     */
+    public SelfUser(Github github, JSONObject jsonObject) {
+<span class="fc" id="L28">        super(github, jsonObject);</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Returns the GitHub user associated with the provided GitHub instance.
+     *
+     * @param github the GitHub instance
+     * @return the GitHub user
+     */
+    public static SelfUser getSelfUser(Github github) {
+<span class="fc" id="L38">        String response = HttpRequestHelper.sendGetRequest(GHBase.getBaseUrl() + &quot;/user&quot;, github.getToken());</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L40">        return new SelfUser(github, new JSONObject(response));</span>
+    }
+
+    /**
+     * Returns the issues of the user.
+     *
+     * @return the issues of the user
+     */
+    public List&lt;GHIssue&gt; getIssues() {
+<span class="fc" id="L49">        return fetchPaginatedData(&quot;/issues&quot;, jsonObject -&gt; new GHIssue(github, jsonObject), github.getToken());</span>
+    }
+
+    /**
+     * Returns the users blocked by the user.
+     *
+     * @return the users blocked by the user
+     */
+    public List&lt;GHUser&gt; getBlockedUsers() {
+<span class="fc" id="L58">        return fetchPaginatedData(&quot;/user/blocks&quot;, jsonObject -&gt; new GHUser(github, jsonObject), github.getToken());</span>
+    }
+
+    /**
+     * Follows the user with the provided username.
+     *
+     * @param username the username of the user to follow
+     */
+    public void followUser(String username) {
+<span class="fc" id="L67">        sendPutRequest(GHBase.getBaseUrl() + &quot;/user/following/&quot; + username, github.getToken(), null);</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Unfollows the user with the provided username.
+     *
+     * @param username the username of the user to unfollow
+     */
+    public void unfollowUser(String username) {
+<span class="fc" id="L76">        sendDeleteRequest(GHBase.getBaseUrl() + &quot;/user/following/&quot; + username, github.getToken());</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Returns a new GHPublicKeyBuilder instance associated with the user's GitHub instance.
+     *
+     * @return a new GHPublicKeyBuilder instance
+     */
+    public GHPublicKeyBuilder addPublicKey() {
+<span class="fc" id="L85">        return new GHPublicKeyBuilder(github);</span>
+    }
+
+    /**
+     * Returns a new GHPublicKey instance with the provided title and key, associated with the user's GitHub instance.
+     *
+     * @param title the title of the public key
+     * @param key the key of the public key
+     * @return a new GHPublicKey instance
+     */
+    public GHPublicKey addPublicKey(String title, String key) {
+<span class="fc" id="L96">        return new GHPublicKeyBuilder(title, key, github).build();</span>
+    }
+
+    /**
+     * Returns the public key with the provided id.
+     *
+     * @param id the id of the public key
+     * @return the public key
+     */
+    public GHPublicKey getPublicKey(int id) {
+<span class="fc" id="L106">        String response = sendGetRequest(GHBase.getBaseUrl() + &quot;/user/keys/&quot; + id, github.getToken());</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L108">        return new GHPublicKey(new JSONObject(response));</span>
+    }
+
+    /**
+     * Deletes the public key with the provided id.
+     *
+     * @param id the id of the public key
+     */
+    public void deletePublicKey(int id) {
+<span class="fc" id="L117">        sendDeleteRequest(GHBase.getBaseUrl() + &quot;/user/keys/&quot; + id, github.getToken());</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Returns a list of repositories created by the user.
+     *
+     * @return a list of repositories created by the user
+     */
+    public List&lt;GHRepository&gt; listCreatedRepositories() {
+<span class="fc" id="L126">        return fetchPaginatedData(GHBase.getBaseUrl(), &quot;/user/repos&quot;, jsonObject -&gt; new GHRepository(jsonObject, github), github.getToken()).stream().filter(repo -&gt; repo.getOwner().getLogin().equals(this.getLogin())).toList();</span>
+    }
+
+    /**
+     * Returns a list of repositories the user has access to.
+     *
+     * @return a list of repositories the user has access to
+     */
+    public List&lt;GHRepository&gt; listRepositoriesWithAccess() {
+<span class="fc" id="L135">        return fetchPaginatedData(GHBase.getBaseUrl(), &quot;/user/repos&quot;, jsonObject -&gt; new GHRepository(jsonObject, github), github.getToken());</span>
+    }
+
+    /**
+     * Returns the email of the user.
+     *
+     * @return the email of the user
+     */
+    public String getEmail() {
+<span class="fc" id="L144">        return  sendGetRequest(GHBase.getBaseUrl() + &quot;/user/email&quot;, github.getToken());</span>
+    }
+
+    /**
+     * Returns a new GHProjectBuilder instance for creating a project in the organization.
+     *
+     * @return a new GHProjectBuilder instance
+     */
+    public GHProjectBuilder createProject() {
+<span class="fc" id="L153">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;);</span>
+    }
+
+    /**
+     * Creates a project in the organization with the provided name and body.
+     *
+     * @param name the name of the project
+     * @param body the body of the project
+     * @return the created project
+     */
+    public GHProject createProject(String name, String body) {
+<span class="fc" id="L164">        return new GHProjectBuilder(this.github, getUrl() + &quot;/projects&quot;)</span>
+<span class="fc" id="L165">                .setName(name)</span>
+<span class="fc" id="L166">                .setBody(body)</span>
+<span class="fc" id="L167">                .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHFile.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities.repositories</a> &gt; <span class="el_source">GHFile.java</span></div><h1>GHFile.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities.repositories;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.GHBase;
+import io.github.coho04.githubapi.builders.GHFileBuilder;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
+/**
+ * This class represents a GitHub file.
+ * It provides methods for fetching data about the file such as its name, path, SHA, size, URLs, and type.
+ */
+public class GHFile extends GHBase {
+
+    private final Github github;
+    private final GHRepository repository;
+    private final String name;
+    private final String path;
+    private final String sha;
+    private final int size;
+    private final String url;
+    private final String htmlUrl;
+    private final String gitUrl;
+    private final String downloadUrl;
+    private final String type;
+    private String content;
+
+    /**
+     * Constructs a new GHFile instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the file data
+     */
+<span class="fc" id="L35">    public GHFile(Github github, JSONObject jsonObject, GHRepository repository) {</span>
+<span class="fc" id="L36">        this.github = github;</span>
+<span class="fc" id="L37">        this.repository = repository;</span>
+<span class="fc" id="L38">        this.name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L39">        this.path = getStringOrNull(jsonObject, &quot;path&quot;);</span>
+<span class="fc" id="L40">        this.sha = getStringOrNull(jsonObject, &quot;sha&quot;);</span>
+<span class="fc" id="L41">        this.size = getIntOrNull(jsonObject, &quot;size&quot;);</span>
+<span class="fc" id="L42">        this.url = getStringOrNull(jsonObject, &quot;url&quot;);</span>
+<span class="fc" id="L43">        this.htmlUrl = getStringOrNull(jsonObject, &quot;html_url&quot;);</span>
+<span class="fc" id="L44">        this.gitUrl = getStringOrNull(jsonObject, &quot;git_url&quot;);</span>
+<span class="fc" id="L45">        this.downloadUrl = getStringOrNull(jsonObject, &quot;download_url&quot;);</span>
+<span class="fc" id="L46">        this.type = getStringOrNull(jsonObject, &quot;type&quot;);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (jsonObject.has(&quot;content&quot;)) {</span>
+<span class="fc" id="L48">            String encodedContent = getStringOrNull(jsonObject, &quot;content&quot;);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (encodedContent != null) {</span>
+<span class="fc" id="L50">                encodedContent = encodedContent.replaceAll(&quot;\\s+&quot;, &quot;&quot;);</span>
+<span class="fc" id="L51">                byte[] decodedBytes = Base64.getDecoder().decode(encodedContent);</span>
+<span class="fc" id="L52">                this.content = new String(decodedBytes, StandardCharsets.UTF_8);</span>
+            }
+        }
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Creates a new GHFileBuilder instance for updating the file.
+     * The GHFileBuilder is initialized with the repository, GitHub instance, and SHA of the file.
+     *
+     * @return a new GHFileBuilder instance
+     */
+    public GHFileBuilder updateFile() {
+<span class="fc" id="L64">        return new GHFileBuilder(repository, github, this.sha);</span>
+    }
+
+    /**
+     * Returns the HTML URL of the file.
+     *
+     * @return the HTML URL of the file
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L73">        return htmlUrl;</span>
+    }
+
+    /**
+     * Returns the URL of the file.
+     *
+     * @return the URL of the file
+     */
+    public String getUrl() {
+<span class="fc" id="L82">        return url;</span>
+    }
+
+    /**
+     * Returns the name of the file.
+     *
+     * @return the name of the file
+     */
+    public String getName() {
+<span class="fc" id="L91">        return name;</span>
+    }
+
+    /**
+     * Returns the size of the file.
+     *
+     * @return the size of the file
+     */
+    public int getSize() {
+<span class="fc" id="L100">        return size;</span>
+    }
+
+    /**
+     * Returns the download URL of the file.
+     *
+     * @return the download URL of the file
+     */
+    public String getDownloadUrl() {
+<span class="fc" id="L109">        return downloadUrl;</span>
+    }
+
+    /**
+     * Returns the Git URL of the file.
+     *
+     * @return the Git URL of the file
+     */
+    public String getGitUrl() {
+<span class="fc" id="L118">        return gitUrl;</span>
+    }
+
+    /**
+     * Returns the path of the file.
+     *
+     * @return the path of the file
+     */
+    public String getPath() {
+<span class="fc" id="L127">        return path;</span>
+    }
+
+    /**
+     * Returns the SHA of the file.
+     *
+     * @return the SHA of the file
+     */
+    public String getSha() {
+<span class="fc" id="L136">        return sha;</span>
+    }
+
+    /**
+     * Returns the type of the file.
+     *
+     * @return the type of the file
+     */
+    public String getType() {
+<span class="fc" id="L145">        return type;</span>
+    }
+
+
+    /**
+     * Returns the content of the file.
+     * The content is encoded in Base64 format.
+     *
+     * @return the content of the file
+     */
+    public String getContent() {
+<span class="fc" id="L156">        return content;</span>
+    }
+
+    /**
+     * Returns the GitHub instance associated with this file.
+     * The GitHub instance is used to perform operations related to GitHub such as fetching and updating data.
+     *
+     * @return the GitHub instance associated with this file
+     */
+    public Github getGithub() {
+<span class="fc" id="L166">        return github;</span>
+    }
+
+    /**
+     * Returns the GHRepository instance associated with this file.
+     * The GHRepository instance represents the repository that this file belongs to.
+     *
+     * @return the GHRepository instance associated with this file
+     */
+    public GHRepository getRepository() {
+<span class="fc" id="L176">        return repository;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

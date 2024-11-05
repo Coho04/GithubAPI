@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHWorkflowRun.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHWorkflowRun.java</span></div><h1>GHWorkflowRun.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.bases.GHBase;
+import org.json.JSONObject;
+
+/**
+ * This class represents a GitHub Workflow Run.
+ * It provides methods for fetching data about the workflow run such as its id, repository id, head repository id, head branch, and head SHA.
+ */
+public class GHWorkflowRun extends GHBase {
+
+    private final int id;
+    private final int repositoryId;
+    private final int headRepositoryId;
+    private final String headBranch;
+    private final String headSha;
+
+    /**
+     * Constructs a new GHWorkflowRun instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the workflow run data
+     */
+<span class="fc" id="L23">    public GHWorkflowRun(JSONObject jsonObject) {</span>
+<span class="fc" id="L24">        this.id = getIntOrNull(jsonObject, &quot;id&quot;);</span>
+<span class="fc" id="L25">        this.repositoryId = getIntOrNull(jsonObject, &quot;repository_id&quot;);</span>
+<span class="fc" id="L26">        this.headRepositoryId = getIntOrNull(jsonObject, &quot;head_repository_id&quot;);</span>
+<span class="fc" id="L27">        this.headBranch = getStringOrNull(jsonObject, &quot;head_branch&quot;);</span>
+<span class="fc" id="L28">        this.headSha = getStringOrNull(jsonObject, &quot;head_sha&quot;);</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Returns the id of the workflow run.
+     *
+     * @return the id of the workflow run
+     */
+    public int getId() {
+<span class="fc" id="L37">        return id;</span>
+    }
+
+    /**
+     * Returns the id of the head repository of the workflow run.
+     *
+     * @return the id of the head repository
+     */
+    public int getHeadRepositoryId() {
+<span class="fc" id="L46">        return headRepositoryId;</span>
+    }
+
+    /**
+     * Returns the id of the repository of the workflow run.
+     *
+     * @return the id of the repository
+     */
+    public int getRepositoryId() {
+<span class="fc" id="L55">        return repositoryId;</span>
+    }
+
+    /**
+     * Returns the name of the head branch of the workflow run.
+     *
+     * @return the name of the head branch
+     */
+    public String getHeadBranch() {
+<span class="fc" id="L64">        return headBranch;</span>
+    }
+
+    /**
+     * Returns the SHA of the head commit of the workflow run.
+     *
+     * @return the SHA of the head commit
+     */
+    public String getHeadSha() {
+<span class="fc" id="L73">        return headSha;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

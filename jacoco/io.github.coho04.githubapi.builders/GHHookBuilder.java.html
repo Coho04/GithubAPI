@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHHookBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.builders</a> &gt; <span class="el_source">GHHookBuilder.java</span></div><h1>GHHookBuilder.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.builders;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.GHBase;
+import io.github.coho04.githubapi.entities.GHHook;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Builder class for creating GitHub webhooks.
+ */
+<span class="fc" id="L14">public class GHHookBuilder extends GHBase {</span>
+
+    private final Github github;
+    private final String url;
+
+    private String name;
+    private boolean active;
+    private String configURL;
+    private String configContentType;
+    private String configSecret;
+    private String configInsecureSSL;
+    private String configUsername;
+    private String configPassword;
+    private List&lt;String&gt; events;
+
+    /**
+     * Constructs a GHHookBuilder.
+     *
+     * @param github the GitHub instance
+     * @param url    the URL for the webhook
+     */
+<span class="fc" id="L35">    public GHHookBuilder(Github github, String url) {</span>
+<span class="fc" id="L36">        this.github = github;</span>
+<span class="fc" id="L37">        this.url = url;</span>
+<span class="fc" id="L38">        this.events = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L39">    }</span>
+
+    @Override
+    public JSONObject toJSONObject() {
+<span class="fc" id="L43">        return super.toJSONObject()</span>
+<span class="fc" id="L44">                .put(&quot;name&quot;, name)</span>
+<span class="fc" id="L45">                .put(&quot;active&quot;, active)</span>
+<span class="fc" id="L46">                .put(&quot;config&quot;, new JSONObject()</span>
+<span class="fc" id="L47">                        .put(&quot;url&quot;, configURL)</span>
+<span class="fc" id="L48">                        .put(&quot;content_type&quot;, configContentType)</span>
+<span class="fc" id="L49">                        .put(&quot;secret&quot;, configSecret)</span>
+<span class="fc" id="L50">                        .put(&quot;insecure_ssl&quot;, configInsecureSSL)</span>
+<span class="fc" id="L51">                        .put(&quot;username&quot;, configUsername)</span>
+<span class="fc" id="L52">                        .put(&quot;password&quot;, configPassword))</span>
+<span class="fc" id="L53">                .put(&quot;events&quot;, events)</span>
+<span class="fc" id="L54">                .put(&quot;active&quot;, active);</span>
+    }
+
+    /**
+     * Sets the content type for the webhook config.
+     *
+     * @param configContentType the content type
+     */
+    public void setConfigContentType(String configContentType) {
+<span class="fc" id="L63">        this.configContentType = configContentType;</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Sets whether SSL verification is enabled for the webhook config.
+     *
+     * @param configInsecureSSL the insecure SSL setting
+     */
+    public void setConfigInsecureSSL(String configInsecureSSL) {
+<span class="fc" id="L72">        this.configInsecureSSL = configInsecureSSL;</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Sets the password for the webhook config.
+     *
+     * @param configPassword the password
+     */
+    public void setConfigPassword(String configPassword) {
+<span class="fc" id="L81">        this.configPassword = configPassword;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Sets the secret for the webhook config.
+     *
+     * @param configSecret the secret
+     */
+    public void setConfigSecret(String configSecret) {
+<span class="fc" id="L90">        this.configSecret = configSecret;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Sets the URL for the webhook config.
+     *
+     * @param configURL the URL
+     */
+    public void setConfigURL(String configURL) {
+<span class="fc" id="L99">        this.configURL = configURL;</span>
+<span class="fc" id="L100">    }</span>
+
+    /**
+     * Sets the username for the webhook config.
+     *
+     * @param configUsername the username
+     */
+    public void setConfigUsername(String configUsername) {
+<span class="fc" id="L108">        this.configUsername = configUsername;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Sets the events that trigger the webhook.
+     *
+     * @param events the list of events
+     */
+    public void setEvents(List&lt;String&gt; events) {
+<span class="fc" id="L117">        this.events = new ArrayList&lt;&gt;(events);</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Adds an event that triggers the webhook.
+     *
+     * @param event the event to add
+     */
+    public void addEvent(String event) {
+<span class="fc" id="L126">        this.events.add(event);</span>
+<span class="fc" id="L127">    }</span>
+
+    /**
+     * Sets the name of the webhook.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
+<span class="fc" id="L135">        this.name = name;</span>
+<span class="fc" id="L136">    }</span>
+
+    /**
+     * Sets whether the webhook is active.
+     *
+     * @param active the active state
+     */
+    public void setActive(boolean active) {
+<span class="fc" id="L144">        this.active = active;</span>
+<span class="fc" id="L145">    }</span>
+
+    /**
+     * Returns the URL for the webhook.
+     *
+     * @return the URL
+     */
+    public String getUrl() {
+<span class="fc" id="L153">        return url;</span>
+    }
+
+    /**
+     * Returns the name of the webhook.
+     *
+     * @return the name
+     */
+    public String getName() {
+<span class="fc" id="L162">        return name;</span>
+    }
+
+    /**
+     * Returns the GitHub instance.
+     *
+     * @return the GitHub instance
+     */
+    public Github getGithub() {
+<span class="fc" id="L171">        return github;</span>
+    }
+
+    /**
+     * Returns the list of events that trigger the webhook.
+     *
+     * @return the list of events
+     */
+    public List&lt;String&gt; getEvents() {
+<span class="fc" id="L180">        return events;</span>
+    }
+
+    /**
+     * Returns the content type for the webhook config.
+     *
+     * @return the content type
+     */
+    public String getConfigContentType() {
+<span class="fc" id="L189">        return configContentType;</span>
+    }
+
+    /**
+     * Returns whether SSL verification is enabled for the webhook config.
+     *
+     * @return the insecure SSL setting
+     */
+    public String getConfigInsecureSSL() {
+<span class="fc" id="L198">        return configInsecureSSL;</span>
+    }
+
+    /**
+     * Returns the password for the webhook config.
+     *
+     * @return the password
+     */
+    public String getConfigPassword() {
+<span class="fc" id="L207">        return configPassword;</span>
+    }
+
+    /**
+     * Returns the secret for the webhook config.
+     *
+     * @return the secret
+     */
+    public String getConfigSecret() {
+<span class="fc" id="L216">        return configSecret;</span>
+    }
+
+    /**
+     * Returns the URL for the webhook config.
+     *
+     * @return the URL
+     */
+    public String getConfigURL() {
+<span class="fc" id="L225">        return configURL;</span>
+    }
+
+    /**
+     * Returns the username for the webhook config.
+     *
+     * @return the username
+     */
+    public String getConfigUsername() {
+<span class="fc" id="L234">        return configUsername;</span>
+    }
+
+    /**
+     * Returns whether the webhook is active.
+     *
+     * @return the active state
+     */
+    public boolean isActive() {
+<span class="fc" id="L243">        return active;</span>
+    }
+
+    /**
+     * Builds and returns a GHHook object.
+     *
+     * @return the built GHHook
+     */
+    public GHHook build() {
+<span class="fc" id="L252">        String response = sendPostRequest(url, github.getToken(), this.toJSONObject());</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        assert response != null;</span>
+<span class="fc" id="L254">        return new GHHook(new JSONObject(response));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

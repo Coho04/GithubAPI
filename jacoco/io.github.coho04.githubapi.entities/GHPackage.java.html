@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHPackage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHPackage.java</span></div><h1>GHPackage.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.ClassBase;
+import org.json.JSONObject;
+
+/**
+ * This class represents a GitHub Package.
+ * It provides methods for fetching data about the package such as its name, package type, owner, version count, visibility, creation date, and update date.
+ */
+public class GHPackage extends ClassBase {
+
+    private final String name;
+    private final String packageType;
+    private GHUser owner;
+    private final String versionCount;
+    private final String visibility;
+    private final String createdAt;
+    private final String updatedAt;
+
+    /**
+     * Constructs a new GHPackage instance with the provided JSON object.
+     *
+     * @param jsonObject the JSON object containing the package data
+     */
+    public GHPackage(Github github, JSONObject jsonObject) {
+<span class="fc" id="L27">        super(jsonObject);</span>
+<span class="fc" id="L28">        this.name = getStringOrNull(jsonObject, &quot;name&quot;);</span>
+<span class="fc" id="L29">        this.packageType = getStringOrNull(jsonObject, &quot;package_type&quot;);</span>
+<span class="pc bpc" id="L30" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;owner&quot;) &amp;&amp; !jsonObject.isNull(&quot;owner&quot;)) {</span>
+<span class="fc" id="L31">            this.owner = new GHUser(github, jsonObject.getJSONObject(&quot;owner&quot;));</span>
+        }
+<span class="fc" id="L33">        this.versionCount = getStringOrNull(jsonObject, &quot;version_count&quot;);</span>
+<span class="fc" id="L34">        this.visibility = getStringOrNull(jsonObject, &quot;visibility&quot;);</span>
+<span class="fc" id="L35">        this.createdAt = getStringOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L36">        this.updatedAt = getStringOrNull(jsonObject, &quot;updated_at&quot;);</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * Returns the name of the package.
+     *
+     * @return the name of the package
+     */
+    public String getName() {
+<span class="fc" id="L45">        return name;</span>
+    }
+
+    /**
+     * Returns the update date of the package.
+     *
+     * @return the update date of the package
+     */
+    public String getUpdatedAt() {
+<span class="fc" id="L54">        return updatedAt;</span>
+    }
+
+    /**
+     * Returns the creation date of the package.
+     *
+     * @return the creation date of the package
+     */
+    public String getCreatedAt() {
+<span class="fc" id="L63">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the owner of the package.
+     *
+     * @return the owner of the package
+     */
+    public GHUser getOwner() {
+<span class="fc" id="L72">        return owner;</span>
+    }
+
+    /**
+     * Returns the package type of the package.
+     *
+     * @return the package type of the package
+     */
+    public String getPackageType() {
+<span class="fc" id="L81">        return packageType;</span>
+    }
+
+    /**
+     * Returns the version count of the package.
+     *
+     * @return the version count of the package
+     */
+    public String getVersionCount() {
+<span class="fc" id="L90">        return versionCount;</span>
+    }
+
+    /**
+     * Returns the visibility of the package.
+     *
+     * @return the visibility of the package
+     */
+    public String getVisibility() {
+<span class="fc" id="L99">        return visibility;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

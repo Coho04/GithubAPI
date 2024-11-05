@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GHAlert.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">io.github.coho04:githubapi</a> &gt; <a href="index.source.html" class="el_package">io.github.coho04.githubapi.entities</a> &gt; <span class="el_source">GHAlert.java</span></div><h1>GHAlert.java</h1><pre class="source lang-java linenums">package io.github.coho04.githubapi.entities;
+
+import io.github.coho04.githubapi.Github;
+import io.github.coho04.githubapi.bases.GHBase;
+import io.github.coho04.githubapi.entities.repositories.GHRepository;
+import org.json.JSONObject;
+
+import java.time.OffsetDateTime;
+
+/**
+ * This class represents a GitHub Alert.
+ * It provides methods for fetching data about the alert such as its number, creation date, url, html url, locations url, state, resolution, resolved at date, resolved by user, secret type, secret type display name, secret, repository, push protection bypassed by user, push protection bypassed status, push protection bypassed at date, resolution comment, and validity.
+ */
+public class GHAlert extends GHBase {
+
+    private final Github github;
+    private final int number;
+    private final OffsetDateTime createdAt;
+    private final String url;
+    private final String htmlUrl;
+    private final String locationsUrl;
+    private final String state;
+    private final String resolution;
+    private final OffsetDateTime resolvedAt;
+    private GHUser resolvedBy;
+    private final String secretType;
+    private final String secretTypeDisplayName;
+    private final String secret;
+    private GHRepository repository;
+    private GHUser pushProtectionBypassedBy;
+    private final boolean pushProtectionBypassed;
+    private final OffsetDateTime pushProtectionBypassedAt;
+    private final String resolutionComment;
+    private final String validity;
+
+    /**
+     * Constructs a new GHAlert instance with the provided JSON object and GitHub instance.
+     *
+     * @param jsonObject the JSON object containing the alert data
+     * @param github     the GitHub instance associated with this alert
+     */
+<span class="fc" id="L42">    public GHAlert(JSONObject jsonObject, Github github) {</span>
+<span class="fc" id="L43">        this.github = github;</span>
+<span class="fc" id="L44">        this.number = getIntOrNull(jsonObject, &quot;number&quot;);</span>
+<span class="fc" id="L45">        this.createdAt = getLocalDateOrNull(jsonObject, &quot;created_at&quot;);</span>
+<span class="fc" id="L46">        this.url = getStringOrNull(jsonObject, &quot;url&quot;);</span>
+<span class="fc" id="L47">        this.htmlUrl = getStringOrNull(jsonObject, &quot;html_url&quot;);</span>
+<span class="fc" id="L48">        this.locationsUrl = getStringOrNull(jsonObject, &quot;locations_url&quot;);</span>
+<span class="fc" id="L49">        this.state = getStringOrNull(jsonObject, &quot;state&quot;);</span>
+<span class="fc" id="L50">        this.resolution = getStringOrNull(jsonObject, &quot;resolution&quot;);</span>
+<span class="fc" id="L51">        this.resolvedAt = getLocalDateOrNull(jsonObject, &quot;resolved_at&quot;);</span>
+
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;resolved_by&quot;) &amp;&amp; !jsonObject.isNull(&quot;resolved_by&quot;)) {</span>
+<span class="fc" id="L54">            this.resolvedBy = new GHUser(github, jsonObject.getJSONObject(&quot;resolved_by&quot;));</span>
+        }
+<span class="fc" id="L56">        this.secretType = getStringOrNull(jsonObject, &quot;secret_type&quot;);</span>
+<span class="fc" id="L57">        this.secretTypeDisplayName = getStringOrNull(jsonObject, &quot;secret_type_display_name&quot;);</span>
+<span class="fc" id="L58">        this.secret = getStringOrNull(jsonObject, &quot;secret&quot;);</span>
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;repository&quot;) &amp;&amp; !jsonObject.isNull(&quot;repository&quot;)) {</span>
+<span class="fc" id="L60">            this.repository = new GHRepository(jsonObject.getJSONObject(&quot;repository&quot;), github);</span>
+        }
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">        if (jsonObject.has(&quot;push_protection_bypassed_by&quot;) &amp;&amp; !jsonObject.isNull(&quot;push_protection_bypassed_by&quot;)) {</span>
+<span class="fc" id="L63">            this.pushProtectionBypassedBy = new GHUser(github, jsonObject.getJSONObject(&quot;push_protection_bypassed_by&quot;));</span>
+        }
+<span class="fc" id="L65">        this.pushProtectionBypassed = getBooleanOrNull(jsonObject, &quot;push_protection_bypassed&quot;);</span>
+<span class="fc" id="L66">        this.pushProtectionBypassedAt = getLocalDateOrNull(jsonObject, &quot;push_protection_bypassed_at&quot;);</span>
+<span class="fc" id="L67">        this.resolutionComment = getStringOrNull(jsonObject, &quot;resolution_comment&quot;);</span>
+<span class="fc" id="L68">        this.validity = getStringOrNull(jsonObject, &quot;validity&quot;);</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Returns the creation date of the alert.
+     *
+     * @return the creation date of the alert
+     */
+    public OffsetDateTime getCreatedAt() {
+<span class="fc" id="L77">        return createdAt;</span>
+    }
+
+    /**
+     * Returns the number of the alert.
+     *
+     * @return the number of the alert
+     */
+    public int getNumber() {
+<span class="fc" id="L86">        return number;</span>
+    }
+
+    /**
+     * Returns the state of the alert.
+     *
+     * @return the state of the alert
+     */
+    public String getState() {
+<span class="fc" id="L95">        return state;</span>
+    }
+
+    /**
+     * Returns the html url of the alert.
+     *
+     * @return the html url of the alert
+     */
+    public String getHtmlUrl() {
+<span class="fc" id="L104">        return htmlUrl;</span>
+    }
+
+    /**
+     * Returns the url of the alert.
+     *
+     * @return the url of the alert
+     */
+    public String getUrl() {
+<span class="fc" id="L113">        return url;</span>
+    }
+
+    /**
+     * Returns the repository of the alert.
+     *
+     * @return the repository of the alert
+     */
+    public GHRepository getRepository() {
+<span class="fc" id="L122">        return repository;</span>
+    }
+
+    /**
+     * Returns the user who bypassed the push protection of the alert.
+     *
+     * @return the user who bypassed the push protection of the alert
+     */
+    public GHUser getPushProtectionBypassedBy() {
+<span class="fc" id="L131">        return pushProtectionBypassedBy;</span>
+    }
+
+    /**
+     * Returns the user who resolved the alert.
+     *
+     * @return the user who resolved the alert
+     */
+    public GHUser getResolvedBy() {
+<span class="fc" id="L140">        return resolvedBy;</span>
+    }
+
+    /**
+     * Returns the GitHub instance associated with the alert.
+     *
+     * @return the GitHub instance associated with the alert
+     */
+    public Github getGithub() {
+<span class="fc" id="L149">        return github;</span>
+    }
+
+    /**
+     * Returns the date when the push protection was bypassed for the alert.
+     *
+     * @return the date when the push protection was bypassed for the alert
+     */
+    public OffsetDateTime getPushProtectionBypassedAt() {
+<span class="fc" id="L158">        return pushProtectionBypassedAt;</span>
+    }
+
+    /**
+     * Returns the date when the alert was resolved.
+     *
+     * @return the date when the alert was resolved
+     */
+    public OffsetDateTime getResolvedAt() {
+<span class="fc" id="L167">        return resolvedAt;</span>
+    }
+
+    /**
+     * Returns the locations url of the alert.
+     *
+     * @return the locations url of the alert
+     */
+    public String getLocationsUrl() {
+<span class="fc" id="L176">        return locationsUrl;</span>
+    }
+
+    /**
+     * Returns the resolution of the alert.
+     *
+     * @return the resolution of the alert
+     */
+    public String getResolution() {
+<span class="fc" id="L185">        return resolution;</span>
+    }
+
+    /**
+     * Returns the resolution comment of the alert.
+     *
+     * @return the resolution comment of the alert
+     */
+    public String getResolutionComment() {
+<span class="fc" id="L194">        return resolutionComment;</span>
+    }
+
+    /**
+     * Returns the secret of the alert.
+     *
+     * @return the secret of the alert
+     */
+    public String getSecret() {
+<span class="fc" id="L203">        return secret;</span>
+    }
+
+    /**
+     * Returns the secret type of the alert.
+     *
+     * @return the secret type of the alert
+     */
+    public String getSecretType() {
+<span class="fc" id="L212">        return secretType;</span>
+    }
+
+    /**
+     * Returns the display name of the secret type of the alert.
+     *
+     * @return the display name of the secret type of the alert
+     */
+    public String getSecretTypeDisplayName() {
+<span class="fc" id="L221">        return secretTypeDisplayName;</span>
+    }
+
+    /**
+     * Returns the validity of the alert.
+     *
+     * @return the validity of the alert
+     */
+    public String getValidity() {
+<span class="fc" id="L230">        return validity;</span>
+    }
+
+    /**
+     * Returns the push protection bypassed status of the alert.
+     *
+     * @return the push protection bypassed status of the alert
+     */
+    public boolean isPushProtectionBypassed() {
+<span class="fc" id="L239">        return pushProtectionBypassed;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
