@@ -7,6 +7,7 @@ import io.github.coho04.githubapi.entities.repositories.GHRepository;
 import org.json.JSONObject;
 
 import java.util.Base64;
+import java.util.logging.Level;
 
 /**
  * GHFileBuilder is a class that extends GHBase. It represents a builder for creating and committing files to a GitHub repository.
@@ -192,24 +193,60 @@ public class GHFileBuilder extends GHBase {
         return path;
     }
 
+
+    public void commit(String email, String name) {
+        if (repository.isWebCommitSignoffRequired()) {
+            Github.getLogger().log(Level.WARNING, "Web commit signoff is required for this repository. Please create a pull request instead.");
+//            createPullRequest(email, name);
+        } else {
+            directCommit(email, name, "main");
+        }
+    }
+
+    private void createPullRequest(String email, String name) {
+        String newBranch = "update-" + path.replace("/", "-").replace(".", "-");
+        String baseBranch = branch != null ? branch.getName() : repository.getDefaultBranch();
+
+        // Create a new branch
+        String createBranchUrl = repository.getUrl() + "/git/refs";
+        JSONObject branchRequest = new JSONObject();
+        branchRequest.put("ref", "refs/heads/" + newBranch);
+        branchRequest.put("sha", branch.getCommitSha());
+        sendPostRequest(createBranchUrl, github.getToken(), branchRequest);
+        branch = repository.getBranches().get(newBranch);
+        directCommit(email, name, newBranch);
+
+        // Create a pull request
+        String createPrUrl = repository.getUrl() + "/pulls";
+        JSONObject prRequest = new JSONObject();
+        prRequest.put("title", message);
+        prRequest.put("head", newBranch);
+        prRequest.put("base", baseBranch);
+        prRequest.put("body", "Automatically created Pull Request for changes in " + path);
+        sendPostRequest(createPrUrl, github.getToken(), prRequest);
+    }
+
+
     /**
      * Commits the file to the repository.
-     * This method is not yet implemented.
      */
-    public void commit(String email, String name) {
+    private void directCommit(String email, String name, String branchName) {
         String url = repository.getUrl() + "/contents/" + path;
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message", message);
         JSONObject committer = new JSONObject();
         committer.put("name", name);
         committer.put("email", email);
-        jsonObject.put("committer", committer);
+
         String encodedString = Base64.getEncoder().encodeToString(content.getBytes());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message", message);
+        jsonObject.put("committer", committer);
         jsonObject.put("content", encodedString);
+        jsonObject.put("branch", branchName);
+
         if (sha != null) {
             jsonObject.put("sha", sha);
         }
-        sendPutRequest(url,github.getToken(), jsonObject);
+        sendPutRequest(url, github.getToken(), jsonObject);
     }
 
     /**

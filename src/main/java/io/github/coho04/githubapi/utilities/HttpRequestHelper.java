@@ -35,7 +35,7 @@ public class HttpRequestHelper {
             con.getOutputStream().write(jsonObject.toString().getBytes());
             int responseCode = con.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_CREATED) {
-                throw new UnsupportedOperationException("Not supported yet. Response Code" + responseCode);
+                throw new UnsupportedOperationException("Not supported yet. Response Code: " + responseCode + " Response Message: " + con.getResponseMessage() + " URL: " + url);
             } else {
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                     return in.lines().collect(Collectors.joining());
