@@ -146,6 +146,7 @@ class GHFileBuilderTest extends TestBase {
 
             JSONObject expectedJson = new JSONObject()
                     .put("message", message)
+                    .put("branch", "main")
                     .put("committer", new JSONObject().put("name", name).put("email", email))
                     .put("content", encodedContent);
 
@@ -182,6 +183,7 @@ class GHFileBuilderTest extends TestBase {
 
             JSONObject expectedJson = new JSONObject()
                     .put("message", message)
+                    .put("branch", "main")
                     .put("committer", new JSONObject().put("name", login).put("email", email))
                     .put("content", encodedContent);
 
@@ -226,6 +228,7 @@ class GHFileBuilderTest extends TestBase {
 
             JSONObject expectedJson = new JSONObject()
                     .put("message", message)
+                    .put("branch", "main")
                     .put("committer", new JSONObject().put("name", name).put("email", "example@example.com"))
                     .put("content", encodedContent);
 
@@ -266,6 +269,7 @@ class GHFileBuilderTest extends TestBase {
                     .put("message", message)
                     .put("committer", new JSONObject().put("name", name).put("email", "example@example.com"))
                     .put("content", encodedContent)
+                    .put("branch", "main")
                     .put("sha", "testSha");
 
             // Mock the static method HttpRequestHelper.sendPutRequest
@@ -279,7 +283,7 @@ class GHFileBuilderTest extends TestBase {
             mockedStatic.verify(() -> HttpRequestHelper.sendPutRequest(
                     eq(url),
                     eq("test_token"),
-                    argThat(json -> jsonSimilar(new JSONObject(json.toString()), expectedJson))
+                    argThat(json -> jsonSimilar(json, expectedJson))
             ));
         }
     }
