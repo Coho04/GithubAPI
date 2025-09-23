@@ -29,7 +29,7 @@ public class GHUser extends EntityBase {
     /**
      * Constructs a new GHUser instance with the provided JSON object.
      *
-     * @param jsonObject the JSON object containing the user data
+     * @param github,jsonObject the JSON object containing the user data
      */
     public GHUser(Github github, JSONObject jsonObject) {
         super(jsonObject);

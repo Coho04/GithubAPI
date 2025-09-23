@@ -42,7 +42,7 @@ public class GHFileBuilder extends GHBase {
      * Constructs a new GHFileBuilder object for a given repository and branch.
      *
      * @param repository a GHRepository object representing the repository to which the file will be committed.
-     * @param branch a GHBranch object representing the branch to which the file will be committed.
+     * @param github, branch a GHBranch object representing the branch to which the file will be committed.
      */
     public GHFileBuilder(GHRepository repository, GHBranch branch, Github github) {
         this.branch = branch;

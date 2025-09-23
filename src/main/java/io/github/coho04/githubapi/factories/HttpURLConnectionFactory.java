@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URI;
 
-/**
- * Factory class for creating HttpURLConnection instances.
- */
 public class HttpURLConnectionFactory {
 
     /**

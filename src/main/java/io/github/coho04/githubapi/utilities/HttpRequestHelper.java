@@ -11,9 +11,6 @@ import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-/**
- * This class provides helper methods for sending HTTP requests.
- */
 public class HttpRequestHelper {
 
     private static final HttpURLConnectionFactory connectionFactory = new HttpURLConnectionFactory();
@@ -24,6 +21,7 @@ public class HttpRequestHelper {
      * @param url         the URL to send the request to
      * @param githubToken the GitHub token
      * @param jsonObject  the JSON object to send
+     * @return String
      */
     public static String sendPostRequest(String url, String githubToken, JSONObject jsonObject) {
         try {

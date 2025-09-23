@@ -51,7 +51,7 @@ public class GHPullRequest extends ClassBase {
     /**
      * Constructs a new GHPullRequest instance with the provided JSON object.
      *
-     * @param jsonObject the JSON object containing the pull request data
+     * @param github,jsonObject the JSON object containing the pull request data
      */
     public GHPullRequest(Github github, JSONObject jsonObject) {
         super(jsonObject);
