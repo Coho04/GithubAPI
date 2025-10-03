@@ -1098,6 +1098,7 @@ public class GHRepository extends ClassBase {
 
     /**
      * Updates the homepage of this repository.
+     * @param homepageUrl Homepage URL
      */
     public void updateHomePage(String homepageUrl) {
         JSONObject jsonObject = new JSONObject();
@@ -1352,6 +1353,7 @@ public class GHRepository extends ClassBase {
 
     /**
      * Creates a project in the organization.
+     * @return GHProjectBuilder
      */
     public GHProjectBuilder createProject() {
         return new GHProjectBuilder(this.github, getUrl() + "/projects");
@@ -1359,6 +1361,7 @@ public class GHRepository extends ClassBase {
 
     /**
      * Creates a project in the organization.
+     * @return GHProject
      */
     public GHProject createProject(String name, String body) {
         return new GHProjectBuilder(this.github, getUrl() + "/projects")

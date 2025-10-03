@@ -825,6 +825,7 @@ public class GHOrganisation extends EntityBase {
 
     /**
      * Creates a project in the organization.
+     * @return GHProject
      */
     public GHProject createProject(String name, String body) {
         return new GHProjectBuilder(this.github, getUrl() + "/projects")
@@ -912,6 +913,7 @@ public class GHOrganisation extends EntityBase {
 
     /**
      * Creates a hook in the organization.
+     * @return GHHookBuilder
      */
     public GHHookBuilder createHook() {
         return new GHHookBuilder(this.github, getUrl() + "/hooks");

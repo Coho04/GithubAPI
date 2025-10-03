@@ -14,7 +14,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
 import java.util.logging.Logger;
 
@@ -47,12 +50,9 @@ class HttpRequestHelperTest {
         Field field = clazz.getDeclaredField(fieldName);
         field.setAccessible(true);
 
-        Field unsafeField = Unsafe.class.getDeclaredField("theUnsafe");
-        unsafeField.setAccessible(true);
-        Unsafe unsafe = (Unsafe) unsafeField.get(null);
-
-        // Remove final modifier from field
-        unsafe.putObjectVolatile(clazz, unsafe.staticFieldOffset(field), value);
+        MethodHandles.Lookup lookup = MethodHandles.privateLookupIn(clazz, MethodHandles.lookup());
+        VarHandle handle = lookup.findStaticVarHandle(clazz, fieldName, field.getType());
+        handle.set(value);
     }
 
     @Test

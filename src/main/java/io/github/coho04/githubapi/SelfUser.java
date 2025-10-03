@@ -22,7 +22,7 @@ public class SelfUser extends GHUser {
     /**
      * Constructs a new GHUser instance with the provided JSON object.
      *
-     * @param jsonObject the JSON object containing the user data
+     * @param jsonObject github
      */
     public SelfUser(Github github, JSONObject jsonObject) {
         super(github, jsonObject);
