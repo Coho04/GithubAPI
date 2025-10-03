@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class HttpRequestHelper {
 
-    private static final HttpURLConnectionFactory connectionFactory = new HttpURLConnectionFactory();
+    static HttpURLConnectionFactory connectionFactory = new HttpURLConnectionFactory();
 
     /**
      * Sends a POST request to the specified URL with the provided GitHub token and JSON object.
